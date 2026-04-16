@@ -309,8 +309,77 @@ input[type=radio]:checked::after{transform:scale(1)}
 .section-reveal{animation:sectionFadeIn .2s ease forwards}
 @keyframes bcnfSuccess{0%{background:rgba(200,169,110,.08)}40%{background:rgba(76,175,125,.25);border-color:var(--sage)}100%{background:rgba(200,169,110,.08)}}
 .bcnf.success{animation:bcnfSuccess .55s ease forwards}
-.bedit{display:flex;align-items:center;justify-content:center;gap:4px;background:transparent;border:1px solid var(--rim);color:var(--muted);font-family:var(--fm);font-size:.62rem;padding:4px 14px;cursor:pointer;border-radius:var(--r);margin:6px auto 0;transition:all .18s;text-transform:uppercase;letter-spacing:.08em;-webkit-tap-highlight-color:transparent}
-.bedit:hover{border-color:var(--gold);color:var(--gold);background:rgba(200,169,110,.06)}.bedit:active{transform:scale(.95);background:rgba(200,169,110,.1)}
+/* ── Swipe drag: suppress all interactive press states ── */
+.pages-track.is-dragging *{pointer-events:none!important}
+.pages-track.is-dragging button,
+.pages-track.is-dragging .sbox,
+.pages-track.is-dragging .sc-clickable,
+.pages-track.is-dragging .nbtn{
+  -webkit-tap-highlight-color:transparent!important;
+  outline:none!important;
+}
+.toggle-btn{
+  position:relative;flex-shrink:0;
+  width:40px;height:22px;
+  background:var(--raised);
+  border:1px solid var(--rim);
+  border-radius:11px;
+  cursor:pointer;
+  transition:background .22s,border-color .22s,box-shadow .22s;
+  -webkit-tap-highlight-color:transparent;
+}
+.toggle-btn::after{
+  content:'';
+  position:absolute;top:2px;left:2px;
+  width:16px;height:16px;
+  border-radius:50%;
+  background:var(--muted);
+  transition:transform .22s cubic-bezier(.34,1.56,.64,1),background .22s;
+  box-shadow:0 1px 3px rgba(0,0,0,.4);
+}
+.toggle-btn[aria-pressed="true"]{
+  background:rgba(200,169,110,.2);
+  border-color:var(--gold);
+  box-shadow:0 0 0 1px rgba(200,169,110,.2);
+}
+.toggle-btn[aria-pressed="true"]::after{
+  transform:translateX(18px);
+  background:var(--gold);
+}
+.identity-edit-header{display:none}
+#identity_edit_view:not([style*="display: none"]) ~ .identity-edit-header,
+#identity_edit_view.section-reveal ~ .identity-edit-header{display:flex}
+/* Simpler approach: JS toggles a class on the panel */
+.panel.identity-editing .identity-edit-header{display:flex}
+
+/* ── Revamped .bedit button ── */
+.bedit{
+  display:inline-flex;align-items:center;justify-content:center;gap:5px;
+  background:transparent;
+  border:1px solid rgba(138,122,158,.3);
+  color:var(--muted);
+  font-family:var(--fm);font-size:.62rem;
+  padding:5px 16px;
+  cursor:pointer;
+  border-radius:20px;
+  margin:6px auto 0;
+  transition:border-color .18s,color .18s,background .18s,box-shadow .18s;
+  text-transform:uppercase;letter-spacing:.1em;
+  -webkit-tap-highlight-color:transparent;
+  position:relative;overflow:hidden;
+}
+.bedit::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(200,169,110,.0),rgba(200,169,110,.0));
+  transition:background .18s;border-radius:inherit;
+}
+.bedit:hover{
+  border-color:rgba(200,169,110,.5);
+  color:var(--gold);
+  background:rgba(200,169,110,.06);
+  box-shadow:0 0 0 1px rgba(200,169,110,.12),0 2px 8px rgba(0,0,0,.25);
+}
+.bedit:active{transform:scale(.94);background:rgba(200,169,110,.1);box-shadow:none}
 .bmini{font-family:var(--fm);font-size:.6rem;padding:3px 7px;cursor:pointer;border-radius:2px;border:1px solid;letter-spacing:.05em;text-transform:uppercase;transition:all .15s}
 .bmini.bl{background:rgba(29,78,143,.18);border-color:var(--ice);color:var(--ice)}.bmini.bl:hover{background:rgba(74,158,202,.3);color:#fff}
 .bmini.br{background:rgba(125,28,42,.18);border-color:var(--crimson);color:var(--ember)}.bmini.br:hover{background:var(--crimson);color:#fff}
@@ -772,7 +841,7 @@ input:focus-visible,textarea:focus-visible{outline:none}
 
           <!-- Identidad & Origen -->
           <div class="panel">
-            <div class="ph"><span class="pt">Identidad &amp; Origen</span></div>
+            <div class="ph identity-edit-header"><span class="pt">Identidad &amp; Origen</span></div>
             <div id="identity_edit_view">
               <div class="g2">
                 <div><span class="fl">Linaje (Raza)</span><select id="sel_desc" onchange="app.updateOptions()"></select><div id="desc_info" class="infobox"></div></div>
@@ -1207,6 +1276,13 @@ input:focus-visible,textarea:focus-visible{outline:none}
           <button class="fs-btn" id="fs_large" onclick="app.setFontSize('large')" title="Grande" style="font-size:17px">A</button>
           <button class="fs-btn" id="fs_xlarge" onclick="app.setFontSize('xlarge')" title="Muy Grande" style="font-size:20px">A</button>
         </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px">
+        <div>
+          <span style="font-family:var(--fd);font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">Recordar posición al volver</span>
+          <div style="font-family:var(--fm);font-size:.6rem;color:var(--border);margin-top:2px">Mantiene el scroll de cada sección al cambiar de pestaña</div>
+        </div>
+        <button id="scroll_preserve_btn" class="toggle-btn" onclick="app.toggleScrollPreserve()" aria-pressed="false" title="Activar/desactivar recordar posición de scroll"></button>
       </div>
     </div>
     <div><div class="dvdr">Reglas del Juego</div><div style="display:flex;flex-direction:column;gap:6px"><button class="btn btn-g" style="width:100%" onclick="document.getElementById('json_rules_input').click()">↑ Importar Reglas (JSON)</button><button class="btn btn-gold" style="width:100%" onclick="app.openDatabaseEditor()">⚙ Editor de Base de Datos</button></div></div>
@@ -1707,10 +1783,11 @@ const MAX_JSON_BYTES = 2 * 1024 * 1024;
 const STORAGE = {
   SCHEMA_VERSION: 1,
   KEYS: {
-    rules:   'sands_rules',
-    roster:  'sands_roster',
-    font:    'ss_font_size',
-    version: 'sands_schema_v'
+    rules:          'sands_rules',
+    roster:         'sands_roster',
+    font:           'ss_font_size',
+    scrollPreserve: 'ss_scroll_preserve',
+    version:        'sands_schema_v'
   },
 
   /** Load rules DB – falls back to DEFAULT_DB */
@@ -1775,6 +1852,8 @@ const app = {
   totalPages: 5,
   activeTalentCat: null,
   currentEditorCat: '',
+  scrollPreserve: false,        // persisted: whether to remember scroll per page
+  _pageScrolls: {},             // in-memory scroll positions per page index
   cropState: {img:null, x:0, y:0, zoom:1, rot:0, minZoom:.05, isDragging:false, lastX:0, lastY:0, pinch:null, velX:0, velY:0},
   _weaponDmgData: [{formula:'1',name:'Desarmado'},{formula:'1',name:'Desarmado'}],
   _editingCustomItem: null,
@@ -1801,6 +1880,7 @@ const app = {
     const ws = document.getElementById('crop_ws');
     if (ws) ws.addEventListener('wheel', e => this._cropWheel(e), {passive:false});
     this._restoreFontSize();
+    this._restoreScrollPreserve();
     // Long-press repeat on resource +/- buttons
     this._initResLongPress();
   },
@@ -2101,8 +2181,22 @@ const app = {
     const w = document.getElementById('pages_wrapper');
     const track = document.getElementById('pages_track');
     let startX=0, startY=0, startT=0;
-    let lastX=0, lastT=0, vel=0;         // velocity tracking
+    let lastX=0, lastT=0, vel=0;
     let dragging=false, locked=false;
+
+    // Ghost-click suppression: after a real horizontal drag, swallow the
+    // synthetic click that touch browsers fire on touchend.
+    let _suppressClicks = false;
+    const suppressFor = (ms = 350) => {
+      _suppressClicks = true;
+      setTimeout(() => { _suppressClicks = false; }, ms);
+    };
+    // Capture-phase listener on the wrapper — fires before any child handler
+    w.addEventListener('click', e => {
+      if (_suppressClicks) { e.stopPropagation(); e.preventDefault(); }
+    }, true);
+    // Also suppress pointerdown visual feedback during an active drag
+    w.addEventListener('pointerdown', () => {}, {passive:true}); // keeps pointer capture honest
 
     const pageW = () => w.clientWidth || window.innerWidth;
 
@@ -2140,6 +2234,7 @@ const app = {
           // Clearly horizontal — take over navigation
           locked = true; dragging = true;
           track.style.transition = 'none';
+          track.classList.add('is-dragging');
         } else {
           // Vertical or ambiguous — release to native scroll
           locked = true;
@@ -2157,13 +2252,14 @@ const app = {
     }, {passive:false});
 
     const endSwipe = (clientX) => {
+      track.classList.remove('is-dragging');
       if (!dragging) { dragging=false; locked=false; vel=0; return; }
       dragging = false; locked = false;
 
       const dx    = clientX - startX;
       const pW    = pageW();
       const ratio = dx / pW;
-      const fast  = Math.abs(vel) > 0.35;  // flick threshold: responsive but not accidental
+      const fast  = Math.abs(vel) > 0.35;
 
       let target = this.currentPage;
       if      (fast && vel < 0 && this.currentPage < this.totalPages-1) target = this.currentPage + 1;
@@ -2171,11 +2267,17 @@ const app = {
       else if (ratio < -0.28 && this.currentPage < this.totalPages-1)   target = this.currentPage + 1;
       else if (ratio >  0.28 && this.currentPage > 0)                   target = this.currentPage - 1;
 
+      // Suppress the ghost click that fires after touchend on mobile
+      suppressFor(380);
       this.goToPage(target);
     };
 
     w.addEventListener('touchend',    e => endSwipe(e.changedTouches[0].clientX), {passive:true});
-    w.addEventListener('touchcancel', e => this.goToPage(this.currentPage),        {passive:true});
+    w.addEventListener('touchcancel', e => {
+      track.classList.remove('is-dragging');
+      dragging = false; locked = false;
+      this.goToPage(this.currentPage);
+    }, {passive:true});
 
     // ── Desktop mouse drag ──
     let mStart = null;
@@ -2186,7 +2288,10 @@ const app = {
     });
     w.addEventListener('mousemove', e => {
       if (!mStart) return;
-      if (!mStart.dragging && Math.abs(e.clientX - mStart.x) > 12) mStart.dragging = true;
+      if (!mStart.dragging && Math.abs(e.clientX - mStart.x) > 12) {
+        mStart.dragging = true;
+        track.classList.add('is-dragging');
+      }
       if (mStart.dragging) {
         const now = Date.now(), dt = now - mStart.lastT || 1;
         mStart.vel = mStart.vel * 0.6 + ((e.clientX - mStart.lastX) / dt) * 0.4;
@@ -2195,6 +2300,7 @@ const app = {
       }
     });
     const endMouse = (clientX) => {
+      track.classList.remove('is-dragging');
       if (!mStart) return;
       const {x, dragging: was, vel: v} = mStart;
       mStart = null;
@@ -2214,6 +2320,13 @@ const app = {
 
   goToPage(n) {
     if (n !== this.currentPage && navigator.vibrate) navigator.vibrate(4);
+
+    // Save current page's scroll position if preserve mode is on
+    if (this.scrollPreserve) {
+      const curPage = document.getElementById('page_' + this.currentPage);
+      if (curPage) this._pageScrolls[this.currentPage] = curPage.scrollTop;
+    }
+
     this.currentPage = n;
     const w = document.getElementById('pages_wrapper');
     const track = document.getElementById('pages_track');
@@ -2224,10 +2337,17 @@ const app = {
     document.querySelectorAll('.nbtn').forEach((b,i) => b.classList.toggle('active', i===n));
     if (n === 4) this.buildDetailPage();
     if (n === 2) this.buildAptitudesPage();
-    // Resetear scroll de la página destino para evitar fondo negro
-    // si en una visita anterior el usuario había scrolleado hacia abajo.
+
     const destPage = document.getElementById('page_' + n);
-    if (destPage) destPage.scrollTop = 0;
+    if (destPage) {
+      if (this.scrollPreserve && this._pageScrolls[n] != null) {
+        // Restore saved scroll position after the transition settles
+        const saved = this._pageScrolls[n];
+        requestAnimationFrame(() => { destPage.scrollTop = saved; });
+      } else {
+        destPage.scrollTop = 0;
+      }
+    }
   },
 
   /* ── SECTION TOGGLES ── */
@@ -2248,6 +2368,8 @@ const app = {
       const sv = document.getElementById(`${sec}_summary_view`);
       if (ev) { ev.style.display = 'block'; ev.classList.remove('section-reveal'); void ev.offsetWidth; ev.classList.add('section-reveal'); }
       if (sv) sv.style.display = 'none';
+      // Show panel header only while in edit mode for identity
+      if (sec === 'identity') ev?.closest('.panel')?.classList.add('identity-editing');
       if (sec === 'equipment') { this.updateDbSelect(); this.renderInventory(); }
       // Scroll al panel en page_3 para que sea visible al expandirse
       if (sec === 'combat' || sec === 'equipment') {
@@ -2310,6 +2432,8 @@ const app = {
     const sv = document.getElementById(`${sec}_summary_view`);
     if (ev) ev.style.display = 'none';
     if (sv) sv.style.display = 'block';
+    // Hide panel header when collapsing identity section back to summary
+    if (sec === 'identity') ev?.closest('.panel')?.classList.remove('identity-editing');
 
     // combat/equipment viven en page_3. Al colapsar el edit_view el contenido
     // encoge y el scrollTop queda apuntando a zona vacía (pantalla negra).
@@ -4498,6 +4622,23 @@ const app = {
   _restoreFontSize() {
     const saved = localStorage.getItem(STORAGE.KEYS.font)||'normal';
     this.setFontSize(saved);
+  },
+
+  _restoreScrollPreserve() {
+    this.scrollPreserve = localStorage.getItem(STORAGE.KEYS.scrollPreserve) === '1';
+    this._syncScrollPreserveBtn();
+  },
+
+  toggleScrollPreserve() {
+    this.scrollPreserve = !this.scrollPreserve;
+    this._pageScrolls = {}; // reset saved positions when toggling
+    localStorage.setItem(STORAGE.KEYS.scrollPreserve, this.scrollPreserve ? '1' : '0');
+    this._syncScrollPreserveBtn();
+  },
+
+  _syncScrollPreserveBtn() {
+    const btn = document.getElementById('scroll_preserve_btn');
+    if (btn) btn.setAttribute('aria-pressed', String(this.scrollPreserve));
   },
 
   /* ── LETHALITY ── */
