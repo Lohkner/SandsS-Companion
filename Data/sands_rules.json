@@ -1,0 +1,185 @@
+{
+  "descriptors": {
+    "humano": { "name": "Humano", "bonus": "+1 a dos Atributos", "mods": {}, "grant": ["Habilidad Grado 0", "Idioma adicional"], "txt": "Definidos por su ambición insaciable y capacidad de adaptación." },
+    "enano": { "name": "Enano", "bonus": "+2 CON, +1 FUE", "mods": { "CON": 2, "FUE": 1 }, "grant": ["Visión Oscura (60')", "Ventaja vs Veneno/Miedo"], "txt": "Forjados en asteroides, con voluntad dura como la roca." },
+    "elfo": { "name": "Elfo", "bonus": "+2 DES, +1 SAB", "mods": { "DES": 2, "SAB": 1 }, "grant": ["Visión Oscura (90')", "Proeza Física G1"], "txt": "Ecos de una era mística donde tecnología y magia eran uno." },
+    "medioelfo": { "name": "Medio Elfo", "bonus": "+1 a dos Atributos", "mods": {}, "grant": ["Visión Oscura (60')", "+2 Reacción"], "txt": "Caminantes entre dos mundos, diplomáticos naturales." },
+    "infernal": { "name": "Infernal", "bonus": "+2 CAR, +1 INT o DES", "mods": { "CAR": 2 }, "grant": ["Visión Infernal", "Resistencia Fuego"], "txt": "Marcados por pactos antiguos o linajes exteriores." },
+    "sintetico": { "name": "Sintético", "bonus": "+1 CON, +2 DES o FUE", "mods": { "CON": 1 }, "grant": ["Inmune Veneno/Enfermedad", "Red Lógica"], "txt": "Cuerpos artificiales lógicos y resistentes." },
+    "aesir": { "name": "Aesir", "bonus": "+2 CAR, +1 SAB/CON", "mods": { "CAR": 2 }, "grant": ["Ventaja vs Miedo", "Sello Divino"], "txt": "Herederos de un propósito divino en el vacío." },
+    "mutante": { "name": "Mutante", "bonus": "+2 Libre, +1 CON", "mods": { "CON": 1 }, "grant": ["Resistencia Veneno"], "txt": "ADN inestable nacido de la exposición al vacío." },
+    "medioorco": { "name": "Medio Orco", "bonus": "+2 FUE, +1 CON", "mods": { "FUE": 2, "CON": 1 }, "grant": ["Implacable", "Intimidación G1"], "txt": "Fuerza imparable y voluntad forjada en conflicto." },
+    "draconido": { "name": "Dracónido", "bonus": "+2 FUE, +1 CAR", "mods": { "FUE": 2, "CAR": 1 }, "grant": ["Resistencia Elemental", "Presencia Imponente"], "txt": "Orgullo ancestral manifestado en escamas y fuego." },
+    "cambiante": { "name": "Cambiante", "bonus": "+2 FUE o DES, +1 CON", "mods": { "CON": 1 }, "grant": ["Garras Naturales", "Instinto Manada"], "txt": "El instinto de la naturaleza reclamando su lugar." }
+  },
+  "archetypes": {
+    "luchador": { "name": "Audaz (Luchador)", "pv": 8, "adr": 6, "ing": 2, "ca": 1, "limit": 2, "skills": ["Proeza Física", "Intimidación", "Percepción", "Supervivencia"], "edges": ["Físico", "Mental"], "txt": "La vanguardia resistente, maestro del acero." },
+    "experto": { "name": "Sutil (Experto)", "pv": 6, "adr": 4, "ing": 4, "ca": 0, "limit": 3, "skills": ["Sigilo", "Engaño", "Investigación", "Percepción", "Tecnología"], "edges": ["Físico", "Mental", "Flexible"], "txt": "Especialista táctico y técnico de precisión." },
+    "adepto": { "name": "Sagaz (Adepto)", "pv": 4, "adr": 0, "ing": 10, "ca": 0, "limit": 4, "skills": ["Arcano", "Historia", "Medicina", "Naturaleza", "Perspicacia", "Religión"], "edges": ["Mental", "Físico"], "txt": "Conducto para la energía de la Fuente y Axiomas." }
+  },
+  "backgrounds": {
+    "soldado": { "name": "Soldado", "skills": ["Proeza Física", "Intimidación", "Perspicacia","Tecnología", "Supervivencia", "Medicina"] },
+    "picaro": { "name": "Pícaro", "skills": ["Sigilo", "Engaño", "Influencia", "Percepción", "Tecnología", "Conocimiento Calle"] },
+    "acolito": { "name": "Acólito", "skills": ["Religión", "Perspicacia", "Historia", "Influencia", "Medicina", "Investigación"] },
+    "erudito": { "name": "Erudito", "skills": ["Arcano", "Investigación", "Historia", "Tecnología", "Medicina", "Naturaleza"] },
+    "salvaje": { "name": "Salvaje", "skills": ["Supervivencia", "Percepción", "Naturaleza", "Sigilo", "Proeza Física", "Medicina"] },
+    "artesano": { "name": "Artesano", "skills": ["Historia", "Influencia", "Perspicacia", "Tecnología", "Artesanía", "Investigación"] },
+    "forastero": { "name": "Forastero", "skills": ["Supervivencia", "Sigilo", "Engaño", "Perspicacia", "Conocimiento Calle", "Percepción"] },
+    "noble": { "name": "Noble", "skills": ["Influencia", "Historia", "Engaño", "Perspicacia", "Investigación", "Religión"] },
+    "mercenario": { "name": "Mercenario", "skills": ["Intimidación", "Percepción", "Proeza Física", "Supervivencia", "Engaño", "Perspicacia"] },
+    "marinero": { "name": "Marinero", "skills": ["Proeza Física", "Percepción", "Supervivencia", "Engaño", "Tecnología", "Naturaleza"] },
+    "gladiador": { "name": "Gladiador", "skills": ["Intimidación", "Proeza Física", "Influencia", "Percepción", "Engaño", "Supervivencia"] },
+    "mercader": { "name": "Mercader", "skills": ["Influencia", "Investigación", "Engaño", "Percepción", "Conocimiento Calle", "Historia"] },
+    "superviviente": { "name": "Superviviente", "skills": ["Supervivencia", "Proeza Física", "Medicina", "Percepción", "Sigilo", "Naturaleza"] }
+  },
+  "talents": {
+    "Senda del Acero": [
+      { "name": "Lancero Marcial", "desc": "Dominio de armas de asta y control de espacio.", "grades": [{ "g": 1, "d": "Barrido Real: Ataque circular (2 PA) contra todos los enemigos adyacentes." }, { "g": 2, "d": "Detención Real: Si impactas ataque de oportunidad (Reacción), el enemigo debe superar Salv. DES o su movimiento baja a 0." }] },
+      { "name": "Maestro del Escudo", "desc": "El escudo como arma activa y baluarte.", "grades": [{ "g": 1, "d": "Guardia del Centinela: Si el enemigo falla ataque cuerpo a cuerpo, usas Reacción para atacar con escudo (1d6+FUE)." }, { "g": 2, "d": "Muro Imparable: Resistencia permanente a un tipo de daño físico. Ignoras daño de un ataque por Descanso Corto." }] },
+      { "name": "Tirador Preciso", "desc": "Puntería extrema a distancia.", "grades": [{ "g": 1, "d": "Disparo de Precisión: Gasta 4 Adr para ignorar cobertura parcial e infligir +1d8 daño." }, { "g": 2, "d": "Fuego Táctico: Tras Apuntar (1 PA), el siguiente ataque tiene Ventaja e impone Desventaja en Concentración enemiga." }] },
+      { "name": "Duelista Táctico", "desc": "Velocidad sobre fuerza bruta.", "grades": [{ "g": 1, "d": "Duelo Intenso: Al impactar, gasta 4 Adr para imponer Desventaja a los ataques del objetivo contra ti." }, { "g": 2, "d": "Riposte Elegante: Al ser fallado, usa Reacción para contraatacar con +1d6 de daño." }] },
+      { "name": "Maestro de la Carga", "desc": "Uso del impulso cinético.", "grades": [{ "g": 1, "d": "Arremetida Poderosa: Tras moverte 20 pies en línea recta, el impacto puede derribar al objetivo (Salv. FUE)." }, { "g": 2, "d": "Carga Imparable: Al derribar, gasta 2 Adr para moverte 5 pies más y atacar a otro enemigo adyacente." }] },
+      { "name": "Escuela de Combate", "desc": "Estilos de lucha fundamentales.", "grades": [{ "g": 1, "d": "Estilo de Lucha: Elige Maestría (Duelo +2 daño, Arquería +1 ataque, Blindado +1 CA, Desarmado 1d6, Gran Arma repetir 1-2)." }, { "g": 2, "d": "Maestrías Combinadas: Eliges un segundo estilo de la lista." }] },
+      { "name": "Ataque Adicional", "desc": "Velocidad de ataque aumentada.", "grades": [{ "g": 1, "d": "Impulso de Batalla (Nivel 5+): Si reduces a un enemigo a 0 PV, usa Reacción para realizar un ataque inmediato." }] },
+      { "name": "Ráfaga de Golpes", "desc": "Técnicas desarmadas fluidas.", "grades": [{ "g": 1, "d": "Gasta 1 PA y 6 Adr para dos ataques desarmados (1d6/1d8/1d10 según nivel)." }, { "g": 2, "d": "Ventaja en Ráfaga si el enemigo está Aturdido o Derribado." }, { "g": 3, "d": "El número de ataques de la Ráfaga aumenta a tres." }] },
+      { "name": "Lanzador Letal", "desc": "Especialista en proyectiles de mano.", "grades": [{ "g": 1, "d": "Ráfaga a Bocajarro: 1 PA y 4 Adr para dos ataques arrojadizos sin desventaja por cercanía." }, { "g": 2, "d": "Manos Rápidas: Desenvainar es 0 PA. Tras impactar, el arma vuelve a tu mano (Reacción)." }] },
+      { "name": "Experto en Hemorragia", "desc": "Instrumentos de precisión quirúrgica.", "grades": [{ "g": 1, "d": "Pasivo: El Sangrado aplicado comienza en Ud10. Si ya sangra, puedes evitar que tire el dado de uso un turno." }] },
+      { "name": "Golpe de Conmoción", "desc": "Trauma interno con armas contundentes.", "grades": [{ "g": 1, "d": "1 PA tras impacto: Aplica Trauma Interno (Ud8). Aliados suman tu FUE al daño contra ese objetivo." }] },
+      { "name": "Cadencia de Acero", "desc": "Encadenamiento de golpes (Nivel 5+).", "grades": [{ "g": 1, "d": "Inercia: Si impactas con Arma Media (2 PA), el siguiente ataque cuesta solo 1 PA." }, { "g": 2, "d": "Inercia de Guerra: Si impactas con Arma Pesada (3 PA), gasta 1 NE Adr para ataque extra por 0 PA." }] }
+    ],
+    "Senda de la Sangre": [
+      { "name": "Defensor Implacable", "desc": "Escudo para tus aliados.", "grades": [{ "g": 1, "d": "Guardia Compartida: Reacción para imponer Desventaja al atacante de un aliado a 5 pies." }, { "g": 2, "d": "Sacrificio del Escudo: Reacción y 4 Adr para recibir daño por aliado y realizar contraataque con Ventaja." }] },
+      { "name": "Furia", "desc": "Trance marcial destructivo.", "grades": [{ "g": 1, "d": "Furia Primal: 1 PA y 6 Adr para entrar en Furia (1 min). +2 daño CC e Inmune al Miedo." }, { "g": 2, "d": "Furia Incesante: Ventaja en CC. Al matar, recuperas 2 puntos de Adrenalina." }] },
+      { "name": "Frenesí Berserker", "desc": "Evolución destructiva de la furia.", "grades": [{ "g": 1, "d": "Frenesí: 1 PA y 8 Adr. Resistencia daño Físico y suma un dado de daño extra a todos los ataques CC." }, { "g": 2, "d": "Ira Implacable: Si caes a 0 PV, gasta Reacción y 4 Adr para quedar a 1 PV. Matar recupera 1d4 Adr." }] },
+      { "name": "Defensa Natural", "id": "def_nat", "desc": "Tu cuerpo es tu armadura.", "grades": [{ "g": 1, "d": "Hierro y Carne: CA = 10 + DES + CON sin armadura ni escudo." }, { "g": 2, "d": "Fortaleza Encarnada: Resistencia permanente a un tipo de daño físico (Cortante/Perforante/Contundente)." }] }
+    ],
+    "Senda de la Astucia": [
+      { "name": "Ataque Furtivo", "desc": "Letalidad basada en la distracción.", "grades": [{ "g": 1, "d": "Golpe en la Sombra: +1d6 (escala con nivel) con Ventaja o aliado cerca. Moverse 10 pies tras impactar es 0 PA." }, { "g": 2, "d": "Cazador de Oportunidades: Furtivo contra sorprendidos. Gasta 4 Ing para obtener Ventaja tras analizar." }] },
+      { "name": "Marca de Cacería", "desc": "Designación de presa mediante miedo.", "grades": [{ "g": 1, "d": "Presa Marcada: 1 PA y 4 Ing. Ventaja para rastrear y +1d6 de daño contra el objetivo por 1 hora." }, { "g": 2, "d": "Depredador Implacable: Dura 8h, daño +2d6 e ignora cobertura parcial. Conoces su dirección exacta." }] },
+      { "name": "Disparo de Supresión", "desc": "Lluvia de proyectiles táctica.", "grades": [{ "g": 1, "d": "Fuego de Distracción: Al impactar, gasta 4 Adr. El enemigo debe superar Salv. SAB o su próximo ataque tiene Desventaja." }, { "g": 2, "d": "Fuego de Cobertura: 2 PA y 8 Adr para suprimir área de 10 pies. Enemigos allí sufren Desventaja en ataques." }] },
+      { "name": "Maestro de las Herramientas", "desc": "Manos más rápidas que el ojo.", "grades": [{ "g": 1, "d": "Mano Presta: Sacar/usar objeto pequeño es 0 PA como parte de movimiento o ataque." }, { "g": 2, "d": "Arsenal Viviente: Al usar objeto utilitario, puedes atacar con arma ligera inmediatamente por 1 PA." }] },
+      { "name": "Desquite Veloz", "desc": "Castigo al error enemigo.", "grades": [{ "g": 1, "d": "Represalia Instantánea: Al ser atacado, gasta Reacción para ataque arrojadizo u objeto utilitario." }, { "g": 2, "d": "Ventaja Inesperada: Represalia impone Desventaja en ataque enemigo o permite moverte 5 pies (0 PA)." }] },
+      { "name": "Enemigo Predilecto", "desc": "Estudio de una amenaza específica.", "grades": [{ "g": 1, "d": "Instinto: +2 daño contra un tipo de criatura. Ventaja en Percepción/Supervivencia contra ellos." }, { "g": 2, "d": "Depredador Letal: Bono daño +3. Gasta 8 Adr/Ing para ataque adicional tras impactar a enemigo predilecto." }] },
+      { "name": "Adaptación Ambiental", "desc": "Uno con el entorno.", "grades": [{ "g": 1, "d": "Instinto del Entorno: Ventaja en Percepción/Supervivencia en un tipo de terreno elegido." }, { "g": 2, "d": "Flujo con el Medio: En terreno predilecto, +10 pies vel. y una tirada de Sigilo con Ventaja por turno (0 PA)." }] },
+      { "name": "Rastreador Experto", "desc": "Lectura de los eventos del suelo.", "grades": [{ "g": 1, "d": "Ventaja rastrear. Gasta 3 Ing para visión psíquica de los eventos de la última hora en el lugar." }, { "g": 2, "d": "Lectura Terreno: Determinas número y salud de criaturas. Ventaja Investigación para pasajes ocultos." }] },
+      { "name": "Movimiento Silencioso", "desc": "Susurro en el vacío.", "grades": [{ "g": 1, "d": "Paso de Sombra: Gasta 6 Adr para moverte el doble en sigilo con Ventaja." }, { "g": 2, "d": "Sombra Colectiva: Gasta 10 Adr para extender beneficio a aliados a 15 pies por 10 minutos." }] },
+      { "name": "Soldado Sombrío", "desc": "Emboscada persistente.", "grades": [{ "g": 1, "d": "Duelista de Sombras: Tras Furtivo, puedes intentar Esconderse inmediatamente (0 PA)." }, { "g": 2, "d": "Golpe Preciso: Gasta 4 Ing para +1d6 extra al Furtivo y puede Derribar o Desarmar al objetivo." }] },
+      { "name": "Capa de Sombra", "desc": "Curvatura de luz tecnológica o mística.", "grades": [{ "g": 1, "d": "Paso entre Sombras: 1 PA y 6 Ing/Adr para semi-invisibilidad (Ventaja Sigilo) por 1 min." }, { "g": 2, "d": "Amparo Umbrío: Coste baja a 4. Gasta 8 Adr para invisibilidad total hasta tu próximo turno." }] },
+      { "name": "Acción Rápida", "desc": "Reflejos de alta frecuencia.", "grades": [{ "g": 1, "d": "Reflejos Instintivos: Al inicio del turno, gasta 5 Adr/Ing para obtener +1 PA (Total 4 PA)." }, { "g": 2, "d": "Flujo de Combate: Rasgos de movimiento cuestan -3 puntos. Tu movimiento nunca provoca ataques de oportunidad." }] },
+      { "name": "Disruptor de Sistemas", "desc": "Virus contra enemigos tecnológicos.", "grades": [{ "g": 1, "d": "1 PA + 4 Ing: Inyecta Interferencia (Ud8). Si el dado saca 1-2, el enemigo pierde su Reacción." }] },
+      { "name": "Químico de Trinchera", "desc": "Ataques con toxicidad persistente.", "grades": [{ "g": 1, "d": "Pasivo: Armas sutiles/proyectiles aplican Toxicidad (Ud8). Puedes forzar Desventaja en salvación de Shock." }] },
+      { "name": "Furtivo Prolongado", "desc": "Doble apertura en la guardia.", "grades": [{ "g": 1, "d": "Gasta 2 NE Ing/Adr para aplicar dados de daño furtivo a un segundo ataque exitoso en el mismo turno." }] }
+    ],
+    "Senda General": [
+      { "name": "Afortunado", "desc": "3 Puntos de suerte.", "grades": [{ "g": 1, "d": "Ganas 3 puntos de Suerte por Descanso Largo. Gasta 1 para repetir tirada propia o forzar repetición enemiga." }] },
+      { "name": "Alerta", "id": "alerta", "desc": "Reflejos imposibles.", "grades": [{ "g": 1, "d": "+5 a la Iniciativa. Nunca puedes ser sorprendido mientras estés consciente." }] },
+      { "name": "Atleta", "id": "atleta", "desc": "Potencia física superior.", "grades": [{ "g": 1, "d": "+1 a FUE o DES. Levantarse cuesta 5 pies. Distancias de salto duplicadas." }] },
+      { "name": "Móvil", "desc": "Velocidad aumentada.", "grades": [{ "g": 1, "d": "Velocidad +10 pies. Tras ataque CC, puedes moverte sin provocar ataques de op. del objetivo (0 PA)." }] },
+      { "name": "Explorador de Mazmorras", "desc": "Experto en trampas.", "grades": [{ "g": 1, "d": "Ventaja detectar trampas/puertas secretas. Resistencia al daño de trampas." }] },
+      { "name": "Resiliente", "desc": "Fortaleza mental o física.", "grades": [{ "g": 1, "d": "Aumenta un Atributo en +1 y obtienes competencia en sus Tiradas de Salvación." }] },
+      { "name": "Resistente", "desc": "Salud superior.", "grades": [{ "g": 1, "d": "Requisito: CON 13+. +1 CON. Al sanar en descanso corto, recuperas el máximo de PV posibles." }] },
+      { "name": "Peleador de Taberna", "desc": "Combate improvisado.", "grades": [{ "g": 1, "d": "+1 FUE o CON. Competencia con armas improvisadas. Ataque desarmado 1d6+Mod. Ventaja en Presas." }] },
+      { "name": "Ambidextro", "desc": "Combate con dos armas.", "grades": [{ "g": 1, "d": "+1 CA con arma en cada mano. Usa armas no-ligeras para dual y suma mod. daño a mano torpe." }] },
+      { "name": "Centinela", "desc": "Control de área.", "grades": [{ "g": 1, "d": "Ventaja ataques op. Impacto reduce vel. enemiga a 0. Reacción para atacar a quien golpee aliado cercano." }] },
+      { "name": "Maestro de Armas de Asta", "desc": "Uso del mango y alcance.", "grades": [{ "g": 1, "d": "Ataque adicional con mango (1d4) por 1 PA. Enemigos entrando en alcance (10 pies) provocan ataque op." }] },
+      { "name": "Maestro de Armas Grandes", "desc": "Fuerza bruta con armas pesadas.", "grades": [{ "g": 1, "d": "FUE 15+. -5 ataque para +10 daño. Al matar o crítico, realiza ataque adicional (0 PA)." }] },
+      { "name": "Tirador", "desc": "Francotirador experto.", "grades": [{ "g": 1, "d": "Largo alcance no impone Desventaja. Puedes elegir -5 ataque para +10 daño a distancia." }] },
+      { "name": "Experto en Ballestas", "desc": "Uso cercano de ballestas.", "grades": [{ "g": 1, "d": "Sin desventaja por disparar adyacente. Aplicas herida sangrante (1d4 daño x 2 turnos)." }] },
+      { "name": "Cazador de Magos", "desc": "Anulación de usuarios del Axioma.", "grades": [{ "g": 1, "d": "Reacción para atacar si lanzan Axioma cerca. Ventaja vs poderes a 5 pies. Impacto puede disipar el Axioma." }, { "g": 2, "d": "Salv. Concentración enemiga es con Desventaja. Si fallan, pierden todo el Ingenio que iban a invertir." }] },
+      { "name": "Entrenamiento Militar", "desc": "Dominio de armas y armaduras.", "grades": [{ "g": 1, "d": "Competencia con 2 armas específicas y subes un grado en competencia de Armadura (Ligera > Media > Pesada)." }] },
+      { "name": "Adepto Elemental", "desc": "Manipulación de energía específica.", "grades": [{ "g": 1, "d": "Ignoras resistencia a un tipo de daño. Al tirar daño, los '1' cuentan como '2'." }] },
+      { "name": "Sello de la Voluntad", "desc": "Mente en paralelo.", "grades": [{ "g": 1, "d": "Puedes mantener hasta dos poderes que requieran Concentración activos simultáneamente." }] },
+      { "name": "Francotirador de Conjuros", "desc": "Precisión arcana.", "grades": [{ "g": 1, "d": "Aprendes un Truco ofensivo. Ataques con poderes obtienen Crítico con 19-2 natural." }] },
+      { "name": "Conjurador de Combate", "desc": "Lanzamiento bajo presión.", "grades": [{ "g": 1, "d": "Ventaja para mantener Concentración. Lanza con manos ocupadas. Usa poder (2 PA o menos) en ataques op." }] }
+    ],
+    "Senda Híbrida": [
+      { "name": "Juramento Sagrado", "desc": "Voluntad vinculada a entidad.", "grades": [{ "g": 1, "d": "Castigo Sagrado: 1 PA y 4 Ing para +2d8 daño extra (Radiante/Necrótico)." }, { "g": 2, "d": "Aura Protección: 1 PA y 6 Ing. Aliados a 15 pies suman tu CAR a todas las Salvaciones." }] },
+      { "name": "Aura de Devoción", "desc": "Presencia que altera la realidad.", "grades": [{ "g": 1, "d": "Activa aura de 15 pies: Terror (Desventaja Moral), Odio (+CAR al daño aliados) o Custodia (Resistencia Mágica)." }, { "g": 2, "d": "Radio aumenta a 30 pies y los efectos se intensifican según el DJ." }] },
+      { "name": "Magia de Guerra", "desc": "Entrelazamiento físico-místico.", "grades": [{ "g": 1, "d": "Tras lanzar Truco (1-2 PA), realiza un ataque con arma por solo 1 PA adicional." }, { "g": 2, "d": "Tras lanzar Poder con Ingenio, realiza un ataque con arma por 1 PA." }] },
+      { "name": "Camino de las Sombras", "desc": "Movimiento por pliegues de realidad.", "grades": [{ "g": 1, "d": "Teletransporte 30 pies a sombras (1 PA y 6 Ing). Siguiente acción tiene Ventaja." }, { "g": 2, "d": "Teletransporte no provoca ataques op. Reacción y 12 Ing para que ataque falle automáticamente." }] },
+      { "name": "Canalización de Energía Primal", "desc": "Cuerpo como foco de la Fuente.", "grades": [{ "g": 1, "d": "Puños de Poder: Ataques desarmados ignoran resistencias. 1 PA y 4 Ing para +1d6 daño elemental x 1 min." }, { "g": 2, "d": "Impacto Resonante: Daño extra 1d8. Ataque desarmado permite lanzar Poder como parte del golpe." }] },
+      { "name": "Uno con el Acero", "desc": "Comunión mística con el arma.", "grades": [{ "g": 1, "d": "Sin armadura, suma SAB a CA además de DES mientras empuñes arma pesada/versátil." }, { "g": 2, "d": "En Bloqueo Enfrentado, gasta 4 Ing/Adr para Ventaja. Si ganas: Contragolpe o Vacío Atractor (Aliados ganan Ventaja)." }] },
+      { "name": "Mutación Controlada", "desc": "Fisiología alterada por elixires.", "grades": [{ "g": 1, "d": "Consumir brebaje es 0 PA. Bajo efectos, sumas CON a tiradas de Bloqueo Enfrentado con espada." }, { "g": 2, "d": "Inmune venenos mundanos, elixires duran el doble. Éxito en Bloqueo recupera 1 Adrenalina." }] },
+      { "name": "Disparo Infundido", "desc": "Proyectiles como vectores de poder.", "grades": [{ "g": 1, "d": "Proyectil Canalizador: Imbuye ataque a distancia (2 PA) con un Poder conocido pagando su Ingenio." }, { "g": 2, "d": "Flecha Horizonte: Aplica Esfuerzo Creativo a disparos infundidos. Ataque Bifurcado afecta segundo objetivo." }] },
+      { "name": "Presencia de Mando", "desc": "Coordinación táctica del caos.", "grades": [{ "g": 1, "d": "Grito Reagrupación: 1 PA y 4 Adr permite a aliado actuar inmediatamente fuera de su turno." }, { "g": 2, "d": "Táctica Enjambre: Tras impacto, gasta 6 Adr para dar Bloqueo Enfrentado gratuito a aliados adyacentes al enemigo." }] },
+      { "name": "Vigilancia del Vacío", "desc": "Anticipación y vacío mental.", "grades": [{ "g": 1, "d": "Sin armadura media/pesada, CA base es 10 + DES + SAB. Ganar Bloqueo recupera 2 Ingenio." }] }
+    ],
+    "Senda de Mercurio": [
+      { "name": "Armadura de Poder", "desc": "Carcasa mecánica arcana.", "grades": [{ "g": 1, "d": "Foco Integrado: Vinculas armadura, ignoras requisitos FUE. Lanzar Poder da +1 CA un turno." }, { "g": 2, "d": "Sinergia Plasma: 1 PA y 4 Ing para invocar armadura o ganar Resistencia Elemental un asalto." }, { "g": 3, "d": "+1 CA permanente. 2 PA y 6 Ing dispara rayo (4d6). Dañar permite ataque CC por 1 PA." }] },
+      { "name": "Maestría Alquímica", "desc": "Ciencia de reactivos y mutaciones.", "grades": [{ "g": 1, "d": "Alquimia Menor: Conoces 6 recetas. Preparas 4 dosis por Descanso Largo (0 Slots en cinturón)." }, { "g": 2, "d": "Fórmulas Potenciadas: Conoces 8 recetas, preparas 6 dosis. CD veneno +2, elixires +50% efectividad." }] }
+    ],
+    "Senda de Alteración": [
+      { "name": "Carencia Mística", "desc": "Cuerpo que absorbe energía mística.", "grades": [{ "g": 1, "d": "Resistencia Daño Mágico/Psíquico. Adrenalina en Percepción/Proeza da +4. Indetectable por medios mágicos. +10 Adrenalina." }] },
+      { "name": "Flujo Armónico", "desc": "Transvase de energías física/mental.", "grades": [{ "g": 1, "d": "Equilibrio: Una vez x encuentro (0 PA), sacrifica 6 puntos de una reserva para recuperar mitad en la otra." }, { "g": 2, "d": "Sinergia Perfecta: Transvase es 1 a 1 (máximo 6) una vez por Descanso Corto." }] }
+    ],
+    "Senda Sobrenatural": [
+      { "name": "Despertar Sobrenatural", "id": "despertar", "desc": "Conexión con frecuencias de poder.", "grades": [{ "g": 1, "d": "Eliges Fuente (Divinidad/Pacto/Innata/Erudición/Naturaleza/Psiónica). +6 Ingenio Máx. 2 Trucos y 1 Poder N1." }] },
+      { "name": "Galería de Entidades", "desc": "Captura de esencia de derrotados.", "grades": [{ "g": 1, "d": "Captura entidades sobrenaturales (Salv. CAR). Almacenas un número igual a Competencia." }, { "g": 2, "d": "Almacena más entidades e invoca dos a la vez. Consumir esencia recupera 1d10 Ingenio." }, { "g": 3, "d": "Ventaja capturando. Acción definitiva (3 PA): sacrifica todas para ataque de 1d10 por cada una." }] },
+      { "name": "Conjuración de Sombras", "desc": "Invoca sirvientes Eidolones.", "grades": [{ "g": 1, "d": "Invocas Eidolones (2 PA y 6 Ing). Debes derrotar nuevos Eidolones en combate ritual para dominarlos." }, { "g": 2, "d": "Mantienes dos activos. La sombra sirve como inventario (4 slots)." }, { "g": 3, "d": "Invocas tres. Acceso a legendarios. Gasta 8 Ing para reducir movimiento enemigo en área de 30 pies." }] },
+      { "name": "Repertorio Sobrenatural", "desc": "Expansión de consciencia.", "grades": [{ "g": 1, "d": "Aprendes permanentemente 3 trucos y 2 Poderes adicionales de tu Fuente de Poder." }] }
+    ],
+    "Fuente: Divinidad": [
+      { "name": "Canalización Divina", "desc": "Conducto de voluntad superior.", "grades": [{ "g": 1, "d": "Eliges 2 opciones: Voluntad del Sol (Asustar), Toque Preservación (Cura), Ataque Sagrado (Maximizar daño) o Bendición Juicio (Ventaja)." }] },
+      { "name": "Mando del Sepulcro", "desc": "Control de no-muertos.", "grades": [{ "g": 1, "d": "2 PA y 8 Ing: Controlas no-muerto/infernal (Salv. SAB) por 24h si su NA es <= tu nivel." }] },
+      { "name": "Aura de Odio", "desc": "Presencia maligna (CAR 16+).", "grades": [{ "g": 1, "d": "Sumas CAR al daño CC propio y de aliados no-muertos/infernales a 10 pies." }, { "g": 2, "d": "El radio del aura aumenta a 30 pies." }] },
+      { "name": "Dominio de la Muerte", "desc": "Nigromancia de biomasa.", "grades": [{ "g": 1, "d": "Competencia armas marciales. Trucos de nigromancia afectan dos objetivos adyacentes." }, { "g": 2, "d": "Gasta 6 Ing en CC para infligir 5 + (2xNivel) daño necrótico extra (ignora res)." }, { "g": 3, "d": "Una vez por turno, ataques infligen +1d8 de daño necrótico adicional." }] },
+      { "name": "Dominio de la Guerra", "desc": "Estrategia marcial.", "grades": [{ "g": 1, "d": "Competencia armadura pesada/marciales. Puedes atacar por 1 PA (veces igual a SAB)." }, { "g": 2, "d": "Reacción y 6 Ing para dar +10 a una tirada de ataque de un aliado." }, { "g": 3, "d": "Resistencia daño físico. Ataques infligen +1d8 daño radiante extra una vez por turno." }] },
+      { "name": "Dominio de la Vida", "desc": "Bio-restauración celular.", "grades": [{ "g": 1, "d": "Curaciones restauran +2 adicionales por nivel del poder." }, { "g": 2, "d": "2 PA y 8 Ing sanas 5xNivel divididos entre aliados a 30 pies." }, { "g": 3, "d": "Todos tus dados de curación obtienen el resultado máximo automáticamente." }] },
+      { "name": "Dominio del Engaño", "desc": "Maestría en la ilusión y la duplicidad", "grades": [{ "g": 1, "d": "Bendición del Embaucador: Tocas a un aliado para darle Ventaja en todas las tiradas de Sigilo por 1 hora." }, { "g": 2, "d": "Duplicado Ilusorio (Nivel 5+): Por 2 PA y 8 de Ingenio, creas un duplicado. Puedes lanzar poderes desde su posición." }, { "g": 3, "d": "Maestro de Espejismos (Nivel 9+): Al usar Duplicado Ilusorio, creas hasta cuatro copias en lugar de una." }] }
+    ],
+    "Fuente: Erudición": [
+      { "name": "Arcanista Erudito", "desc": "Tu conocimiento está anclado en un soporte físico: tu Libro de Datos/Conjuros. Requiere: Despertar Sobrenatural (Erudición).", "grades": [ { "g": 1, "d": "El Gran Archivo: Libro con 4 poderes Nv1. Preparas INT + Competencia. Aprendes Encontrar Familiar (siempre preparado)." }, { "g": 2, "d": "Recuperación de Datos (Nivel 5+): 1/DL, tras Descanso Corto, gastas 8 Ing para recuperar Ing igual a Nivel/2." }, { "g": 3, "d": "Secuencias Prioritarias (Nivel 9+): Eliges un poder Nv1 y uno Nv2. Siempre preparados, coste 1 Ing." }]},
+      { "name": "Especialista Arcano","desc": "Te enfocas en una 'Escuela' o protocolo de realidad específico. Requiere: Arcanista Erudito.", "grades": [{ "g": 1, "d": "Coste transcribir mitad. Elige uno: Abjuración (Escudo PV extras), Adivinación (2d20 sustituibles/día), Conjuración (TP 15 pies por 1PA/2Ing), Evocación (Áreas no dañan aliados) o Nigromancia (Siervos +PV/Daño)." }] },
+      { "name": "Infusión Arcana","desc": "Hackeas objetos mundanos para convertirlos en herramientas de poder (El Artífice). Requiere: INT 15+.",  "grades": [ { "g": 1, "d": "Maestro de Infusiones: Imbuyes objetos (bonos +1/elemental). Mantienes activos 1+(Nivel/2). Se refrescan tras DL." }] },
+      { "name": "Genialidad Táctica", "desc": "Tu cerebro procesa el combate como una sucesión de variables. Requiere: INT 15+, Investigación G1.", "grades": [{ "g": 1, "d": "Análisis Rápido: Reacción (4 Ing) para sumar mod. INT a salvación o prueba de aliado cercano." }, { "g": 2, "d": "Genialidad Veterana: Una vez por asalto, usas Análisis Rápido sin coste de Ingenio." }] },
+      { "name": "Maestría en Objetos Mágicos", "desc": "Entiendes la arquitectura mística de cualquier artefacto. Requiere: Nivel 5+, INT 15+.", "grades": [ { "g": 1, "d": "Identificas por contacto e ignoras requisitos. Ganas +1 ranura de sintonización (Talento seleccionable hasta 3 veces)." }] },
+      { "name": "Alma del Artífice", "desc": "Tu conexión con tus herramientas refuerza tu propio campo de energía. Requiere: Nivel 7+.", "grades": [ { "g": 1, "d": "Vínculo Protector: Ganas +1 a todas tus Salvaciones por cada objeto mágico sintonizado." }]  }
+    ],
+    "Fuente: Pacto": [
+      { "name": "Regalo del Patrón", "desc": "Vínculo físico simbólico.", "grades": [{ "g": 1, "d": "Eliges: El Tomo (3 trucos), Las Cadenas (Familiar especial que ataca) o La Corona (+1 CA y Ventaja Influencia)." }] },
+      { "name": "Explosión Agonizante", "desc": "Mejora de rayo.", "grades": [{ "g": 1, "d": "Sumas tu modificador de Carisma al daño de cada rayo de tu Explosión Sobrenatural." }] },
+      { "name": "Hoja Sedienta", "desc": "Pacto del Acero (Niv. 5+).", "grades": [{ "g": 1, "d": "Cuando usas la acción de Atacar (2 PA), realizas dos ataques en lugar de uno." }] },
+      { "name": "Bebedor de Vida", "desc": "Pacto del Acero (Niv. 7+).", "grades": [{ "g": 1, "d": "Al impactar con arma del pacto, infliges daño necrótico extra igual a tu Mod. CAR." }] }
+    ],
+    "Fuente: Herencia": [
+      { "name": "Metamagia", "desc": "Alteración de estructura vital.", "grades": [{ "g": 1, "d": "Eliges opción gastando Adrenalina: Poder Acelerado (1 PA), Potenciado (Daño Máximo), Extendido o Gemelo." }] },
+      { "name": "Foco Elemental", "desc": "Sangre sintonizada.", "grades": [{ "g": 1, "d": "Tus poderes de un tipo ignoran Resistencia y puedes repetir los '1' en dados de daño." }] }
+    ],
+    "Fuente: Naturaleza": [
+      {"name": "Cambiaformas Bestial", "desc": "Tu código genético se vuelve fluido. Requiere: Despertar Sobrenatural (Naturaleza), SAB 13+.","grades": [ { "g": 1, "d": "Mímesis Biológica: 2 PA y 6 Ing. Te transformas en bestia conocida (1h). Adoptas sus Físicos/PV, mantienes Mentales." }, { "g": 2, "d": "Adaptación Extrema (Nivel 5+): Permite formas con nado/vuelo. Estando transformado: 1 PA y 8 Ing para regenerar 2d8 PV." }, { "g": 3, "d": "Avatar Primordial (Nivel 9+): Al transformar, gasta 8 Adrenalina extra. Ganas Resistencia Elemental y ataques +1d6 daño elemental." }] },
+      {"name": "Siervo de la Maleza", "desc": "Controlas la flora local como arma táctica. Requiere: Despertar Sobrenatural (Naturaleza), SAB 13+.", "grades": [ { "g": 1, "d": "Defensor del Yermo: Comp. escudos/medias. 1 PA y 2 Ing: Suelo difícil en 10 pies para enemigos (1 min)." }, { "g": 2, "d": "Enredo Bio-Orgánico (Nivel 5+): 2 PA y 8 Ing: Enredaderas apresan criatura a 60 pies (Salv. FUE)." }, { "g": 3, "d": "Animación Macro-Botánica (Nivel 9+): 16 Ing y 1 min conc: Animas planta masiva para luchar (NA = tu nivel) por 1 hora." }] },
+      { "name": "Vínculo Animal", "desc": "Tu voluntad se entrelaza con un depredador. Requiere: Despertar Sobrenatural (Naturaleza), SAB 13+.", "grades": [ { "g": 1, "d": "Compañero de Caza: Animal leal (NA 1). Misma iniciativa. Escala: +1 a tiradas por cada 2 niveles tuyos." },  { "g": 2, "d": "Instinto de Manada (Nivel 5+): Ataques son mágicos. Reacción del animal para contraatacar a quien te ataque." }, { "g": 3, "d": "Guardián del Espíritu (Nivel 9+): 2 PA y 16 Ing. Fusión espiritual (1 min): PV temp, daño Radiante extra y Resist. física." }] }]
+  },
+  "weapons": {
+    "baston": { "name": "Bastón", "dmg": "1d6", "slots": 1, "cat": "simple", "stat": "FIN" },
+    "shuriken": { "name": "Shuriken", "dmg": "1d4", "slots": 1, "cat": "simple", "stat": "FIN" },
+    "daga": { "name": "Daga", "dmg": "1d4", "slots": 1, "cat": "simple", "stat": "FIN" },
+    "espada_corta": { "name": "Espada Corta", "dmg": "1d6", "slots": 1, "cat": "marcial", "stat": "FIN" },
+    "espada_larga": { "name": "Espada Larga", "dmg": "1d8/1d10", "slots": 2, "cat": "marcial", "stat": "FUE" },
+    "mandoble": { "name": "Mandoble", "dmg": "2d6", "slots": 3, "cat": "marcial", "stat": "FUE" },
+    "hacha": { "name": "Hacha de Batalla", "dmg": "1d8", "slots": 2, "cat": "marcial", "stat": "FUE" },
+    "arco_corto": { "name": "Arco Corto", "dmg": "1d6", "slots": 2, "cat": "simple", "stat": "DES" },
+    "arco_largo": { "name": "Arco Largo", "dmg": "1d8", "slots": 2, "cat": "marcial", "stat": "DES" },
+    "ballesta_l": { "name": "Ballesta Ligera", "dmg": "1d6", "slots": 1, "cat": "simple", "stat": "DES" },
+    "ballesta_p": { "name": "Ballesta Pesada", "dmg": "1d8", "slots": 2, "cat": "marcial", "stat": "DES" },
+    "alabarda": { "name": "Alabarda", "dmg": "1d10", "slots": 3, "cat": "marcial", "stat": "FUE" },
+    "lanza": { "name": "Lanza", "dmg": "1d6", "slots": 1, "cat": "simple", "stat": "FUE" },
+    "martillo_g": { "name": "Martillo de Guerra", "dmg": "1d8/1d10", "slots": 3, "cat": "marcial", "stat": "FUE" },
+    "martillo_l": { "name": "Martillo Ligero", "dmg": "1d6", "slots": 1, "cat": "marcial", "stat": "FUE" },
+    "ninjato": { "name": "Ninjato", "dmg": "1d6", "slots": 1, "cat": "marcial", "stat": "FIN" }
+  },
+  "armors": {
+    "pieles": { "name": "Pieles", "ca": 11, "type": "light", "slots": 1 },
+    "cuero": { "name": "Cuero", "ca": 12, "type": "light", "slots": 1 },
+    "acolchada": { "name": "Acolchada", "ca": 13, "type": "light", "slots": 1 },
+    "coraza": { "name": "Coraza", "ca": 14, "type": "medium", "slots": 2 },
+    "malla": { "name": "Cota de Malla", "ca": 16, "type": "heavy", "slots": 3 },
+    "mallas_p": { "name": "Mallas con Placas", "ca": 17, "type": "heavy", "slots": 3 },
+    "placas": { "name": "Placas", "ca": 18, "type": "heavy", "slots": 3 }
+  },
+  "shields": {
+    "rodela": { "name": "Escudo (Rodela)", "slots": 1, "bonus": 1 },
+    "basico": { "name": "Escudo (Básico)", "slots": 1, "bonus": 2 },
+    "torre": { "name": "Escudo (Torre)", "slots": 2, "bonus": 3 }
+  }
+}
