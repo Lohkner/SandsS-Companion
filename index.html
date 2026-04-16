@@ -1879,6 +1879,15 @@ const app = {
   showScreen(id) {
     document.getElementById('home-screen').classList.toggle('hidden', id !== 'home');
     document.getElementById('app-screen').classList.toggle('hidden', id !== 'app');
+    // Limpiar el listener de cierre de swipe cuando salimos de la home,
+    // para evitar que se acumulen listeners en document con cada visita.
+    if (id !== 'home') {
+      const el = document.getElementById('home-roster');
+      if (el?._swipeCloseHandler) {
+        document.removeEventListener('touchstart', el._swipeCloseHandler);
+        el._swipeCloseHandler = null;
+      }
+    }
   },
 
   goHome() {
@@ -2352,10 +2361,10 @@ const app = {
       const sv = document.getElementById('personal_summary_view');
       if (ev) { ev.style.display = 'block'; ev.classList.remove('section-reveal'); void ev.offsetWidth; ev.classList.add('section-reveal'); }
       if (sv) sv.style.display = 'none';
-      // Restore alignment button active state
+      // Restore alignment button active state — usa dataset.ali (igual que applyCharData y randomize)
       if (this.alignment) {
         document.querySelectorAll('.aopt').forEach(b =>
-          b.classList.toggle('active', b.textContent === this.alignment)
+          b.classList.toggle('active', b.dataset.ali === this.alignment)
         );
       }
     } else {
@@ -2588,6 +2597,7 @@ const app = {
     ALIGNMENTS.forEach(a => {
       const btn = document.createElement('button');
       btn.type = 'button'; btn.className = 'aopt'; btn.textContent = a;
+      btn.dataset.ali = a; // necesario para que applyCharData y randomize puedan restaurar el estado activo
       btn.onclick = () => {
         this.alignment = a;
         document.querySelectorAll('.aopt').forEach(b => b.classList.remove('active'));
@@ -4741,8 +4751,12 @@ const app = {
   /* ── RANDOMIZE ── */
   randomize() {
     if (!this.DB.archetypes) { this.toast('Carga reglas primero','err'); return; }
+    // Anclar vista en página 0 y suprimir _markUnsaved durante la generación
+    this._charLoading = true;
     this.clearCharData();
     this.unlockApp();
+    this.goToPage(0);
+    this._pageScrolls = {}; // limpiar posiciones guardadas obsoletas
 
     // 1. Stats (3d6 cada uno)
     STATS.forEach(s => {
@@ -4836,6 +4850,7 @@ const app = {
     ['identity','stats','saves','skills','combat','equipment'].forEach(s=>this.confirmSection(s));
 
     this.buildDetailPage();
+    this._charLoading = false;
     this.toast('Personaje aleatorio listo','ok');
   },
 
