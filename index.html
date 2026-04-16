@@ -354,32 +354,22 @@ input[type=radio]:checked::after{transform:scale(1)}
 
 /* ── Revamped .bedit button ── */
 .bedit{
-  display:inline-flex;align-items:center;justify-content:center;gap:5px;
+  display:flex;align-items:center;justify-content:center;gap:4px;
   background:transparent;
-  border:1px solid rgba(138,122,158,.3);
+  border:1px solid var(--rim);
   color:var(--muted);
   font-family:var(--fm);font-size:.62rem;
-  padding:5px 16px;
+  padding:4px 14px;
   cursor:pointer;
-  border-radius:20px;
+  border-radius:var(--r);
   margin:6px auto 0;
   transition:border-color .18s,color .18s,background .18s,box-shadow .18s;
-  text-transform:uppercase;letter-spacing:.1em;
+  text-transform:uppercase;letter-spacing:.08em;
   -webkit-tap-highlight-color:transparent;
-  position:relative;overflow:hidden;
+  box-shadow:0 1px 4px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.03);
 }
-.bedit::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(200,169,110,.0),rgba(200,169,110,.0));
-  transition:background .18s;border-radius:inherit;
-}
-.bedit:hover{
-  border-color:rgba(200,169,110,.5);
-  color:var(--gold);
-  background:rgba(200,169,110,.06);
-  box-shadow:0 0 0 1px rgba(200,169,110,.12),0 2px 8px rgba(0,0,0,.25);
-}
-.bedit:active{transform:scale(.94);background:rgba(200,169,110,.1);box-shadow:none}
+.bedit:hover{border-color:var(--gold);color:var(--gold);background:rgba(200,169,110,.06);box-shadow:0 2px 8px rgba(0,0,0,.3),0 0 0 1px rgba(200,169,110,.1),inset 0 1px 0 rgba(255,255,255,.04)}
+.bedit:active{transform:scale(.95);background:rgba(200,169,110,.1);box-shadow:none}
 .bmini{font-family:var(--fm);font-size:.6rem;padding:3px 7px;cursor:pointer;border-radius:2px;border:1px solid;letter-spacing:.05em;text-transform:uppercase;transition:all .15s}
 .bmini.bl{background:rgba(29,78,143,.18);border-color:var(--ice);color:var(--ice)}.bmini.bl:hover{background:rgba(74,158,202,.3);color:#fff}
 .bmini.br{background:rgba(125,28,42,.18);border-color:var(--crimson);color:var(--ember)}.bmini.br:hover{background:var(--crimson);color:#fff}
@@ -1279,7 +1269,7 @@ input:focus-visible,textarea:focus-visible{outline:none}
       </div>
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px">
         <div>
-          <span style="font-family:var(--fd);font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">Recordar posición al volver</span>
+          <span id="scroll_preserve_lbl" style="font-family:var(--fd);font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">Activar recordar posición al volver</span>
           <div style="font-family:var(--fm);font-size:.6rem;color:var(--border);margin-top:2px">Mantiene el scroll de cada sección al cambiar de pestaña</div>
         </div>
         <button id="scroll_preserve_btn" class="toggle-btn" onclick="app.toggleScrollPreserve()" aria-pressed="false" title="Activar/desactivar recordar posición de scroll"></button>
@@ -4638,7 +4628,11 @@ const app = {
 
   _syncScrollPreserveBtn() {
     const btn = document.getElementById('scroll_preserve_btn');
+    const lbl = document.getElementById('scroll_preserve_lbl');
     if (btn) btn.setAttribute('aria-pressed', String(this.scrollPreserve));
+    if (lbl) lbl.textContent = this.scrollPreserve
+      ? 'Desactivar recordar posición al volver'
+      : 'Activar recordar posición al volver';
   },
 
   /* ── LETHALITY ── */
