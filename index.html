@@ -82,8 +82,6 @@ html{padding-top:env(safe-area-inset-top,0px);box-sizing:border-box}
 .leth-card[data-tier="3"].active{border-color:var(--sage);box-shadow:0 0 0 1px rgba(76,175,125,.3),0 4px 16px rgba(76,175,125,.2),inset 0 1px 0 rgba(76,175,125,.1)}
 .leth-card.active::before{opacity:1}
 /* Inner elements */
-.leth-icon{font-size:1.4rem;line-height:1;margin-bottom:2px;transition:transform .18s}
-.leth-card.active .leth-icon{transform:scale(1.12)}
 .leth-name{font-family:var(--fd);font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;transition:color .18s}
 .leth-card[data-tier="1"] .leth-name{color:var(--blood)}
 .leth-card[data-tier="2"] .leth-name{color:var(--goldb)}
@@ -1282,9 +1280,8 @@ input:focus-visible,textarea:focus-visible{outline:none}
               <span class="pt">Configuración de Campaña</span>
             </div>
             <!-- Summary view -->
-            <div id="campana_summary" style="padding:6px 0 4px;display:flex;flex-direction:column;align-items:center;gap:8px">
+            <div id="campana_summary" style="padding:6px 0 4px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center">
               <span class="leth-summary-badge" id="campana_leth_badge" data-tier="1">
-                <span id="campana_leth_icon_sum">💀</span>
                 <span id="campana_leth_label">Letalidad 1 — +1 PV/nivel</span>
               </span>
               <button class="bedit" id="campana_edit_btn" onclick="app.editCampana()">✏ Editar</button>
@@ -1296,21 +1293,18 @@ input:focus-visible,textarea:focus-visible{outline:none}
                 <button class="leth-card active" id="leth_1" data-tier="1"
                   onclick="app.setLethality(1)" onmousedown="this.blur()">
                   <div class="leth-check">✓</div>
-                  <div class="leth-icon">💀</div>
                   <div class="leth-name">Letalidad 1</div>
                   <div class="leth-bonus">+1 PV/nivel</div>
                 </button>
                 <button class="leth-card" id="leth_2" data-tier="2"
                   onclick="app.setLethality(2)" onmousedown="this.blur()">
                   <div class="leth-check">✓</div>
-                  <div class="leth-icon">⚔️</div>
                   <div class="leth-name">Letalidad 2</div>
                   <div class="leth-bonus">+2 PV/nivel</div>
                 </button>
                 <button class="leth-card" id="leth_3" data-tier="3"
                   onclick="app.setLethality(3)" onmousedown="this.blur()">
                   <div class="leth-check">✓</div>
-                  <div class="leth-icon">🩸</div>
                   <div class="leth-name">Letalidad 3</div>
                   <div class="leth-bonus">+3 PV/nivel</div>
                 </button>
@@ -4821,17 +4815,15 @@ const app = {
     });
     // Update summary badge
     const TIERS = {
-      1: { label:'Letalidad 1 — +1 PV/nivel', tier:'1', icon:'💀' },
-      2: { label:'Letalidad 2 — +2 PV/nivel', tier:'2', icon:'⚔️' },
-      3: { label:'Letalidad 3 — +3 PV/nivel', tier:'3', icon:'🩸' },
+      1: { label:'Letalidad 1 — +1 PV/nivel', tier:'1' },
+      2: { label:'Letalidad 2 — +2 PV/nivel', tier:'2' },
+      3: { label:'Letalidad 3 — +3 PV/nivel', tier:'3' },
     };
     const t = TIERS[n] || TIERS[1];
     const badge = document.getElementById('campana_leth_badge');
     const lbl   = document.getElementById('campana_leth_label');
-    const icon  = document.getElementById('campana_leth_icon_sum');
     if (badge) badge.dataset.tier = t.tier;
     if (lbl)   lbl.textContent    = t.label;
-    if (icon)  icon.textContent   = t.icon;
     this.calc();
   },
 
