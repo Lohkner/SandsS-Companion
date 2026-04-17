@@ -48,9 +48,71 @@ html{padding-top:env(safe-area-inset-top,0px);box-sizing:border-box}
   .lfill { transition: none; }
 }
 
-.leth-btn{background:var(--raised);border:1px solid var(--rim);border-radius:var(--r);padding:7px 4px;cursor:pointer;transition:all .18s;text-align:center;width:100%}
-.leth-btn.active{background:rgba(200,169,110,.08);border-color:var(--gold)}
-.leth-btn:hover{border-color:var(--border)}
+/* ══ LETHALITY CARD REVAMP ══ */
+.leth-card{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:12px 8px 10px;
+  background:linear-gradient(160deg,var(--raised),var(--deep));
+  border:2px solid var(--rim);
+  border-radius:12px;
+  cursor:pointer;
+  transition:border-color .18s,background .18s,box-shadow .18s,transform .1s;
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
+  position:relative;overflow:hidden;
+  width:100%;
+}
+.leth-card::before{
+  content:'';position:absolute;inset:0;
+  border-radius:10px;
+  opacity:0;transition:opacity .18s;
+}
+.leth-card:active{transform:scale(.95)}
+/* Tier colors */
+.leth-card[data-tier="1"]::before{background:radial-gradient(ellipse at 50% 0%,rgba(176,48,64,.18) 0%,transparent 70%)}
+.leth-card[data-tier="2"]::before{background:radial-gradient(ellipse at 50% 0%,rgba(200,169,110,.18) 0%,transparent 70%)}
+.leth-card[data-tier="3"]::before{background:radial-gradient(ellipse at 50% 0%,rgba(76,175,125,.18) 0%,transparent 70%)}
+/* Active state */
+.leth-card.active{
+  background:linear-gradient(160deg,var(--raised),var(--deep));
+  transform:none;
+}
+.leth-card[data-tier="1"].active{border-color:var(--blood);box-shadow:0 0 0 1px rgba(176,48,64,.3),0 4px 16px rgba(176,48,64,.2),inset 0 1px 0 rgba(176,48,64,.1)}
+.leth-card[data-tier="2"].active{border-color:var(--gold);box-shadow:0 0 0 1px rgba(200,169,110,.3),0 4px 16px rgba(200,169,110,.2),inset 0 1px 0 rgba(200,169,110,.1)}
+.leth-card[data-tier="3"].active{border-color:var(--sage);box-shadow:0 0 0 1px rgba(76,175,125,.3),0 4px 16px rgba(76,175,125,.2),inset 0 1px 0 rgba(76,175,125,.1)}
+.leth-card.active::before{opacity:1}
+/* Inner elements */
+.leth-icon{font-size:1.4rem;line-height:1;margin-bottom:2px;transition:transform .18s}
+.leth-card.active .leth-icon{transform:scale(1.12)}
+.leth-name{font-family:var(--fd);font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;transition:color .18s}
+.leth-card[data-tier="1"] .leth-name{color:var(--blood)}
+.leth-card[data-tier="2"] .leth-name{color:var(--goldb)}
+.leth-card[data-tier="3"] .leth-name{color:var(--sage)}
+.leth-bonus{font-family:var(--fm);font-size:.6rem;color:var(--muted);margin-top:1px;transition:color .18s}
+.leth-card.active .leth-bonus{color:var(--dim)}
+/* Selected badge */
+.leth-check{
+  position:absolute;top:5px;right:6px;
+  width:14px;height:14px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.55rem;font-weight:700;
+  opacity:0;transform:scale(.5);
+  transition:opacity .18s,transform .18s;
+}
+.leth-card[data-tier="1"] .leth-check{background:var(--blood);color:#fff}
+.leth-card[data-tier="2"] .leth-check{background:var(--gold);color:#1a1625}
+.leth-card[data-tier="3"] .leth-check{background:var(--sage);color:#fff}
+.leth-card.active .leth-check{opacity:1;transform:scale(1)}
+/* Summary badge */
+.leth-summary-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 12px;border-radius:20px;
+  font-family:var(--fd);font-size:.72rem;font-weight:600;letter-spacing:.06em;
+  border:1px solid;
+}
+.leth-summary-badge[data-tier="1"]{color:var(--blood);border-color:rgba(176,48,64,.35);background:rgba(176,48,64,.08)}
+.leth-summary-badge[data-tier="2"]{color:var(--goldb);border-color:rgba(200,169,110,.35);background:rgba(200,169,110,.08)}
+.leth-summary-badge[data-tier="3"]{color:var(--sage);border-color:rgba(76,175,125,.35);background:rgba(76,175,125,.08)}
 .fs-btn{background:var(--raised);border:1px solid var(--rim);border-radius:var(--r);padding:5px 10px;cursor:pointer;color:var(--dim);font-family:var(--fd);transition:all .15s;line-height:1;min-width:32px;text-align:center}
 .fs-btn.active{background:rgba(200,169,110,.18);border-color:var(--gold);color:var(--gold);box-shadow:0 0 0 1px rgba(200,169,110,.25),0 2px 6px rgba(0,0,0,.3)}
 .fs-btn:hover:not(.active){border-color:var(--border);color:var(--text);background:var(--panel)}
@@ -612,7 +674,7 @@ details>summary::before{content:'▸';color:var(--gold);font-size:.56rem;transit
 .res-btn-ing{border-color:rgba(74,158,202,.35);color:rgba(74,158,202,.7)}.res-btn-ing:hover{background:rgba(74,158,202,.15);border-color:var(--ice);color:var(--ice);box-shadow:0 0 0 1px rgba(74,158,202,.2)}
 /* ══ UTILITY BADGES ══ */
 .pill-badge{display:inline-flex;align-items:center;gap:3px;font-family:var(--fm);font-size:.66rem;color:var(--muted);margin-left:auto;background:var(--raised);border:1px solid var(--border);border-radius:20px;padding:2px 9px}
-.leth-sub{font-family:var(--fm);font-size:.58rem;color:var(--muted);margin-top:2px}
+
 
 .last-saved{font-family:var(--fm);font-size:.52rem;color:var(--muted);letter-spacing:.04em;transition:color .5s;text-align:center;margin-top:1px}
 .last-saved.fresh{color:var(--sage)!important}
@@ -1220,29 +1282,41 @@ input:focus-visible,textarea:focus-visible{outline:none}
               <span class="pt">Configuración de Campaña</span>
             </div>
             <!-- Summary view -->
-            <div id="campana_summary" style="padding:4px 0;text-align:center">
-              <div id="campana_leth_label" style="font-family:var(--fd);font-size:.78rem;color:var(--gold);font-weight:600;margin-bottom:6px">Letalidad 1 — +1 PV/nivel</div>
+            <div id="campana_summary" style="padding:6px 0 4px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <span class="leth-summary-badge" id="campana_leth_badge" data-tier="1">
+                <span id="campana_leth_icon_sum">💀</span>
+                <span id="campana_leth_label">Letalidad 1 — +1 PV/nivel</span>
+              </span>
               <button class="bedit" id="campana_edit_btn" onclick="app.editCampana()">✏ Editar</button>
             </div>
             <!-- Edit view -->
-            <div id="campana_edit" style="display:none;margin-top:6px">
-              <span class="fl">Nivel de Letalidad</span>
-              <div class="g3 mt4">
-                <button class="leth-btn active" id="leth_1" onclick="app.setLethality(1)">
-                  <div style="font-family:var(--fd);font-size:.65rem;color:var(--blood);font-weight:600">Letalidad 1</div>
-                  <div class="leth-sub">+1 PV/nivel</div>
+            <div id="campana_edit" style="display:none;margin-top:8px">
+              <span class="fl" style="margin-bottom:8px;display:block">Nivel de Letalidad</span>
+              <div class="g3" style="gap:8px">
+                <button class="leth-card active" id="leth_1" data-tier="1"
+                  onclick="app.setLethality(1)" onmousedown="this.blur()">
+                  <div class="leth-check">✓</div>
+                  <div class="leth-icon">💀</div>
+                  <div class="leth-name">Letalidad 1</div>
+                  <div class="leth-bonus">+1 PV/nivel</div>
                 </button>
-                <button class="leth-btn" id="leth_2" onclick="app.setLethality(2)">
-                  <div style="font-family:var(--fd);font-size:.65rem;color:var(--gold);font-weight:600">Letalidad 2</div>
-                  <div class="leth-sub">+2 PV/nivel</div>
+                <button class="leth-card" id="leth_2" data-tier="2"
+                  onclick="app.setLethality(2)" onmousedown="this.blur()">
+                  <div class="leth-check">✓</div>
+                  <div class="leth-icon">⚔️</div>
+                  <div class="leth-name">Letalidad 2</div>
+                  <div class="leth-bonus">+2 PV/nivel</div>
                 </button>
-                <button class="leth-btn" id="leth_3" onclick="app.setLethality(3)">
-                  <div style="font-family:var(--fd);font-size:.65rem;color:var(--sage);font-weight:600">Letalidad 3</div>
-                  <div class="leth-sub">+3 PV/nivel</div>
+                <button class="leth-card" id="leth_3" data-tier="3"
+                  onclick="app.setLethality(3)" onmousedown="this.blur()">
+                  <div class="leth-check">✓</div>
+                  <div class="leth-icon">🩸</div>
+                  <div class="leth-name">Letalidad 3</div>
+                  <div class="leth-bonus">+3 PV/nivel</div>
                 </button>
               </div>
-              <div style="font-family:var(--fm);font-size:.62rem;color:var(--muted);margin-top:5px;font-style:italic;line-height:1.4">PV adicionales a partir del Nivel 2. No afectan al Nivel 1.</div>
-              <button class="bcnf" style="margin-top:8px;width:100%" onclick="app.confirmCampana()">✓ Confirmar</button>
+              <p style="font-family:var(--fm);font-size:.62rem;color:var(--muted);margin-top:8px;font-style:italic;line-height:1.45">PV adicionales a partir del Nivel 2. No afectan al Nivel 1.</p>
+              <button class="bcnf" onclick="app.confirmCampana()">✓ Confirmar</button>
             </div>
           </div>
           <div class="panel"><div class="ph"><span class="pt" id="detail_desc_title">Linaje: —</span></div><div id="detail_desc_body"><p style="color:var(--muted);font-size:.8rem;font-style:italic">Selecciona un Linaje.</p></div></div>
@@ -4740,14 +4814,24 @@ const app = {
 
   setLethality(n) {
     this.lethality = n;
-    [1,2,3].forEach(i=>{
-      const el=document.getElementById('leth_'+i);
-      if(el) el.classList.toggle('active', i===n);
+    // Toggle active on cards
+    [1,2,3].forEach(i => {
+      const el = document.getElementById('leth_'+i);
+      if (el) el.classList.toggle('active', i === n);
     });
-    // Update summary label
-    const labels = {1:'Letalidad 1 — +1 PV/nivel', 2:'Letalidad 2 — +2 PV/nivel', 3:'Letalidad 3 — +3 PV/nivel'};
-    const lbl = document.getElementById('campana_leth_label');
-    if(lbl) lbl.textContent = labels[n]||labels[1];
+    // Update summary badge
+    const TIERS = {
+      1: { label:'Letalidad 1 — +1 PV/nivel', tier:'1', icon:'💀' },
+      2: { label:'Letalidad 2 — +2 PV/nivel', tier:'2', icon:'⚔️' },
+      3: { label:'Letalidad 3 — +3 PV/nivel', tier:'3', icon:'🩸' },
+    };
+    const t = TIERS[n] || TIERS[1];
+    const badge = document.getElementById('campana_leth_badge');
+    const lbl   = document.getElementById('campana_leth_label');
+    const icon  = document.getElementById('campana_leth_icon_sum');
+    if (badge) badge.dataset.tier = t.tier;
+    if (lbl)   lbl.textContent    = t.label;
+    if (icon)  icon.textContent   = t.icon;
     this.calc();
   },
 
