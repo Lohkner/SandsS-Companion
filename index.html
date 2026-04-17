@@ -638,6 +638,15 @@ details>summary::before{content:'▸';color:var(--gold);font-size:.56rem;transit
 :focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:var(--r)}
 button:focus-visible,select:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 input:focus-visible,textarea:focus-visible{outline:none}
+/* Suprimir focus-visible en botones dentro del track de páginas —
+   en móvil el swipe puede otorgar :focus a un botón que el dedo
+   rozó, dejando el outline dorado pegado aunque no se haya pulsado. */
+.pages-track button:focus,.pages-track button:focus-visible,
+.pages-track .sbox:focus,.pages-track .svsbox:focus,
+.pages-track .aopt:focus,.pages-track .aopt:focus-visible{outline:none!important;box-shadow:none!important}
+/* Durante un drag activo ningún hijo debe mostrar estado de foco */
+.pages-track.is-dragging *:focus,
+.pages-track.is-dragging *:focus-visible{outline:none!important;box-shadow:none!important}
 
 
 /* ══ UTILITY CLASSES (replaces repeated inline styles) ══ */
@@ -2186,15 +2195,15 @@ const app = {
     const w = document.getElementById('pages_wrapper');
     const track = document.getElementById('pages_track');
     let startX=0, startY=0, startT=0;
-    let lastX=0, lastT=0, vel=0;
+    let lastX=0, lastT=0;
+    // Exponential moving average velocity — más estable que la instantánea
+    let velEMA = 0;
     let dragging=false, locked=false;
 
     // ── Ghost-input suppression ──────────────────────────────────────────────
     // After a horizontal drag the browser fires a synthetic event sequence:
     //   touchend → (pointerup) → mousedown → mouseup → click
-    // Simply blocking 'click' is not enough: stat-box buttons also respond to
-    // 'touchstart' / 'pointerdown' that arrive before the click.  We therefore
-    // suppress ALL of those event types at capture phase for a short window.
+    // Suppress ALL of those at capture phase so stat-box buttons don't fire.
     let _suppressClicks = false;
     const SWIPE_SUPPRESS_EVENTS = ['touchstart','pointerdown','mousedown','click'];
     const _swipeGuard = (e) => {
@@ -2203,97 +2212,117 @@ const app = {
     SWIPE_SUPPRESS_EVENTS.forEach(type =>
       w.addEventListener(type, _swipeGuard, {capture:true, passive:false})
     );
-
-    const suppressFor = (ms = 420) => {
+    const suppressFor = (ms = 380) => {
       _suppressClicks = true;
       setTimeout(() => { _suppressClicks = false; }, ms);
     };
-    // Keep pointer-capture honest (no-op touch that satisfies some browsers)
     w.addEventListener('pointerdown', () => {}, {passive:true});
 
     const pageW = () => w.clientWidth || window.innerWidth;
 
-    // Live position: follow finger with rubber-band at edges
+    // ── Live drag position with rubber-band at edges ──
     const setLive = (rawDx) => {
       const base = -this.currentPage * pageW();
-      let x = base + rawDx;
-      // Rubber-band resistance past edges
       const atStart = this.currentPage === 0 && rawDx > 0;
       const atEnd   = this.currentPage === this.totalPages - 1 && rawDx < 0;
-      if (atStart || atEnd) x = base + rawDx * 0.12;
+      // Resistance factor 0.10 — tight enough to signal edge, not sticky
+      const x = (atStart || atEnd) ? base + rawDx * 0.10 : base + rawDx;
       track.style.transition = 'none';
       track.style.transform = `translateX(${x}px)`;
     };
 
+    // ── Touch start ──
     w.addEventListener('touchstart', e => {
+      if (e.touches.length > 1) return; // ignore multi-touch
       const t = e.touches[0];
       startX = lastX = t.clientX;
       startY = t.clientY;
       startT = lastT = Date.now();
-      dragging = false; locked = false; vel = 0;
+      dragging = false; locked = false; velEMA = 0;
+      // Blur any focused child so :focus-visible gold border doesn't linger
+      const focused = w.querySelector(':focus');
+      if (focused) focused.blur();
     }, {passive:true});
 
+    // ── Touch move ──
     w.addEventListener('touchmove', e => {
-      if (!e.cancelable) return; // browser already handling this gesture
+      if (!e.cancelable || e.touches.length > 1) return;
       const t = e.touches[0];
       const dx = t.clientX - startX;
       const dy = t.clientY - startY;
-      const absDx = Math.abs(dx), absDy = Math.abs(dy);
 
       if (!locked) {
-        // Need at least 6px of movement before committing to a direction
-        if (absDx < 6 && absDy < 6) return;
-        if (absDx > absDy * 1.2) {
-          // Clearly horizontal — take over navigation
+        // Commit direction after 8px — reduces accidental horizontal locks
+        if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+        // Ratio 1.4 — prefer vertical scroll when ambiguous
+        if (Math.abs(dx) > Math.abs(dy) * 1.4) {
           locked = true; dragging = true;
           track.style.transition = 'none';
           track.classList.add('is-dragging');
         } else {
-          // Vertical or ambiguous — release to native scroll
-          locked = true;
+          locked = true; // vertical — hand back to native scroll
         }
       }
 
       if (dragging) {
         e.preventDefault();
         const now = Date.now();
-        const dt = now - lastT || 1;
-        vel = vel * 0.6 + ((t.clientX - lastX) / dt) * 0.4;
+        const dt  = Math.max(now - lastT, 1);
+        const instantVel = (t.clientX - lastX) / dt;
+        // EMA alpha 0.35 — smooth but still responsive to quick flicks
+        velEMA = velEMA * 0.65 + instantVel * 0.35;
         lastX = t.clientX; lastT = now;
         setLive(dx);
       }
     }, {passive:false});
 
+    // ── Snap decision ──
+    // Uses momentum projection: if the finger is still moving fast, project
+    // where it would land (px/ms × remaining time budget) and use that to
+    // decide direction — feels much more natural than pure threshold.
+    const FLICK_VEL   = 0.22;  // px/ms — lower = more sensitive to quick flicks
+    const DRAG_RATIO  = 0.22;  // fraction of page width to commit on slow drag
+    const PROJ_MS     = 80;    // ms to project momentum forward
+
     const endSwipe = (clientX) => {
-      if (!dragging) { dragging=false; locked=false; vel=0;
-        // Still remove is-dragging in case it got stuck
-        track.classList.remove('is-dragging'); return; }
+      if (!dragging) {
+        dragging = false; locked = false; velEMA = 0;
+        track.classList.remove('is-dragging');
+        return;
+      }
       dragging = false; locked = false;
 
-      const dx    = clientX - startX;
-      const pW    = pageW();
-      const ratio = dx / pW;
-      const fast  = Math.abs(vel) > 0.28;
+      const dx       = clientX - startX;
+      const pW       = pageW();
+      const ratio    = dx / pW;
+      const absVel   = Math.abs(velEMA);
+      const isFlick  = absVel > FLICK_VEL;
+      // Projected displacement: where would the finger end up in PROJ_MS more?
+      const projected = dx + velEMA * PROJ_MS;
+      const projRatio = projected / pW;
 
       let target = this.currentPage;
-      if      (fast && vel < 0 && this.currentPage < this.totalPages-1) target = this.currentPage + 1;
-      else if (fast && vel > 0 && this.currentPage > 0)                 target = this.currentPage - 1;
-      else if (ratio < -0.24 && this.currentPage < this.totalPages-1)   target = this.currentPage + 1;
-      else if (ratio >  0.24 && this.currentPage > 0)                   target = this.currentPage - 1;
+      if (isFlick && velEMA < 0 && this.currentPage < this.totalPages - 1) {
+        target = this.currentPage + 1;
+      } else if (isFlick && velEMA > 0 && this.currentPage > 0) {
+        target = this.currentPage - 1;
+      } else if (projRatio < -DRAG_RATIO && this.currentPage < this.totalPages - 1) {
+        target = this.currentPage + 1;
+      } else if (projRatio > DRAG_RATIO && this.currentPage > 0) {
+        target = this.currentPage - 1;
+      }
 
-      // Suppress ALL synthetic input events (touchstart, pointerdown, mousedown,
-      // click) that fire after touchend, AND keep is-dragging active so
-      // pointer-events:none on children blocks visual feedback for the same window.
-      const SUPPRESS_MS = 420;
+      // Suppress ghost events; keep is-dragging alive for the same window
+      const SUPPRESS_MS = 380;
       suppressFor(SUPPRESS_MS);
       setTimeout(() => track.classList.remove('is-dragging'), SUPPRESS_MS);
       this.goToPage(target);
     };
 
     w.addEventListener('touchend',    e => endSwipe(e.changedTouches[0].clientX), {passive:true});
-    w.addEventListener('touchcancel', e => {
+    w.addEventListener('touchcancel', () => {
       track.classList.remove('is-dragging');
-      dragging = false; locked = false; vel = 0;
+      dragging = false; locked = false; velEMA = 0;
       this.goToPage(this.currentPage);
     }, {passive:true});
 
@@ -2301,18 +2330,19 @@ const app = {
     let mStart = null;
     w.addEventListener('mousedown', e => {
       if (e.target.closest('input,select,textarea,button,label')) return;
-      mStart = {x:e.clientX, t:Date.now(), lastX:e.clientX, lastT:Date.now(), vel:0, dragging:false};
+      mStart = {x:e.clientX, lastX:e.clientX, lastT:Date.now(), velEMA:0, dragging:false};
       track.style.transition = 'none';
     });
     w.addEventListener('mousemove', e => {
       if (!mStart) return;
-      if (!mStart.dragging && Math.abs(e.clientX - mStart.x) > 12) {
+      if (!mStart.dragging && Math.abs(e.clientX - mStart.x) > 10) {
         mStart.dragging = true;
         track.classList.add('is-dragging');
       }
       if (mStart.dragging) {
-        const now = Date.now(), dt = now - mStart.lastT || 1;
-        mStart.vel = mStart.vel * 0.6 + ((e.clientX - mStart.lastX) / dt) * 0.4;
+        const now = Date.now(), dt = Math.max(now - mStart.lastT, 1);
+        const iv = (e.clientX - mStart.lastX) / dt;
+        mStart.velEMA = mStart.velEMA * 0.65 + iv * 0.35;
         mStart.lastX = e.clientX; mStart.lastT = now;
         setLive(e.clientX - mStart.x);
       }
@@ -2320,16 +2350,18 @@ const app = {
     const endMouse = (clientX) => {
       track.classList.remove('is-dragging');
       if (!mStart) return;
-      const {x, dragging: was, vel: v} = mStart;
+      const {x, dragging: was, velEMA: v} = mStart;
       mStart = null;
       if (!was) return;
-      const dx = clientX - x, pW = pageW(), ratio = dx / pW;
-      const fast = Math.abs(v) > 0.28;
+      const dx = clientX - x, pW = pageW();
+      const projected = dx + v * PROJ_MS;
+      const projRatio = projected / pW;
+      const isFlick = Math.abs(v) > FLICK_VEL;
       let target = this.currentPage;
-      if      (fast && v < 0 && this.currentPage < this.totalPages-1) target = this.currentPage + 1;
-      else if (fast && v > 0 && this.currentPage > 0)                 target = this.currentPage - 1;
-      else if (ratio < -0.24 && this.currentPage < this.totalPages-1) target = this.currentPage + 1;
-      else if (ratio >  0.24 && this.currentPage > 0)                 target = this.currentPage - 1;
+      if      (isFlick && v < 0 && this.currentPage < this.totalPages-1) target = this.currentPage + 1;
+      else if (isFlick && v > 0 && this.currentPage > 0)                 target = this.currentPage - 1;
+      else if (projRatio < -DRAG_RATIO && this.currentPage < this.totalPages-1) target = this.currentPage + 1;
+      else if (projRatio > DRAG_RATIO && this.currentPage > 0)                  target = this.currentPage - 1;
       this.goToPage(target);
     };
     w.addEventListener('mouseup',    e => endMouse(e.clientX));
@@ -2349,8 +2381,9 @@ const app = {
     const w = document.getElementById('pages_wrapper');
     const track = document.getElementById('pages_track');
     const pageW = w ? w.clientWidth : window.innerWidth;
-    // Snap transition: weighted deceleration, feels physical not springy
-    track.style.transition = 'transform .38s cubic-bezier(.2,.82,.3,1)';
+    // Easing: cubic-bezier(.15,.85,.3,1) — arranca rápido, desacelera con peso.
+    // Duración base 340ms; se percibe ágil en flicks y asentado en drags lentos.
+    track.style.transition = 'transform .34s cubic-bezier(.15,.85,.3,1)';
     track.style.transform  = `translateX(-${n * pageW}px)`;
     document.querySelectorAll('.nbtn').forEach((b,i) => b.classList.toggle('active', i===n));
     if (n === 4) this.buildDetailPage();
@@ -2375,12 +2408,8 @@ const app = {
       const sv = document.getElementById('personal_summary_view');
       if (ev) { ev.style.display = 'block'; ev.classList.remove('section-reveal'); void ev.offsetWidth; ev.classList.add('section-reveal'); }
       if (sv) sv.style.display = 'none';
-      // Restore alignment button active state — usa dataset.ali (igual que applyCharData y randomize)
-      if (this.alignment) {
-        document.querySelectorAll('.aopt').forEach(b =>
-          b.classList.toggle('active', b.dataset.ali === this.alignment)
-        );
-      }
+      // Restore alignment button active state
+      if (this.alignment) this._syncAlignmentUI();
     } else {
       const ev = document.getElementById(`${sec}_edit_view`);
       const sv = document.getElementById(`${sec}_summary_view`);
@@ -2608,17 +2637,28 @@ const app = {
 
   buildAlignmentPicker() {
     const c = document.getElementById('align_sel');
+    if (!c || c.dataset.built) return; // idempotente — construir una sola vez
+    c.dataset.built = '1';
     ALIGNMENTS.forEach(a => {
       const btn = document.createElement('button');
       btn.type = 'button'; btn.className = 'aopt'; btn.textContent = a;
-      btn.dataset.ali = a; // necesario para que applyCharData y randomize puedan restaurar el estado activo
+      btn.dataset.ali = a;
+      // preventDefault en mousedown evita que el botón robe el foco
+      // y que el outline dorado de :focus-visible aparezca en el campo anterior
+      btn.addEventListener('mousedown', e => e.preventDefault());
       btn.onclick = () => {
         this.alignment = a;
-        document.querySelectorAll('.aopt').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+        this._syncAlignmentUI();
       };
       c.appendChild(btn);
     });
+  },
+
+  /** Sincroniza los botones .aopt con this.alignment (fuente única de verdad). */
+  _syncAlignmentUI() {
+    document.querySelectorAll('.aopt').forEach(b =>
+      b.classList.toggle('active', b.dataset.ali === this.alignment)
+    );
   },
 
   /* ── OPTIONS UPDATE ── */
@@ -2651,10 +2691,25 @@ const app = {
     }
 
     // Skills
+    // Antes de reconstruir, leer y guardar la selección actual en _skillsSel
+    // para que no se pierda cuando updateOptions reconstruye el DOM.
+    if (reset) {
+      this._skillsSel = { arq: new Set(), bg: new Set() };
+    } else {
+      // Preservar el estado actual del DOM si existe, o usar _skillsSel guardado
+      const curArq = Array.from(document.querySelectorAll('input[name="chk_arq"]:checked')).map(e=>e.value);
+      const curBg  = Array.from(document.querySelectorAll('input[name="chk_bg"]:checked')).map(e=>e.value);
+      if (curArq.length || curBg.length) {
+        this._skillsSel = { arq: new Set(curArq), bg: new Set(curBg) };
+      } else if (!this._skillsSel) {
+        this._skillsSel = { arq: new Set(), bg: new Set() };
+      }
+    }
+
     const buildSkills = (containerId, skills, name, limit) => {
       const div = document.getElementById(containerId);
       if (!div) return;
-      const checked = Array.from(div.querySelectorAll('input:checked')).map(el => el.value);
+      const saved = name === 'chk_arq' ? this._skillsSel.arq : this._skillsSel.bg;
       div.innerHTML = '';
       (skills || []).forEach(s => {
         const lbl = document.createElement('label');
@@ -2663,10 +2718,16 @@ const app = {
         chk.type = 'checkbox';
         chk.name = name;
         chk.value = s;
-        chk.addEventListener('change', () => { app.checkLimit(name, limit); app.calc(); });
-        if (reset === false && checked.includes(s)) chk.checked = true;
+        chk.addEventListener('change', () => {
+          app.checkLimit(name, limit);
+          // Mantener _skillsSel sincronizado con el DOM
+          const set = name === 'chk_arq' ? this._skillsSel.arq : this._skillsSel.bg;
+          if (chk.checked) set.add(s); else set.delete(s);
+          app.calc();
+        });
+        if (saved.has(s)) chk.checked = true;
         lbl.appendChild(chk);
-        lbl.append(' ' + s);   // plain text node — safe regardless of skill name content
+        lbl.append(' ' + s);
         div.appendChild(lbl);
       });
     };
@@ -4481,7 +4542,14 @@ const app = {
     if (data.concept) document.getElementById('char_concept').value = data.concept;
     if (data.notes) document.getElementById('char_notes').value = data.notes;
     // Alignment
-    if (data.alignment) document.querySelectorAll('.aopt').forEach(b=>b.classList.toggle('active',b.dataset.ali===data.alignment));
+    if (data.alignment) this._syncAlignmentUI();
+    // Restaurar selección de skills antes de llamar updateOptions,
+    // para que buildSkills pueda marcar los checkboxes correctamente.
+    const skillChecks = (data.checks||[]).filter(c => c.name==='chk_arq'||c.name==='chk_bg');
+    this._skillsSel = {
+      arq: new Set(skillChecks.filter(c=>c.name==='chk_arq').map(c=>c.value)),
+      bg:  new Set(skillChecks.filter(c=>c.name==='chk_bg').map(c=>c.value))
+    };
     // Apply identity selects FIRST so updateOptions can read them and build sel_filo options
     ['sel_desc','sel_arq','sel_bg'].forEach(id=>{const el=document.getElementById(id);if(el&&data.selects[id])el.value=data.selects[id];});
     this.updateOptions(false);
@@ -4600,7 +4668,8 @@ const app = {
     const lvlEl=document.getElementById('char_lvl');if(lvlEl)lvlEl.value=1;
     ['char_xp','cur_pv','cur_adr','cur_ing','cur_carne'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=0});
     this.inventory=[]; this.gold=0; this.alignment=''; this._aptSel={tricks:new Set(),spells:new Set()};
-    document.querySelectorAll('.aopt').forEach(b=>b.classList.remove('active'));
+    this._skillsSel = { arq: new Set(), bg: new Set() };
+    this._syncAlignmentUI();
     document.querySelectorAll('input[type=checkbox],input[type=radio]').forEach(c=>c.checked=false);
     document.querySelectorAll('input[name="chk_talents_hidden"]').forEach(el=>el.remove());
     document.getElementById('char_img').src = DEFAULT_PORTRAIT;
@@ -4799,7 +4868,7 @@ const app = {
     // 5. Alineamiento aleatorio
     const ali = ALIGNMENTS[Math.floor(Math.random()*ALIGNMENTS.length)];
     this.alignment = ali;
-    document.querySelectorAll('.aopt').forEach(b=>b.classList.toggle('active',b.dataset.ali===ali));
+    this._syncAlignmentUI();
 
     // 6. updateOptions para construir filos y habilidades (ya tiene arq/desc/bg en los selects)
     this.updateOptions(true);
