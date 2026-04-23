@@ -17,33 +17,26 @@
 <meta name="msapplication-TileColor" content="#07060a">
 <meta name="color-scheme" content="dark">
 <style>:root{
-  /* ── Palette ── */
   --void:#05040a;--deep:#0a0810;--surface:#100e18;--raised:#181422;--panel:#20192e;--rim:#2e2540;--border:#3d3254;
   --muted:#7a6a92;--dim:#9e8db6;--text:#cfc0e4;--bright:#ece4f8;
   --gold:#c9aa6f;--goldb:#e0c27e;--goldh:#f0d48e;--glow-g:rgba(200,169,110,.15);
   --crimson:#6e1525;--blood:#a82a3a;--ember:#d9542a;--ice:#3d8fc2;--sage:#3fa06c;
   --void-rgb:5,4,10;
-  /* ── Typography ── */
   --ft:'Cinzel Decorative',serif;
   --fd:'Cinzel',serif;
   --fb:'Spectral',serif;
   --fm:'JetBrains Mono',monospace;
-  /* ── Shadows ── */
   --gg:0 0 20px rgba(200,169,110,.22),0 0 50px rgba(200,169,110,.06);
   --gb:0 0 20px rgba(168,42,58,.3);
   --lg:0 8px 40px rgba(0,0,0,.7),0 2px 8px rgba(0,0,0,.4);
-  /* ── Geometry ── */
   --r:3px;--rl:8px;--nav:58px;
   --safe-b:env(safe-area-inset-bottom,0px);
   --safe-t:env(safe-area-inset-top,0px);
   --fs-base:15px;
   --res-btn-w:36px;--res-btn-h:44px;
-  /* ── Gold line ── */
   --line-gold:linear-gradient(90deg,transparent,var(--gold) 30%,var(--goldb) 50%,var(--gold) 70%,transparent);
   --line-dim:linear-gradient(90deg,transparent,var(--rim) 30%,var(--border) 50%,var(--rim) 70%,transparent);
 }
-
-/* ── Reset ── */
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
 ::selection{background:rgba(200,169,110,.18);color:var(--bright)}
 ::-webkit-scrollbar{display:none}*{scrollbar-width:none;-ms-overflow-style:none}
@@ -55,8 +48,6 @@ body{
   font-size:var(--fs-base,15px);line-height:1.5;
   overflow:hidden;overscroll-behavior:none;
 }
-
-/* ── Reduced motion ── */
 @media(prefers-reduced-motion:reduce){
   .loader-orb,.loader-star,.screen,.char-card,.char-card-wrap,
   .sdial-menu,dialog.modal[open],.lfill,.pages-track,
@@ -64,9 +55,7 @@ body{
   .toggle-btn::after{animation:none!important;transition:none!important;opacity:1!important}
 }
 
-/* ══════════════════════════════════════
-   LOADER
-══════════════════════════════════════ */
+/* LOADER */
 #ss-loader{
   position:fixed;inset:0;z-index:9999;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
@@ -80,12 +69,7 @@ body{
 #ss-loader.fade-out{opacity:0;pointer-events:none}
 
 /* Ornament line above loader title */
-.loader-ornament{
-  width:120px;height:1px;
-  background:var(--line-gold);
-  margin-bottom:-4px;
-  box-shadow:0 0 10px rgba(200,169,110,.25);
-}
+
 .loader-title{
   font-family:var(--ft);
   font-size:clamp(1.5rem,7vw,2.5rem);
@@ -99,11 +83,7 @@ body{
   color:rgba(138,122,158,.6);
   letter-spacing:.55em;text-transform:uppercase;margin-top:-8px;
 }
-.loader-ornament-b{
-  width:80px;height:1px;
-  background:var(--line-dim);
-  margin-top:-4px;
-}
+
 .loader-orb{
   width:36px;height:36px;border-radius:50%;
   border:1px solid rgba(200,169,110,.2);border-top-color:var(--gold);
@@ -114,9 +94,7 @@ body{
 .loader-star{font-size:1.6rem;animation:lpulse 2.4s ease-in-out infinite;color:var(--gold);text-shadow:0 0 24px rgba(200,169,110,.5)}
 @keyframes lpulse{0%,100%{opacity:.3;transform:scale(.88)}50%{opacity:1;transform:scale(1.06)}}
 
-/* ══════════════════════════════════════
-   SCREENS
-══════════════════════════════════════ */
+/* SCREENS */
 .screen{
   position:fixed;inset:0;
   display:flex;flex-direction:column;
@@ -125,9 +103,7 @@ body{
 }
 .screen.hidden{opacity:0;pointer-events:none;transform:scale(.97)}
 
-/* ══════════════════════════════════════
-   HOME SCREEN
-══════════════════════════════════════ */
+/* HOME SCREEN */
 #home-screen{
   overflow-y:auto;overflow-x:hidden;
   padding:env(safe-area-inset-top,0px) 0 60px;
@@ -166,12 +142,6 @@ body{
   margin:16px auto;
   box-shadow:0 0 8px rgba(200,169,110,.2);
 }
-.home-deco-h{
-  width:180px;height:1px;
-  background:var(--line-gold);
-  margin:0 auto;
-  box-shadow:0 0 10px rgba(200,169,110,.2);
-}
 
 .home-body{max-width:480px;margin:0 auto;padding:0 18px}
 
@@ -185,9 +155,7 @@ body{
 }
 .roster-lbl::after{content:'';flex:1;height:1px;background:var(--rim)}
 
-/* ══════════════════════════════════════
-   CHARACTER CARDS — ROSTER
-══════════════════════════════════════ */
+/* CHARACTER CARDS — ROSTER */
 .char-port{
   width:46px;height:60px;border-radius:3px;
   object-fit:cover;flex-shrink:0;
@@ -219,8 +187,6 @@ body{
   text-align:center;padding:48px 24px;
   color:var(--muted);font-style:italic;font-size:.85rem;line-height:2;
 }
-
-/* ── Swipe-to-delete ── */
 .char-card-wrap{
   position:relative;overflow:hidden;border-radius:var(--rl);margin-bottom:6px;
   animation:cardSlideIn .22s cubic-bezier(.22,.61,.36,1) forwards;opacity:0;
@@ -256,17 +222,13 @@ body{
 .char-card:hover::before{opacity:1}
 @keyframes cardSlideIn{from{opacity:0;transform:translateX(-10px) scale(.99)}to{opacity:1;transform:none}}
 
-/* ══════════════════════════════════════
-   APP SHELL
-══════════════════════════════════════ */
+/* APP SHELL */
 .app-shell{
   display:flex;flex-direction:column;
   min-height:-webkit-fill-available;height:100dvh;
   max-width:720px;margin:0 auto;width:100%;
   position:relative;
 }
-
-/* ── HEADER ── */
 .app-hdr{
   flex-shrink:0;
   padding:calc(11px + env(safe-area-inset-top,0px)) 14px 10px;
@@ -362,9 +324,7 @@ body{
 .sdial-item:active{transform:scale(.88)}
 .sdial-danger:hover{border-color:rgba(168,42,58,.7);color:#f08090;background:var(--panel);box-shadow:0 4px 18px rgba(0,0,0,.65),0 0 14px rgba(168,42,58,.18),inset 0 1px 0 rgba(255,255,255,.04)}
 
-/* ══════════════════════════════════════
-   PAGES + NAV
-══════════════════════════════════════ */
+/* PAGES + NAV */
 .pages-wrapper{flex:1;overflow:hidden;position:relative;min-height:0;touch-action:pan-y}
 .pages-track{display:flex;height:100%;will-change:transform;-webkit-backface-visibility:hidden}
 .page{
@@ -374,8 +334,6 @@ body{
   display:flex;flex-direction:column;gap:14px;
   overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;
 }
-
-/* ── BOTTOM NAV ── */
 .bnav{
   height:calc(var(--nav) + var(--safe-b));
   padding-bottom:var(--safe-b);
@@ -414,9 +372,7 @@ body{
 .nico{font-size:1.1rem;line-height:1;display:flex;align-items:center;justify-content:center}
 .nlbl{font-size:.46rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
 
-/* ══════════════════════════════════════
-   PANELS
-══════════════════════════════════════ */
+/* PANELS */
 .panel{
   background:var(--surface);
   border:1px solid rgba(61,50,84,.55);
@@ -447,9 +403,7 @@ body{
   color:var(--goldb);letter-spacing:.14em;text-transform:uppercase;
 }
 
-/* ══════════════════════════════════════
-   PORTRAIT
-══════════════════════════════════════ */
+/* PORTRAIT */
 .port-hint{
   position:absolute;inset:0;
   background:linear-gradient(0deg,rgba(0,0,0,.82) 0%,transparent 50%);
@@ -482,9 +436,7 @@ body{
 .port-divider{width:50%;margin:10px auto 8px;height:1px;background:var(--line-gold)}
 .port-lvl{font-family:var(--fm);font-size:.56rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
 
-/* ══════════════════════════════════════
-   INPUTS
-══════════════════════════════════════ */
+/* INPUTS */
 .fl{
   font-family:var(--fd);font-size:.58rem;
   color:var(--muted);letter-spacing:.14em;
@@ -554,9 +506,7 @@ input[type=radio]::after{
 }
 input[type=radio]:checked::after{transform:scale(1)}
 
-/* ══════════════════════════════════════
-   GRIDS
-══════════════════════════════════════ */
+/* GRIDS */
 .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
 .g6{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px}
@@ -564,9 +514,7 @@ input[type=radio]:checked::after{transform:scale(1)}
 .mb4{margin-bottom:4px}.mb5{margin-bottom:5px}.mt4{margin-top:4px}
 .txt-it-c{color:var(--muted);font-size:.78rem;font-style:italic;text-align:center;padding:10px}
 
-/* ══════════════════════════════════════
-   STAT BOX
-══════════════════════════════════════ */
+/* STAT BOX */
 .sbox{
   background:var(--raised);
   border:1px solid rgba(61,50,84,.6);
@@ -591,12 +539,9 @@ input[type=radio]:checked::after{transform:scale(1)}
 .sbox .val{font-family:var(--fm);font-size:.68rem;color:var(--dim);margin-top:3px;border-top:1px solid var(--rim);padding-top:2px}
 .sbox .lbl{font-family:var(--fd);font-size:.54rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:3px}
 
-/* ══════════════════════════════════════
-   FC BOXES
-══════════════════════════════════════ */
+/* FC BOXES */
 .frow{display:grid;gap:5px}
-.frow.c3{grid-template-columns:1fr 1fr 1fr}
-.frow.c6{grid-template-columns:repeat(6,1fr)}
+
 .fbox{
   background:var(--raised);
   border:1px solid rgba(61,50,84,.6);
@@ -640,9 +585,7 @@ input[type=radio]:checked::after{transform:scale(1)}
 .lbar{height:2px;background:var(--rim);border-radius:1px;overflow:hidden;margin-top:4px}
 .lfill{height:100%;background:linear-gradient(90deg,var(--gold),var(--goldb));width:0%;transition:width .5s cubic-bezier(.4,0,.2,1)}
 
-/* ══════════════════════════════════════
-   RESOURCE BOXES
-══════════════════════════════════════ */
+/* RESOURCE BOXES */
 .res-box{border-radius:var(--rl);padding:8px 5px;text-align:center;height:100%;box-sizing:border-box}
 .res-box-pv{
   background:rgba(110,21,37,.1);
@@ -698,8 +641,6 @@ input[type=radio]:checked::after{transform:scale(1)}
 .res-btn-ing:hover{background:rgba(61,143,194,.12);border-color:var(--ice);color:var(--ice)}
 .res-btn-carne{border-color:rgba(160,104,58,.3);color:rgba(160,104,58,.65)}
 .res-btn-carne:hover{background:rgba(160,104,58,.12);border-color:#a0683a;color:#a0683a}
-
-/* ── Secondary stat boxes ── */
 .sc{
   background:var(--raised);border:1px solid rgba(61,50,84,.55);
   border-radius:var(--rl);padding:7px 4px;text-align:center;
@@ -718,9 +659,7 @@ input[type=radio]:checked::after{transform:scale(1)}
 .sc-clickable:active{transform:scale(.93);border-color:var(--gold)}
 .sc-lbl{font-family:var(--fd);font-size:.56rem;text-transform:uppercase;letter-spacing:.12em;margin-bottom:3px;font-weight:600}
 
-/* ══════════════════════════════════════
-   ATTACK CARDS
-══════════════════════════════════════ */
+/* ATTACK CARDS */
 .atk-card{
   background:var(--raised);
   border:1px solid rgba(61,50,84,.55);
@@ -761,9 +700,7 @@ input[type=radio]:checked::after{transform:scale(1)}
 .abtn-a .aval{color:#d06070}
 .abtn-d .aval{color:var(--goldb)}
 
-/* ══════════════════════════════════════
-   COMBAT CARDS
-══════════════════════════════════════ */
+/* COMBAT CARDS */
 .ccard{
   background:rgba(5,4,10,.5);
   border:1px solid rgba(61,50,84,.45);
@@ -775,9 +712,7 @@ input[type=radio]:checked::after{transform:scale(1)}
 .cval{font-family:var(--fm);font-weight:700;font-size:.96rem;color:var(--bright)}
 .calert{color:var(--ember);font-size:.68rem;text-align:center;margin-top:2px;min-height:.85em}
 
-/* ══════════════════════════════════════
-   SKILLS
-══════════════════════════════════════ */
+/* SKILLS */
 .skill-area{
   background:var(--deep);border:1px solid var(--rim);
   border-radius:var(--r);padding:4px 6px;max-height:200px;
@@ -804,9 +739,7 @@ input[type=radio]:checked::after{transform:scale(1)}
 .stag:hover{border-color:rgba(200,169,110,.4);color:var(--goldb)}
 .stag.g1{border-color:rgba(168,42,58,.4);color:#c06070;background:rgba(110,21,37,.15)}
 
-/* ══════════════════════════════════════
-   SAVES
-══════════════════════════════════════ */
+/* SAVES */
 .saves-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-top:6px;border-top:1px solid var(--rim);padding-top:6px}
 .svsbox{
   text-align:center;padding:9px 2px;
@@ -824,9 +757,7 @@ input[type=radio]:checked::after{transform:scale(1)}
 .svsbox.prof{color:var(--goldb);border-color:rgba(200,169,110,.4);box-shadow:0 0 0 1px rgba(200,169,110,.08),inset 0 1px 0 rgba(200,169,110,.05)}
 .svslbl{font-size:.52rem;font-family:var(--fd);color:var(--muted);letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:1px}
 
-/* ══════════════════════════════════════
-   INVENTORY
-══════════════════════════════════════ */
+/* INVENTORY */
 .iitem{
   display:grid;
   grid-template-columns:60px minmax(0,1fr) 40px 36px 36px 36px 36px;
@@ -862,9 +793,7 @@ input[type=radio]:checked::after{transform:scale(1)}
 .coin input{width:68px;background:transparent;border:none;border-bottom:1px solid var(--rim);color:var(--goldb);font-family:var(--fm);font-weight:600;text-align:right;padding:1px 3px;font-size:.85rem;min-height:unset}
 .coin input:focus{outline:none;border-bottom-color:var(--gold)}
 
-/* ══════════════════════════════════════
-   TALENT CARDS
-══════════════════════════════════════ */
+/* TALENT CARDS */
 .tc{
   background:var(--raised);border:1px solid rgba(61,50,84,.55);
   border-radius:var(--rl);padding:12px 14px;
@@ -881,9 +810,7 @@ input[type=radio]:checked::after{transform:scale(1)}
 .tc h4{font-family:var(--fd);font-size:.78rem;color:var(--goldb);margin-bottom:3px;letter-spacing:.04em}
 .tc p{font-size:.73rem;color:var(--dim);line-height:1.5}
 
-/* ══════════════════════════════════════
-   IDENTITY
-══════════════════════════════════════ */
+/* IDENTITY */
 .ibadge{
   display:inline-flex;align-items:center;gap:4px;
   font-family:var(--fd);font-size:.68rem;color:var(--goldb);
@@ -909,9 +836,7 @@ input[type=radio]:checked::after{transform:scale(1)}
   border-radius:2px;padding:3px 10px;
 }
 
-/* ══════════════════════════════════════
-   DETAIL / POWER CARDS
-══════════════════════════════════════ */
+/* DETAIL / POWER CARDS */
 .dc{
   background:var(--raised);border:1px solid rgba(61,50,84,.55);
   border-radius:var(--rl);margin-bottom:7px;overflow:hidden;
@@ -951,9 +876,7 @@ input[type=radio]:checked::after{transform:scale(1)}
 }
 .infobox:not(:empty){border-left-color:rgba(200,169,110,.35);background:rgba(200,169,110,.02)}
 
-/* ══════════════════════════════════════
-   BUTTONS
-══════════════════════════════════════ */
+/* BUTTONS */
 .btn{
   font-family:var(--fd);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
   padding:8px 10px;cursor:pointer;border-radius:var(--r);
@@ -981,8 +904,6 @@ input[type=radio]:checked::after{transform:scale(1)}
 }
 .btn-gold:hover{box-shadow:0 4px 24px rgba(200,169,110,.35);transform:translateY(-1px)}
 .btn-gold:active{transform:scale(.92);box-shadow:none}
-
-/* ── Confirm button ── */
 .bcnf{
   width:100%;
   background:transparent;
@@ -1004,8 +925,6 @@ input[type=radio]:checked::after{transform:scale(1)}
 .bcnf:active{transform:scale(.98);background:rgba(200,169,110,.1)}
 @keyframes bcnfSuccess{0%{background:transparent}40%{background:rgba(63,160,108,.15);border-color:var(--sage)}100%{background:transparent}}
 .bcnf.success{animation:bcnfSuccess .55s ease forwards}
-
-/* ── Edit button ── */
 .bedit{
   display:flex;align-items:center;justify-content:center;gap:4px;
   background:transparent;border:1px solid rgba(61,50,84,.5);color:var(--muted);
@@ -1017,8 +936,6 @@ input[type=radio]:checked::after{transform:scale(1)}
 }
 .bedit:hover{border-color:rgba(200,169,110,.4);color:var(--gold);background:rgba(200,169,110,.05)}
 .bedit:active{transform:scale(.95);background:rgba(200,169,110,.08)}
-
-/* ── Mini buttons ── */
 .bmini{
   font-family:var(--fm);font-size:.6rem;padding:6px 10px;cursor:pointer;
   border-radius:var(--r);border:1px solid;letter-spacing:.06em;text-transform:uppercase;
@@ -1031,8 +948,6 @@ input[type=radio]:checked::after{transform:scale(1)}
 .bmini.br:hover{background:rgba(168,42,58,.18);border-color:var(--blood);color:#fff}
 .bmini.bg{background:rgba(63,160,108,.08);border-color:rgba(63,160,108,.35);color:var(--sage)}
 .bmini.bg:hover{background:rgba(63,160,108,.18);border-color:var(--sage);color:#fff}
-
-/* ── Font size toggle ── */
 .fs-btn{
   background:var(--raised);border:1px solid var(--rim);border-radius:var(--r);
   padding:7px 10px;cursor:pointer;color:var(--dim);font-family:var(--fd);
@@ -1043,8 +958,6 @@ input[type=radio]:checked::after{transform:scale(1)}
 .fs-btn.active{background:rgba(200,169,110,.1);border-color:rgba(200,169,110,.4);color:var(--gold)}
 .fs-btn:hover:not(.active){border-color:var(--border);color:var(--text)}
 .fs-btn:active{transform:scale(.92)}
-
-/* ── Toggle ── */
 .toggle-btn{
   position:relative;flex-shrink:0;
   width:44px;height:24px;
@@ -1063,9 +976,7 @@ input[type=radio]:checked::after{transform:scale(1)}
 .toggle-btn[aria-pressed="true"]{background:rgba(200,169,110,.15);border-color:rgba(200,169,110,.4)}
 .toggle-btn[aria-pressed="true"]::after{transform:translateX(20px);background:var(--gold)}
 
-/* ══════════════════════════════════════
-   LETHALITY CARDS
-══════════════════════════════════════ */
+/* LETHALITY CARDS */
 .leth-card{
   display:flex;flex-direction:column;align-items:center;gap:6px;
   padding:14px 8px 12px;
@@ -1099,9 +1010,7 @@ input[type=radio]:checked::after{transform:scale(1)}
 .leth-summary-badge[data-tier="2"]{color:var(--goldb);border-color:rgba(200,169,110,.3);background:rgba(200,169,110,.07)}
 .leth-summary-badge[data-tier="3"]{color:var(--sage);border-color:rgba(63,160,108,.3);background:rgba(63,160,108,.07)}
 
-/* ══════════════════════════════════════
-   MODALS
-══════════════════════════════════════ */
+/* MODALS */
 dialog.modal{
   background:var(--surface);color:var(--text);
   border:1px solid rgba(61,50,84,.6);border-radius:var(--rl);
@@ -1170,9 +1079,7 @@ dialog::backdrop{background:rgba(0,0,0,.8);backdrop-filter:blur(14px)}
 .dfl{font-family:var(--fd);font-size:.56rem;color:var(--dim);letter-spacing:.16em;text-transform:uppercase;display:block;margin:9px 0 3px}
 .dfl em{font-style:italic;font-family:var(--fb);text-transform:none;letter-spacing:0;font-size:.62rem;color:var(--muted);opacity:.75}
 
-/* ══════════════════════════════════════
-   TOAST
-══════════════════════════════════════ */
+/* TOAST */
 #toast-ct,#toast-ct-err{
   position:fixed;bottom:calc(var(--nav) + var(--safe-b) + 12px);
   left:50%;transform:translateX(-50%);
@@ -1197,9 +1104,7 @@ dialog::backdrop{background:rgba(0,0,0,.8);backdrop-filter:blur(14px)}
 .t-msg{flex:1;line-height:1.35}
 @keyframes slideUp{from{transform:translateY(10px);opacity:0}to{transform:none;opacity:1}}
 
-/* ══════════════════════════════════════
-   DICE OVERLAY
-══════════════════════════════════════ */
+/* DICE OVERLAY */
 #dice-overlay{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;pointer-events:none;background:transparent}
 #dice-overlay.active{pointer-events:auto}
 .dice-backdrop{position:absolute;inset:0;background:rgba(5,4,10,.8);backdrop-filter:blur(10px);opacity:0;transition:opacity .3s ease}
@@ -1263,9 +1168,7 @@ dialog::backdrop{background:rgba(0,0,0,.8);backdrop-filter:blur(14px)}
 .dice-close-btn:hover{border-color:var(--gold);color:var(--gold)}
 #dice-overlay.active .dice-close-btn.show{opacity:1;pointer-events:auto}
 
-/* ══════════════════════════════════════
-   CROPPER
-══════════════════════════════════════ */
+/* CROPPER */
 #crop_modal{max-width:min(520px,100vw);width:100%;height:100dvh;max-height:100dvh;border-radius:0;border:none;inset:0;margin:0}
 @media(min-width:480px){#crop_modal{height:min(640px,92dvh);max-height:min(640px,92dvh);border-radius:var(--rl);border:1px solid var(--border);inset:0;margin:auto}}
 #crop_modal .crl{display:flex;flex-direction:column;height:100%;min-height:0;overflow:hidden}
@@ -1294,9 +1197,7 @@ input[type=range]{flex:1;accent-color:var(--gold);cursor:pointer;min-width:0;hei
 .bsave:hover{box-shadow:var(--gb)}
 .bsave:active{transform:scale(.98);opacity:.9}
 
-/* ══════════════════════════════════════
-   MISC
-══════════════════════════════════════ */
+/* MISC */
 .dvdr{display:flex;align-items:center;gap:8px;margin:10px 0;color:var(--muted);font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;font-family:var(--fd)}
 .dvdr::before,.dvdr::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--rim),transparent)}
 h3.sub{font-family:var(--fd);font-size:.7rem;color:var(--gold);letter-spacing:.08em;margin-bottom:4px}
@@ -1371,8 +1272,6 @@ input:focus-visible,textarea:focus-visible{outline:none}
   .home-title{font-size:1.4rem;letter-spacing:.08em}
 }
 @media(max-width:400px){.g6{grid-template-columns:repeat(2,1fr)}.saves-grid{grid-template-columns:repeat(3,1fr)}}
-
-/* ── DB editor extras ── */
 #db_list_container{min-height:120px}
 #db_form_container{padding-top:14px!important;border-top:1px solid rgba(61,50,84,.4)}
 #db_key:not(:placeholder-shown){border-color:rgba(61,143,194,.35)}
@@ -1381,11 +1280,7 @@ input:focus-visible,textarea:focus-visible{outline:none}
 #db_sidebar .btn-g{font-size:.6rem;color:var(--dim);border-color:rgba(61,50,84,.45)}
 #db_sidebar .btn-g:hover{color:var(--gold);border-color:rgba(200,169,110,.35);background:rgba(200,169,110,.04)}
 #db_sidebar hr{border:none;border-top:1px solid rgba(61,50,84,.3);margin:6px 4px}
-
-/* ── Aptitude page ── */
 .cat-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--sage);margin-left:6px;vertical-align:middle;flex-shrink:0;box-shadow:0 0 4px rgba(63,160,108,.5)}
-
-/* ── Identity badge summary ── */
 .identity-edit-header{display:none}
 .panel.identity-editing .identity-edit-header{display:flex}
 </style>
@@ -1428,8 +1323,6 @@ input:focus-visible,textarea:focus-visible{outline:none}
   </div>
 </div>
 <input type="file" id="img_input" accept="image/*" style="display:none" onchange="app.startCrop(this)">
-
-<!-- ══ APTITUDE MANAGER MODAL ══ -->
 <dialog id="apt_manager_modal" class="modal" aria-labelledby="apt_manager_title" style="max-width:min(960px,96vw);height:min(85dvh,calc(90svh - env(safe-area-inset-top,0px)))">
   <div class="mhd">
     <span class="mttl" id="apt_manager_title">Gestor de Trucos</span>
@@ -1454,8 +1347,6 @@ input:focus-visible,textarea:focus-visible{outline:none}
 </dialog>
 <input type="file" id="json_char_input" accept=".json" style="display:none" onchange="app.loadJSON(this)">
 <input type="file" id="json_rules_input" accept=".json" style="display:none" onchange="app.loadRulesFile(this)">
-
-<!-- ══════════════════ HOME SCREEN ══════════════════ -->
 <div id="home-screen" class="screen" role="main">
   <div class="home-hdr">
     <h1 class="home-title">Stars &amp; Sorcery</h1>
@@ -1475,8 +1366,6 @@ input:focus-visible,textarea:focus-visible{outline:none}
     </div>
   </div>
 </div>
-
-<!-- ══════════════════ APP SCREEN ══════════════════ -->
 <div id="app-screen" class="screen hidden">
   <div class="app-shell" role="main">
     <header class="app-hdr">
@@ -1498,8 +1387,6 @@ input:focus-visible,textarea:focus-visible{outline:none}
 
     <div class="pages-wrapper" id="pages_wrapper">
       <div class="pages-track" id="pages_track">
-
-        <!-- ══ P0: PERFIL ══ -->
         <div class="page" id="page_0">
 
           <!-- Retrato + Datos personales -->
@@ -1684,8 +1571,6 @@ input:focus-visible,textarea:focus-visible{outline:none}
           </div>
 
         </div><!-- /page 0 -->
-
-        <!-- ══ P1: ESTADÍSTICAS ══ -->
         <div class="page" id="page_1">
           <div class="panel">
             <div class="ph"><span class="pt">Los Seis Pilares</span></div>
@@ -1764,8 +1649,6 @@ input:focus-visible,textarea:focus-visible{outline:none}
             </div>
           </div>
         </div><!-- /page 1 -->
-
-        <!-- ══ P2: APTITUDES ══ -->
         <div class="page" id="page_2">
           <!-- Trucos panel -->
           <div class="panel">
@@ -1800,8 +1683,6 @@ input:focus-visible,textarea:focus-visible{outline:none}
             </div>
           </div>
         </div><!-- /page 2 -->
-
-        <!-- ══ P3: EQUIPO ══ -->
         <div class="page" id="page_3">
           <div class="panel">
             <div class="ph"><span class="pt">Equipo de Combate</span></div>
@@ -1915,8 +1796,6 @@ input:focus-visible,textarea:focus-visible{outline:none}
             </div>
           </div>
         </div><!-- /page 3 -->
-
-        <!-- ══ P4: DETALLE ══ -->
         <div class="page" id="page_4">
           <!-- Configuración de Campaña -->
           <div class="panel">
@@ -1966,16 +1845,14 @@ input:focus-visible,textarea:focus-visible{outline:none}
     </div><!-- /pages-wrapper -->
 
     <nav class="bnav">
-      <button class="nbtn active" onclick="app.goToPage(0)" aria-label="Ir a Perfil"><span class="nico" style="display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7" r="4"/><path d="M12 14c-5 0-8 2.5-8 4v1h16v-1c0-1.5-3-4-8-4z"/></svg></span><span class="nlbl">Perfil</span></button>
-      <button class="nbtn" onclick="app.goToPage(1)" aria-label="Ir a Stats"><span class="nico" style="display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="13" width="4" height="8" rx="1"/><rect x="9" y="8" width="4" height="13" rx="1"/><rect x="16" y="4" width="4" height="17" rx="1"/></svg></span><span class="nlbl">Stats</span></button>
-      <button class="nbtn" onclick="app.goToPage(2)" aria-label="Ir a Aptitudes"><span class="nico" style="display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4.5A2.5 2.5 0 0 1 4.5 2H20v20H4.5A2.5 2.5 0 0 1 2 19.5v-15z"/><path d="M20 2v20"/><path d="M7 8h7"/><path d="M7 12h5"/><path d="M7 16h7"/></svg></span><span class="nlbl">Aptitudes</span></button>
-      <button class="nbtn" onclick="app.goToPage(3)" aria-label="Ir a Equipo"><span class="nico" style="display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="10" width="22" height="11" rx="1.5"/><path d="M1 10 Q1 3 12 3 Q23 3 23 10"/><line x1="1" y1="10" x2="23" y2="10"/><rect x="9" y="8.5" width="6" height="4" rx="1" stroke-width="1.5"/><circle cx="12" cy="10.5" r="1" fill="currentColor" stroke="none"/><path d="M8.5 4.5 Q12 1.5 15.5 4.5" stroke-width="1.4"/></svg></span><span class="nlbl">Equipo</span></button>
-      <button class="nbtn" onclick="app.goToPage(4)" aria-label="Ir a Detalle"><span class="nico" style="display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg></span><span class="nlbl">Detalle</span></button>
+      <button class="nbtn active" onclick="app.goToPage(0)" aria-label="Ir a Perfil"><span class="nico"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7" r="4"/><path d="M12 14c-5 0-8 2.5-8 4v1h16v-1c0-1.5-3-4-8-4z"/></svg></span><span class="nlbl">Perfil</span></button>
+      <button class="nbtn" onclick="app.goToPage(1)" aria-label="Ir a Stats"><span class="nico"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="13" width="4" height="8" rx="1"/><rect x="9" y="8" width="4" height="13" rx="1"/><rect x="16" y="4" width="4" height="17" rx="1"/></svg></span><span class="nlbl">Stats</span></button>
+      <button class="nbtn" onclick="app.goToPage(2)" aria-label="Ir a Aptitudes"><span class="nico"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4.5A2.5 2.5 0 0 1 4.5 2H20v20H4.5A2.5 2.5 0 0 1 2 19.5v-15z"/><path d="M20 2v20"/><path d="M7 8h7"/><path d="M7 12h5"/><path d="M7 16h7"/></svg></span><span class="nlbl">Aptitudes</span></button>
+      <button class="nbtn" onclick="app.goToPage(3)" aria-label="Ir a Equipo"><span class="nico"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="10" width="22" height="11" rx="1.5"/><path d="M1 10 Q1 3 12 3 Q23 3 23 10"/><line x1="1" y1="10" x2="23" y2="10"/><rect x="9" y="8.5" width="6" height="4" rx="1" stroke-width="1.5"/><circle cx="12" cy="10.5" r="1" fill="currentColor" stroke="none"/><path d="M8.5 4.5 Q12 1.5 15.5 4.5" stroke-width="1.4"/></svg></span><span class="nlbl">Equipo</span></button>
+      <button class="nbtn" onclick="app.goToPage(4)" aria-label="Ir a Detalle"><span class="nico"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg></span><span class="nlbl">Detalle</span></button>
     </nav>
   </div>
 </div><!-- /app-screen -->
-
-<!-- ══ SETTINGS MODAL ══ -->
 <dialog id="settings_modal" class="modal" aria-labelledby="settings_modal_title">
   <div class="mhd"><span class="mttl" id="settings_modal_title">Ajustes &amp; Datos</span><button class="bcls" onclick="document.getElementById('settings_modal').close()" aria-label="Cerrar ajustes">✕</button></div>
   <div class="mbd" style="display:flex;flex-direction:column;gap:14px">
@@ -2002,15 +1879,12 @@ input:focus-visible,textarea:focus-visible{outline:none}
     <button class="bcnf" style="width:100%;margin-top:4px" onclick="document.getElementById('settings_modal').close()">✓ Confirmar</button>
   </div>
 </dialog>
-
-<!-- ══ DB EDITOR MODAL ══ -->
 <dialog id="db_editor_modal" class="modal" aria-labelledby="db_editor_title" style="max-width:min(1000px,96vw);height:min(88dvh,calc(90svh - env(safe-area-inset-top,0px)))">
   <div class="mhd" style="background:var(--panel)">
     <span class="mttl" style="color:var(--ice)" id="db_editor_title">Editor de Reglas</span>
     <button class="bcls" onclick="document.getElementById('db_editor_modal').close()" aria-label="Cerrar editor de reglas">✕</button>
   </div>
   <div class="mbd dbl" style="padding:0">
-    <!-- ── Sidebar ── -->
     <div class="dbs" id="db_sidebar">
       <div style="font-family:var(--fd);font-size:.52rem;color:var(--muted);text-transform:uppercase;letter-spacing:.18em;padding:4px 10px 6px;border-bottom:1px solid rgba(74,63,94,.3);margin-bottom:4px">Categorías</div>
       <button class="catbtn" onclick="app.dbEditCategory('descriptors')" aria-label="Editar Linajes">
@@ -2043,7 +1917,6 @@ input:focus-visible,textarea:focus-visible{outline:none}
         ↓ Exportar Reglas
       </button>
     </div>
-    <!-- ── Content area ── -->
     <div class="dbct">
       <div id="db_list_container">
         <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;text-align:center;gap:10px">
@@ -2054,8 +1927,6 @@ input:focus-visible,textarea:focus-visible{outline:none}
     </div>
   </div>
 </dialog>
-
-<!-- ══ TALENT MODAL ══ -->
 <dialog id="talent_modal" class="modal" aria-labelledby="talent_modal_title" style="max-width:min(960px,96vw);height:min(85dvh,calc(90svh - env(safe-area-inset-top,0px)))">
   <div class="mhd"><span class="mttl" id="talent_modal_title">Gestor de Talentos</span><button class="bcls" onclick="app.closeTalentManager()" aria-label="Cerrar gestor de talentos">✕</button></div>
   <div class="mbd tml" style="padding:0">
@@ -2070,8 +1941,6 @@ input:focus-visible,textarea:focus-visible{outline:none}
     </div>
   </div>
 </dialog>
-
-<!-- ══ CROP MODAL ══ -->
 <dialog id="crop_modal" class="modal" aria-labelledby="crop_modal_title">
   <div class="crl">
     <div class="mhd">
@@ -2108,42 +1977,8 @@ input:focus-visible,textarea:focus-visible{outline:none}
 </dialog>
 
 <script>
-/* ════════════════════════════════════════════════════
-   Stars & Sorcery Companion — Application Script
-   ─────────────────────────────────────────────────
-   SECTIONS (in order):
-     1. DEFAULT_DB        — built-in rules database
-     2. ALIGNMENTS        — alignment options array
-     3. DEFAULT_PORTRAIT  — placeholder SVG data URI
-     4. CONSTANTS         — named app-wide constants
-     5. STORAGE           — localStorage abstraction
-     6. app               — main application object
-        ├ State           — properties & initial values
-        ├ Init            — boot and setup
-        ├ Screens         — screen transitions
-        ├ Home            — roster rendering
-        ├ Navigation      — page swipe + bottom nav
-        ├ Section toggles — edit/summary views
-        ├ Character       — save, load, clear, export
-        ├ Helpers         — fillSelect, getMod, etc.
-        ├ Options         — updateOptions, checkLimit
-        ├ Calc            — stat/resource calculations
-        ├ Inventory       — items, gold, combat sync
-        ├ Dice            — roll system + overlay
-        ├ Resources       — PV/Adr/Ing adjustments
-        ├ Talents         — manager, summary, count
-        ├ Detail page     — lore/archetype view
-        ├ Aptitudes       — spells/tricks manager
-        ├ DB Editor       — rule database CRUD
-        ├ Cropper         — portrait crop tool
-        ├ Rules import    — JSON rules loader
-        ├ Font size       — UI scale setting
-        ├ Lethality       — campaign config
-        ├ Misc            — dial, confirm, campana
-        ├ Randomize       — random character gen
-        └ Utilities       — debounce, PWA
-     7. Boot              — app startup sequence
-   ════════════════════════════════════════════════════ */
+
+/* Stars & Sorcery Companion — app object */
 
 /* ══════════════════════════════════════════
    DEFAULT RULES DATABASE
@@ -2578,7 +2413,6 @@ const STORAGE = {
       const parsed = JSON.parse(raw);
       return (parsed && typeof parsed === 'object') ? parsed : structuredClone(DEFAULT_DB);
     } catch (err) {
-      console.warn('[STORAGE] loadRules failed, using defaults:', err);
       return structuredClone(DEFAULT_DB);
     }
   },
@@ -2586,7 +2420,7 @@ const STORAGE = {
   /** Save rules DB – handles storage quota */
   saveRules(db) {
     try { localStorage.setItem(this.KEYS.rules, JSON.stringify(db)); return true; }
-    catch (err) { console.warn('[STORAGE] saveRules failed (quota?):', err); return false; }
+    catch (err) { return false; }
   },
 
   /** Load entire roster */
@@ -2597,7 +2431,6 @@ const STORAGE = {
       const parsed = JSON.parse(raw);
       return (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) ? parsed : {};
     } catch (err) {
-      console.warn('[STORAGE] loadRoster failed:', err);
       return {};
     }
   },
@@ -2605,7 +2438,7 @@ const STORAGE = {
   /** Save entire roster – returns false on quota error */
   saveRoster(roster) {
     try { localStorage.setItem(this.KEYS.roster, JSON.stringify(roster)); return true; }
-    catch (err) { console.warn('[STORAGE] saveRoster failed (quota?):', err); return false; }
+    catch (err) { return false; }
   },
 
   /** Load a single character from roster */
@@ -2646,7 +2479,6 @@ const app = {
   _editingCustomItem: null,
   _charLoading: false,   // suppresses _markUnsaved during load/clear
 
-  /* ── INIT ── */
   init() {
     // Load rules — fallback to DEFAULT_DB if storage is corrupt
     try {
@@ -2674,7 +2506,6 @@ const app = {
     this._initResLongPress();
   },
 
-  /* ── SCREENS ── */
   showScreen(id) {
     document.getElementById('home-screen').classList.toggle('hidden', id !== 'home');
     document.getElementById('app-screen').classList.toggle('hidden', id !== 'app');
@@ -2749,7 +2580,6 @@ const app = {
     this.toast(`Cargado: ${this._esc(name)}`, 'ok');
   },
 
-  /* ── HOME ROSTER ── */
   _esc(str) {
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
   },
@@ -2962,7 +2792,6 @@ const app = {
     this.toast(`"${name}" eliminado`, 'ok');
   },
 
-  /* ── UNLOCK / SETUP APP ── */
   unlockApp() {
     // Preserve current identity selections before rebuilding selects
     const prevDesc = document.getElementById('sel_desc')?.value || '';
@@ -2989,7 +2818,6 @@ const app = {
     this.renderInventory();
   },
 
-  /* ── NAVIGATION ── */
   setupSwipe() {
     const w = document.getElementById('pages_wrapper');
     const track = document.getElementById('pages_track');
@@ -3211,7 +3039,6 @@ const app = {
     }
   },
 
-  /* ── SECTION TOGGLES ── */
   editSection(sec) {
     if (sec === 'personal') {
       const ev = document.getElementById('personal_edit_view');
@@ -3399,7 +3226,6 @@ const app = {
     return this.inventory.find(i => String(i.uid) === String(uid));
   },
 
-  /* ── HELPERS ── */
   /** Single source of truth for portrait sync — keeps both img elements in step. */
   _syncPortrait(src) {
     const s = src || DEFAULT_PORTRAIT;
@@ -3431,7 +3257,6 @@ const app = {
     const raw = Math.floor((val - 10) / 2);
     return Math.max(-3, Math.min(4, raw));
   },
-
 
   // Tabla de XP necesario para subir al siguiente nivel (acumulativo)
   // XP_TABLE is defined as a top-level constant
@@ -3479,7 +3304,6 @@ const app = {
     );
   },
 
-  /* ── OPTIONS UPDATE ── */
   /** Rebuilds dependent selects (filo, skills, traits) after identity changes. */
   updateOptions(reset=false) {
     if (!this.DB.archetypes) return;
@@ -3583,7 +3407,6 @@ const app = {
     }
   },
 
-  /* ── CALC ── */
   /** Recalculates all derived stats and updates the DOM. Called on any input change. */
   calc() {
     // Local alias for readability within this dense function (mirrors this._el)
@@ -3791,7 +3614,6 @@ const app = {
     this.calc();
   },
 
-  /* ── INVENTORY ── */
   updateDbSelect() {
     const cat = document.getElementById('inv_db_category')?.value;
     const sel = document.getElementById('inv_db_item');
@@ -4000,7 +3822,6 @@ const app = {
     restore('sel_weapon',prev.w1); restore('sel_weapon_sec',prev.w2);
   },
 
-  /* ── DICE ROLLS ── */
   rollCheck(label, mod) {
     const d20 = Math.floor(Math.random()*20)+1;
     const total = d20 + mod;
@@ -4177,7 +3998,6 @@ const app = {
   },
   rollWeaponDmg(n) { this.rollDice(this._weaponDmgData[n-1]?.formula||'1', `Daño: ${this._weaponDmgData[n-1]?.name||'Arma'}`); },
 
-  /* ── RESOURCE ADJUST ── */
   adjustRes(curId, maxId, delta) {
     const cur = document.getElementById(curId);
     const max = document.getElementById(maxId);
@@ -4282,7 +4102,6 @@ const app = {
     }, TIMING.TOAST_VISIBLE);
   },
 
-  /* ── TALENTS ── */
   initTalentManager() {
     if (!this.DB.talents) return;
     const cc = document.getElementById('tm_categories'); cc.innerHTML='';
@@ -4430,7 +4249,6 @@ const app = {
     } else view.style.display='none';
   },
 
-  /* ── DETAIL PAGE ── */
   buildDetailPage() {
     const descKey = document.getElementById('sel_desc').value;
     const arqKey = document.getElementById('sel_arq').value;
@@ -4546,7 +4364,6 @@ const app = {
     });
   },
 
-  /* ── APTITUDES PAGE ── */
   // selectedApt stores { tricks: Set of keys, spells: Set of keys }
   _aptSel: { tricks: new Set(), spells: new Set() },
   _aptMode: 'tricks',
@@ -4708,7 +4525,6 @@ const app = {
     }
   },
 
-  /* ── DATABASE EDITOR ── */
   openDatabaseEditor() {
     document.getElementById('settings_modal').close();
     document.getElementById('db_editor_modal').showModal();
@@ -5384,7 +5200,6 @@ const app = {
     this.toast('Retrato actualizado','ok');
   },
 
-  /* ── RULES IMPORT ── */
   loadRulesFile(input) {
     if (!input.files?.[0]) return;
     const file = input.files[0];
@@ -5592,7 +5407,6 @@ const app = {
 
   triggerLoadJSON() { document.getElementById('json_char_input').click(); },
 
-  /* ── CLEAR CHARACTER DATA ── */
   clearCharData() {
     STATS.forEach(s=>{const el=document.getElementById('base_'+s);if(el)el.value=8});
     ['char_name','char_concept','char_notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
@@ -5668,7 +5482,6 @@ const app = {
       : 'Activar recordar posición al volver';
   },
 
-  /* ── LETHALITY ── */
   lethality: 1,
 
   setLethality(n) {
@@ -5776,7 +5589,6 @@ const app = {
     });
   },
 
-  /* ── RANDOMIZE ── */
   randomize() {
     if (!this.DB.archetypes) { this.toast('Carga reglas primero','err'); return; }
     // Anclar vista en página 0 y suprimir _markUnsaved durante la generación
@@ -5934,6 +5746,7 @@ const app = {
   // Safety net: if something hangs, dismiss loader after 5s regardless
   setTimeout(dismissLoader, TIMING.LOADER_TIMEOUT);
 })();
+
 </script>
 </body>
 </html>
