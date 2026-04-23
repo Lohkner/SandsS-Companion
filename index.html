@@ -731,7 +731,7 @@ input:focus-visible,textarea:focus-visible{outline:none}
 .apt-card--sel .apt-card__badge{background:rgba(74,158,202,.2);color:var(--ice)}
 .apt-card__desc{font-size:.72rem;color:var(--muted);margin-top:3px;line-height:1.4}
 .apt-card__row{display:flex;justify-content:space-between;align-items:center;gap:6px}
-   These replace the most repeated inline style strings produced by JS methods
+/* These replace the most repeated inline style strings produced by JS methods
    (buildDetailPage, showTalentSummary, _renderAptManager, etc.).
    Never remove without auditing those methods first.              */
 .js-detail-txt{font-size:.82rem;color:var(--text);line-height:1.6;margin-bottom:8px}
@@ -1897,7 +1897,7 @@ const STORAGE = {
   },
 
   /** Save a single character into roster */
-  saveChar(name, data) {
+  saveCharData(name, data) {
     const roster = this.loadRoster();
     roster[String(name)] = data;
     return this.saveRoster(roster);
@@ -2971,7 +2971,7 @@ const app = {
     $('res_carga').textContent = `${inv.current}/${inv.max}`;
     const pct = inv.max > 0 ? Math.min(100, (inv.current/inv.max)*100) : 0;
     $('carga_bar').style.width = pct+'%';
-    $('carga_bar').style.background = pct > 100 ? 'var(--blood)' : '';
+    $('carga_bar').style.background = pct > 100 ? 'var(--blood)' : 'var(--gold)';
     const warn = $('carga_warn');
     warn.style.display = inv.current > inv.max ? 'block' : 'none';
     if ($('load_summary_display'))
@@ -3772,7 +3772,9 @@ const app = {
 
   /** Returns true if the spell entry is classified as a trick (not a full spell). */
   _isTrickEntry(s) {
-    return s.type === 'trick' || (s.cost && s.cost.toLowerCase().includes('adr'));
+    // Match type flag OR cost that starts with "adr" as a standalone token
+    // (e.g. "Adr 1", "ADR", "adr") — avoids false positives like "Reduce ADR del enemigo".
+    return s.type === 'trick' || (s.cost && /^adr\b/i.test(s.cost.trim()));
   },
 
   /** Returns all DB spell keys that belong to the given section ('tricks' | 'spells'). */
@@ -4550,6 +4552,9 @@ const app = {
         };
         app.DB = sanitizeObj(rules);
         app.saveRulesToLocal();
+        // Reset aptitude selection so stale keys from a previous character
+        // don't carry over into the newly loaded rule set.
+        app._aptSel = { tricks: new Set(), spells: new Set() };
         app.unlockApp();
         app.toast('Reglas cargadas','ok');
       } catch(err) { app.toast(err.message || 'Formato JSON inválido','err'); }
@@ -4637,14 +4642,22 @@ const app = {
 
   saveChar() {
     if (this._saving) return; this._saving = true;
-    setTimeout(() => { this._saving = false; }, 800);
+    const releaseSaving = () => { this._saving = false; };
     const name = document.getElementById('char_name').value.trim();
-    if (!name) { this._saving = false; this.toast('¡Se requiere nombre!','err'); return; }
+    if (!name) { releaseSaving(); this.toast('¡Se requiere nombre!','err'); return; }
     const roster = STORAGE.loadRoster();
     if (roster[name]) {
-      this._confirm('¿Sobreescribir personaje?', `El personaje "${this._esc(name)}" ya existe y será reemplazado.`, '✓ Sobreescribir', () => this._doSaveChar(name, roster));
+      this._confirm('¿Sobreescribir personaje?', `El personaje "${this._esc(name)}" ya existe y será reemplazado.`, '✓ Sobreescribir', () => {
+        this._doSaveChar(name, roster);
+        releaseSaving();
+      });
+      // Also release if user cancels the dialog (cancelBtn path in _confirm)
+      // _confirm doesn't expose a cancel callback, so use a short safety timeout
+      // only as a fallback — long enough to not interfere with a slow confirm click.
+      setTimeout(releaseSaving, 10000);
     } else {
       this._doSaveChar(name, roster);
+      releaseSaving();
     }
   },
 
@@ -4877,10 +4890,13 @@ const app = {
     btn.classList.toggle('open', open);
     btn.setAttribute('aria-expanded', String(open));
     if (open) {
-      // Close on next outside click — {once:true} auto-removes the listener
+      // Close on next outside click — {once:true} auto-removes the listener.
+      // Guard: if the click is on the dial button itself, let toggleDial handle it
+      // naturally on the next call instead of fighting for the closed state.
       setTimeout(() => {
         document.addEventListener('click', function _close(e) {
-          if (!document.getElementById('sdial')?.contains(e.target)) {
+          const dialEl = document.getElementById('sdial');
+          if (!dialEl?.contains(e.target)) {
             menu.classList.remove('open');
             btn.classList.remove('open');
             btn.setAttribute('aria-expanded', 'false');
