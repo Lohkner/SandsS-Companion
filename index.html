@@ -41,6 +41,7 @@
   --port-w:287px;--port-h:410px;
   --port-r:var(--rl);
   --port-clip:none;
+
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
 ::selection{background:rgba(200,169,110,.18);color:var(--bright)}
@@ -113,6 +114,7 @@ body{
   overflow-y:auto;overflow-x:hidden;
   padding:env(safe-area-inset-top,0px) 0 60px;
   -webkit-overflow-scrolling:touch;
+  background-image:var(--bg-home,none);background-size:cover;background-position:center top;
 }
 
 .home-hdr{
@@ -121,12 +123,8 @@ body{
   position:relative;
 }
 /* Corner ornaments */
-.home-hdr::before,.home-hdr::after{
-  content:'';position:absolute;
-  width:28px;height:28px;
-  border-color:rgba(200,169,110,.25);border-style:solid;
-}
-.home-hdr::before{top:32px;left:24px;border-width:1px 0 0 1px}
+
+
 .home-hdr::after{top:32px;right:24px;border-width:1px 1px 0 0}
 
 .home-title{
@@ -429,9 +427,9 @@ body{
 .port-card{
   position:relative;width:var(--port-w);max-width:100%;height:var(--port-h);
   overflow:hidden;border-radius:var(--port-r);
-  border:1px solid rgba(200,169,110,.22);
+  border:1px solid rgba(200,169,110,.55);
   flex-shrink:0;
-  box-shadow:0 8px 40px rgba(0,0,0,.6),0 0 0 1px rgba(200,169,110,.04);
+  box-shadow:0 8px 40px rgba(0,0,0,.65);
 }
 .port-card img,.port-card-edit img{display:block;width:100%;height:100%;object-fit:cover;background:var(--raised);clip-path:var(--port-clip)}
 .port-card-edit{
@@ -1222,10 +1220,24 @@ dialog::backdrop{background:rgba(0,0,0,.8);backdrop-filter:blur(14px)}
 #crop_modal .crl{display:flex;flex-direction:column;height:100%;min-height:0;overflow:hidden}
 .crws{flex:1 1 0;min-height:0;background:#06060b;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
 .crws:active{cursor:grabbing}
-.crfr{position:absolute;border:1px solid rgba(200,169,110,.9);box-shadow:0 0 0 2000px rgba(0,0,0,.65),inset 0 0 0 1px rgba(200,169,110,.1);border-radius:2px;pointer-events:none;z-index:10}
-.crfr::before,.crfr::after{content:'';position:absolute;width:16px;height:16px;border-color:var(--gold);border-style:solid}
-.crfr::before{top:-1px;left:-1px;border-width:2px 0 0 2px}
-.crfr::after{bottom:-1px;right:-1px;border-width:0 2px 2px 0}
+.crfr{
+  position:absolute;
+  border:1.5px solid rgba(224,192,122,.98);
+  border-radius:var(--crfr-r, 2px);
+  pointer-events:none;z-index:12;
+  /* Dark surround via box-shadow — clips to border-radius automatically */
+  box-shadow:
+    0 0 0 2000px rgba(0,0,0,.62),
+    inset 0 0 0 1px rgba(200,169,110,.12);
+}
+/* Overlay div kept for structural reasons but invisible — box-shadow handles it */
+.cr-overlay{
+  position:absolute;inset:0;
+  pointer-events:none;z-index:11;
+}
+
+
+
 .crimg{position:absolute;transform-origin:center center;pointer-events:none;will-change:transform;max-width:none;max-height:none}
 .cr-grid{position:absolute;pointer-events:none;opacity:0;transition:opacity .18s;z-index:11}
 .crws.dragging .cr-grid{opacity:1}
@@ -1344,6 +1356,47 @@ input:focus-visible,textarea:focus-visible{outline:none}
   font-family:var(--fd);font-size:.58rem;letter-spacing:.06em;
   min-height:36px;text-align:center;
 }
+
+/* Per-shape gold border match */
+.crfr.arch{border-radius:140px 140px 2px 2px / 160px 160px 2px 2px}
+
+[data-theme="void"]{--void:#020202;--deep:#060606;--surface:#0c0c0c;--raised:#111111;--panel:#181818;--rim:#252525;--border:#333333;--muted:#666666;--dim:#999999;--text:#cccccc;--bright:#f0f0f0;--gold:#888888;--goldb:#aaaaaa;--goldh:#cccccc;--crimson:#1a1a1a;--blood:#333333;--ember:#555555;--ice:#444444;--sage:#444444;}
+[data-theme="arcane"]{--void:#040509;--deep:#080a12;--surface:#0e1020;--raised:#141628;--panel:#1a1d35;--rim:#252848;--border:#333658;--muted:#6a6898;--dim:#9090c0;--text:#c8c8e8;--bright:#e8e8f8;--gold:#8890e0;--goldb:#a0a8f0;--goldh:#c0c8ff;--crimson:#3a2070;--blood:#5a30a0;--ember:#7040c0;--ice:#4080d0;--sage:#3a8878;}
+[data-theme="ember"]{--void:#080402;--deep:#100806;--surface:#1a0e08;--raised:#241410;--panel:#2e1a14;--rim:#42261e;--border:#58322a;--muted:#907060;--dim:#b09080;--text:#e0c8b8;--bright:#f5e8d8;--gold:#e09050;--goldb:#f0a860;--goldh:#ffbf70;--crimson:#701a0a;--blood:#a02a18;--ember:#d04020;--ice:#5090a8;--sage:#508860;}
+
+/* Background image overlays — ensure readability */
+#home-screen::before,.pages-wrapper::before{
+  content:'';position:absolute;inset:0;
+  background:rgba(var(--void-rgb,5,4,10),.72);
+  pointer-events:none;z-index:0;
+  opacity:var(--bg-overlay-op,0);
+}
+#home-screen>*,.pages-wrapper>*{position:relative;z-index:1}
+
+.pages-wrapper{background-image:var(--bg-app,none);background-size:cover;background-position:center top}
+
+/* ── Portrait border states ── */
+/* Premium (default) */
+.port-card{
+  border:1px solid rgba(200,169,110,.55);
+  box-shadow:0 0 0 1px rgba(200,169,110,.12),0 0 16px rgba(200,169,110,.1),0 8px 40px rgba(0,0,0,.65);
+}
+/* Subtle (legacy) — applied when body has .port-border-subtle */
+body.port-border-subtle .port-card{
+  border:1px solid rgba(200,169,110,.18);
+  box-shadow:0 4px 20px rgba(0,0,0,.45);
+}
+body.port-border-subtle .port-card-edit{
+  border:1px dashed rgba(200,169,110,.22);
+}
+/* Hidden — applied when body has .port-border-none */
+body.port-border-none .port-card{
+  border:none;
+  box-shadow:0 8px 40px rgba(0,0,0,.65);
+}
+body.port-border-none .port-card-edit{
+  border:1px dashed rgba(200,169,110,.15);
+}
 </style>
 <!-- Fonts injected via JS so they never block window.load or app init -->
 <script>
@@ -1406,6 +1459,8 @@ input:focus-visible,textarea:focus-visible{outline:none}
     <button class="btn btn-gold" onclick="app.closeAptManager()">✓ Listo</button>
   </div>
 </dialog>
+<input type="file" id="bg_home_input" accept="image/*" style="display:none" onchange="app.loadBgImage('home',this)">
+<input type="file" id="bg_app_input"  accept="image/*" style="display:none" onchange="app.loadBgImage('app',this)">
 <input type="file" id="json_char_input" accept=".json" style="display:none" onchange="app.loadJSON(this)">
 <input type="file" id="json_rules_input" accept=".json" style="display:none" onchange="app.loadRulesFile(this)">
 <div id="home-screen" class="screen" role="main">
@@ -1417,12 +1472,12 @@ input:focus-visible,textarea:focus-visible{outline:none}
   <div class="home-body">
     <div class="home-actions">
       <button class="btn btn-gold" onclick="app.newChar()" style="width:100%;padding:13px 8px;font-size:.76rem">✦ Nuevo Personaje</button>
-      <button class="btn btn-g" onclick="document.getElementById('json_char_input').click()" style="width:100%;padding:13px 8px;font-size:.76rem">↑ Importar JSON</button>
+      <button class="btn btn-g" onclick="app.toast('Selecciona un archivo .json de personaje','info');setTimeout(()=>document.getElementById('json_char_input').click(),80)" style="width:100%;padding:13px 8px;font-size:.76rem">↑ Importar JSON</button>
     </div>
     <p style="font-family:var(--fm);font-size:.58rem;color:var(--border);text-align:center;margin-bottom:8px;letter-spacing:.08em">← Desliza izquierda para eliminar · Derecha para cerrar</p>
     <div id="home-roster"></div>
     <div style="margin-top:18px;padding-top:16px;border-top:1px solid var(--rim);display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
-      <button class="btn btn-g" style="font-size:.68rem" onclick="document.getElementById('json_rules_input').click()" aria-label="Importar reglas desde archivo JSON">↑ Importar Reglas</button>
+      <button class="btn btn-g" style="font-size:.68rem" onclick="app.toast('Selecciona un archivo .json de reglas','info');setTimeout(()=>document.getElementById('json_rules_input').click(),80)" aria-label="Importar reglas desde archivo JSON">↑ Importar Reglas</button>
       <button class="btn btn-g" style="font-size:.68rem" onclick="app.openDatabaseEditor()">Editor de Reglas</button>
     </div>
   </div>
@@ -1941,6 +1996,19 @@ input:focus-visible,textarea:focus-visible{outline:none}
     <!-- ── RETRATO ── -->
     <div>
       <div class="dvdr">Retrato</div>
+      <!-- Per-char prefs notice -->
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px">
+        <div>
+          <span style="font-family:var(--fd);font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">Guardar ajustes con personaje</span>
+          <div style="font-family:var(--fm);font-size:.6rem;color:var(--border);margin-top:2px">Tamaño, forma y fuente se restauran al cargar este personaje</div>
+        </div>
+        <button id="per_char_prefs_btn" class="toggle-btn" onclick="app.togglePerCharPrefs()" aria-pressed="false" aria-label="Guardar ajustes visuales por personaje"></button>
+      </div>
+      <!-- Border toggle -->
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px">
+        <span style="font-family:var(--fd);font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">Desactivar Borde Premium</span>
+        <button id="port_border_btn" class="toggle-btn" onclick="app.togglePortraitBorder()" aria-pressed="true" aria-label="Cambiar entre borde premium y borde sutil del retrato"></button>
+      </div>
       <!-- Size -->
       <div style="margin-bottom:10px">
         <span style="font-family:var(--fd);font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:7px">Tamaño</span>
@@ -1960,9 +2028,36 @@ input:focus-visible,textarea:focus-visible{outline:none}
           <button class="fs-btn psh-btn"        data-shape="rounded" onclick="app.setPortraitShape('rounded')" title="Redondeado">Suave</button>
           <button class="fs-btn psh-btn"        data-shape="arch"    onclick="app.setPortraitShape('arch')"    title="Arco superior">Arco</button>
           <button class="fs-btn psh-btn"        data-shape="circle"  onclick="app.setPortraitShape('circle')"  title="Círculo">Círculo</button>
-          <button class="fs-btn psh-btn"        data-shape="shield"  onclick="app.setPortraitShape('shield')"  title="Escudo">Escudo</button>
-          <button class="fs-btn psh-btn"        data-shape="hex"     onclick="app.setPortraitShape('hex')"     title="Hexágono">Hex</button>
         </div>
+      </div>
+    </div>
+    <div>
+      <div class="dvdr">Fondo de Pantalla</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div>
+          <div style="font-family:var(--fd);font-size:.6rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px">Inicio</div>
+          <div style="display:flex;gap:4px">
+            <button class="btn btn-g" style="flex:1;font-size:.6rem;padding:6px 4px" onclick="document.getElementById('bg_home_input').click()">↑ Subir</button>
+            <button id="bg_home_clear" class="btn btn-p" style="font-size:.6rem;padding:6px 4px;display:none" onclick="app.setBgImage('home','')">✕</button>
+          </div>
+        </div>
+        <div>
+          <div style="font-family:var(--fd);font-size:.6rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px">Personaje</div>
+          <div style="display:flex;gap:4px">
+            <button class="btn btn-g" style="flex:1;font-size:.6rem;padding:6px 4px" onclick="document.getElementById('bg_app_input').click()">↑ Subir</button>
+            <button id="bg_app_clear" class="btn btn-p" style="font-size:.6rem;padding:6px 4px;display:none" onclick="app.setBgImage('app','')">✕</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="dvdr">Tema Visual</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap">
+        <button class="fs-btn theme-btn" data-theme="deco" onclick="app.setTheme('deco')" title="Art Déco" style="flex:1;padding:6px 2px;font-size:.58rem">Art Déco</button>
+        <button class="fs-btn theme-btn" data-theme="blood" onclick="app.setTheme('blood')" title="Sangre" style="flex:1;padding:6px 2px;font-size:.58rem">Sangre</button>
+        <button class="fs-btn theme-btn" data-theme="void" onclick="app.setTheme('void')" title="Vacío" style="flex:1;padding:6px 2px;font-size:.58rem">Vacío</button>
+        <button class="fs-btn theme-btn" data-theme="arcane" onclick="app.setTheme('arcane')" title="Arcano" style="flex:1;padding:6px 2px;font-size:.58rem">Arcano</button>
+        <button class="fs-btn theme-btn" data-theme="ember" onclick="app.setTheme('ember')" title="Brasa" style="flex:1;padding:6px 2px;font-size:.58rem">Brasa</button>
       </div>
     </div>
     <div><div class="dvdr">Reglas del Juego</div><div style="display:flex;flex-direction:column;gap:6px"><button class="btn btn-g" style="width:100%" onclick="document.getElementById('json_rules_input').click()">↑ Importar Reglas (JSON)</button><button class="btn btn-gold" style="width:100%" onclick="app.openDatabaseEditor()">⚙ Editor de Base de Datos</button></div></div>
@@ -2042,6 +2137,7 @@ input:focus-visible,textarea:focus-visible{outline:none}
       onmousedown="app.cropDragStart(event)"
       ontouchstart="app.cropDragStart(event)">
       <img class="crimg" id="crop_preview" src="" alt="" draggable="false">
+      <div class="cr-overlay" id="crop_overlay"></div>
       <div class="crfr" id="crop_frame"></div>
       <div class="cr-grid" id="cr_grid"><svg id="cr_grid_svg" overflow="visible"></svg></div>
     </div>
@@ -2068,6 +2164,10 @@ input:focus-visible,textarea:focus-visible{outline:none}
 </dialog>
 
 <script>
+
+
+
+
 
 /* Stars & Sorcery Companion — app object */
 
@@ -2473,7 +2573,7 @@ const TIMING = {
   /** Swipe ghost-click suppression window */
   SWIPE_SUPPRESS:    380,
   /** Swipe snap transition */
-  SWIPE_SNAP:        240,
+  SWIPE_SNAP:        320,
   /** Crop spring transition */
   CROP_SPRING:       340,
   /** Long-press initial threshold */
@@ -2596,6 +2696,8 @@ const app = {
     this._restoreFontSize();
     this._restoreScrollPreserve();
     this._restorePortraitSettings();
+    this._restoreTheme();
+    this._restoreBgImages();
     // Long-press repeat on resource +/- buttons
     this._initResLongPress();
   },
@@ -2916,66 +3018,81 @@ const app = {
     const w     = document.getElementById('pages_wrapper');
     const track = document.getElementById('pages_track');
 
+    // ── Tuning — matches native iOS/Android feel ──
+    const DEAD_PX     = 8;     // px before ANY axis locks (iOS standard)
+    const V_BIAS      = 2.2;   // H/V ratio for axis lock (high = vertical wins)
+    const MIN_DIST    = 38;    // px minimum travel to count a slow drag
+    const FLICK_DIST  = 22;    // px minimum travel to count a fast flick
+    const FLICK_VEL   = 0.28;  // px/ms velocity threshold for flick
+    const DRAG_RATIO  = 0.30;  // fraction of page width for slow drag commit
+    const RUBBER      = 0.12;  // edge resistance (higher = softer bounce)
+    const SNAP_MS     = 320;   // ms for snap animation
+    const SNAP_EASE   = 'cubic-bezier(.25,.46,.45,.94)'; // iOS ease-out
+    const SCROLL_SEL  = '.skill-area,.tms,.dbs,.tmct,.dbct,.mbd,[data-scroll]';
+
+    // ── Velocity window — track last N samples, use peak ──
+    const VEL_SAMPLES = 4;
+    let velSamples = [];
+    const peakVel = () => {
+      if (!velSamples.length) return 0;
+      return velSamples.reduce((a,b) => Math.abs(a)>Math.abs(b)?a:b, 0);
+    };
+    const addVelSample = (v) => {
+      velSamples.push(v);
+      if (velSamples.length > VEL_SAMPLES) velSamples.shift();
+    };
+
     // ── State ──
     let startX=0, startY=0, startT=0, lastX=0, lastT=0;
-    let velEMA=0, dragging=false, locked=false;
+    let dragging=false, locked=false, totalDist=0;
 
-    // ── Constants — tuned for natural feel ──
-    const FLICK_VEL   = 0.14;   // px/ms  — lower = more responsive flick
-    const DRAG_RATIO  = 0.25;   // page % — needed for slow-drag commit
-    const PROJ_MS     = 100;    // ms     — momentum projection window
-    const LOCK_PX     = 5;      // px     — distance before direction locks
-    const V_BIAS      = 1.6;    // ratio  — vertical preference (lower = easier swipe)
-    const RUBBER      = 0.06;   // 0–1    — edge resistance
-    const EMA_ALPHA   = 0.45;   // 0–1    — velocity smoothing (higher = snappier)
-    const SNAP_MS     = 240;    // ms     — snap animation duration
-    const SNAP_EASE   = 'cubic-bezier(.08,.92,.22,1)';  // quick out, soft landing
-
-    // ── Scrollable children — don't steal touch from these ──
-    const SCROLL_SEL = '.skill-area,.tms,.dbs,.tmct,.dbct,.mbd,[data-scroll]';
-
-    // ── Ghost-click suppression after horizontal drag ──
+    // ── Ghost-click suppression ──
     let _suppress = false;
     const GUARD_EVENTS = ['touchstart','pointerdown','mousedown','click'];
     const _guard = e => { if (_suppress) { e.stopPropagation(); e.preventDefault(); } };
-    GUARD_EVENTS.forEach(t => w.addEventListener(t, _guard, {capture:true, passive:false}));
+    GUARD_EVENTS.forEach(t => w.addEventListener(t, _guard, {capture:true,passive:false}));
     const suppressFor = (ms = TIMING.SWIPE_SUPPRESS) => {
-      _suppress = true;
-      setTimeout(() => { _suppress = false; }, ms);
+      _suppress = true; setTimeout(() => { _suppress = false; }, ms);
     };
 
     const pageW = () => w.clientWidth || window.innerWidth;
 
-    // ── Rubber-band edge resistance ──
+    // ── Live drag with rubber-band ──
     const setLive = rawDx => {
       const base   = -this.currentPage * pageW();
       const atEdge = (this.currentPage === 0 && rawDx > 0) ||
-                     (this.currentPage === this.totalPages - 1 && rawDx < 0);
+                     (this.currentPage === this.totalPages-1 && rawDx < 0);
       track.style.transition = 'none';
-      track.style.transform  = `translateX(${base + (atEdge ? rawDx * RUBBER : rawDx)}px)`;
+      track.style.transform  = `translateX(${base + (atEdge ? rawDx*RUBBER : rawDx)}px)`;
     };
 
-    // ── Snap to target page ──
+    // ── Snap decision ──
+    const decide = (dx, vel) => {
+      const pW   = pageW();
+      const cur  = this.currentPage;
+      const max  = this.totalPages - 1;
+      const dist = Math.abs(dx);
+      const dir  = dx < 0 ? 1 : -1; // +1 = forward, -1 = back
+
+      const isFlick = Math.abs(vel) >= FLICK_VEL && dist >= FLICK_DIST;
+      const isDrag  = dist >= MIN_DIST && dist/pW >= DRAG_RATIO;
+
+      if (isFlick) {
+        if (vel < 0 && cur < max) return cur + 1;
+        if (vel > 0 && cur > 0)   return cur - 1;
+      }
+      if (isDrag) {
+        if (dir > 0 && cur < max) return cur + 1;
+        if (dir < 0 && cur > 0)   return cur - 1;
+      }
+      return cur;
+    };
+
+    // ── Snap to target ──
     const snapTo = target => {
       suppressFor();
       setTimeout(() => track.classList.remove('is-dragging'), TIMING.SWIPE_SUPPRESS);
       this.goToPage(target);
-    };
-
-    // ── Decide target from velocity + projection ──
-    const decide = (dx, vel) => {
-      const pW       = pageW();
-      const projected = dx + vel * PROJ_MS;
-      const projR    = projected / pW;
-      const isFlick  = Math.abs(vel) > FLICK_VEL;
-      const cur      = this.currentPage;
-      const max      = this.totalPages - 1;
-
-      if      (isFlick && vel < 0 && cur < max) return cur + 1;
-      else if (isFlick && vel > 0 && cur > 0)   return cur - 1;
-      else if (projR < -DRAG_RATIO && cur < max) return cur + 1;
-      else if (projR >  DRAG_RATIO && cur > 0)   return cur - 1;
-      return cur;
     };
 
     // ══ TOUCH ══
@@ -2985,10 +3102,12 @@ const app = {
       startX = lastX = t.clientX;
       startY = t.clientY;
       startT = lastT = Date.now();
-      velEMA = 0; dragging = false; locked = false;
-      // Pre-snap track position so rubber-band starts from correct base
+      dragging = false; locked = false;
+      totalDist = 0; velSamples = [];
+      // Freeze any in-progress snap immediately
+      const cur = getComputedStyle(track).transform;
       track.style.transition = 'none';
-      // Blur focused inputs so focus ring doesn't linger
+      track.style.transform  = cur;
       w.querySelector(':focus')?.blur();
     }, {passive:true});
 
@@ -2999,78 +3118,79 @@ const app = {
       const dy = t.clientY - startY;
 
       if (!locked) {
-        // Skip if inside a scrollable child
         if (e.target.closest(SCROLL_SEL)) { locked = true; return; }
-        // Wait for minimum movement before committing direction
-        if (Math.abs(dx) < LOCK_PX && Math.abs(dy) < LOCK_PX) return;
+        if (Math.abs(dx) < DEAD_PX && Math.abs(dy) < DEAD_PX) return;
         if (Math.abs(dx) > Math.abs(dy) * V_BIAS) {
           locked = true; dragging = true;
           track.classList.add('is-dragging');
         } else {
-          locked = true; // vertical — release to native scroll
-          return;
+          locked = true; return;
         }
       }
-
       if (!dragging) return;
       e.preventDefault();
 
       const now = Date.now();
       const dt  = Math.max(now - lastT, 1);
-      velEMA    = velEMA * (1 - EMA_ALPHA) + (t.clientX - lastX) / dt * EMA_ALPHA;
-      lastX     = t.clientX;
-      lastT     = now;
+      const iv  = (t.clientX - lastX) / dt;
+      addVelSample(iv);
+      totalDist += Math.abs(t.clientX - lastX);
+      lastX = t.clientX; lastT = now;
       setLive(dx);
     }, {passive:false});
 
     w.addEventListener('touchend', e => {
-      if (!dragging) { dragging = false; locked = false; velEMA = 0; return; }
       track.classList.remove('is-dragging');
+      if (!dragging) { dragging=false; locked=false; velSamples=[]; return; }
       const dx = e.changedTouches[0].clientX - startX;
+      const vel = peakVel();
       dragging = false; locked = false;
-      snapTo(decide(dx, velEMA));
+      snapTo(decide(dx, vel));
     }, {passive:true});
 
     w.addEventListener('touchcancel', () => {
       track.classList.remove('is-dragging');
-      dragging = false; locked = false; velEMA = 0;
+      dragging=false; locked=false; velSamples=[];
       this.goToPage(this.currentPage);
     }, {passive:true});
 
-    // ══ MOUSE (desktop) ══
+    // ══ MOUSE ══
     let ms = null;
     w.addEventListener('mousedown', e => {
       if (e.target.closest('input,select,textarea,button,label')) return;
-      ms = {x:e.clientX, lx:e.clientX, lt:Date.now(), v:0, drag:false};
+      ms = {x:e.clientX, lx:e.clientX, lt:Date.now(), samples:[], drag:false, dist:0};
       track.style.transition = 'none';
     });
     w.addEventListener('mousemove', e => {
       if (!ms) return;
-      if (!ms.drag && Math.abs(e.clientX - ms.x) > 8) {
-        ms.drag = true; track.classList.add('is-dragging');
+      if (!ms.drag && Math.abs(e.clientX-ms.x)>8) {
+        ms.drag=true; track.classList.add('is-dragging');
       }
       if (ms.drag) {
-        const dt = Math.max(Date.now() - ms.lt, 1);
-        ms.v  = ms.v * (1 - EMA_ALPHA) + (e.clientX - ms.lx) / dt * EMA_ALPHA;
-        ms.lx = e.clientX; ms.lt = Date.now();
-        setLive(e.clientX - ms.x);
+        const dt=Math.max(Date.now()-ms.lt,1);
+        const iv=(e.clientX-ms.lx)/dt;
+        ms.samples.push(iv); if(ms.samples.length>VEL_SAMPLES) ms.samples.shift();
+        ms.dist += Math.abs(e.clientX-ms.lx);
+        ms.lx=e.clientX; ms.lt=Date.now();
+        setLive(e.clientX-ms.x);
       }
     });
     const endMouse = cx => {
       track.classList.remove('is-dragging');
       if (!ms) return;
-      const {x, drag, v} = ms; ms = null;
+      const {x,drag,samples,dist} = ms; ms=null;
       if (!drag) return;
-      snapTo(decide(cx - x, v));
+      const vel = samples.reduce((a,b)=>Math.abs(a)>Math.abs(b)?a:b, 0);
+      snapTo(decide(cx-x, vel));
     };
-    w.addEventListener('mouseup',    e => endMouse(e.clientX));
-    w.addEventListener('mouseleave', e => endMouse(e.clientX));
+    w.addEventListener('mouseup',    e=>endMouse(e.clientX));
+    w.addEventListener('mouseleave', e=>endMouse(e.clientX));
 
-    // ══ RESIZE / ROTATION ══
+    // ══ RESIZE/ROTATION ══
     const _reSnap = this._debounce(() => {
       if (document.getElementById('app-screen')?.classList.contains('hidden')) return;
-      track.style.transition = 'none';
-      track.style.transform  = `translateX(-${this.currentPage * pageW()}px)`;
+      track.style.transition='none';
+      track.style.transform=`translateX(-${this.currentPage*pageW()}px)`;
     }, 100);
     window.addEventListener('resize',            _reSnap, {passive:true});
     window.addEventListener('orientationchange', _reSnap, {passive:true});
@@ -4963,6 +5083,20 @@ const app = {
       frame.style.top    = '50%';
       frame.style.transform = 'translate(-50%,-50%)';
     }
+    // Apply current portrait shape to frame so editor previews correctly
+    const shapeData = {
+      rect:    {r:'2px',  clip:'none', cls:''},
+      rounded: {r:'14px', clip:'none', cls:''},
+      arch:    {r:'0',    clip:'none', cls:'arch'},
+      circle:  {r:'50%',  clip:'none', cls:''},
+
+    };
+    const s = shapeData[this._portShape || 'rect'] || shapeData['rect'];
+    if (frame) {
+      frame.style.setProperty('--crfr-r',    s.r);
+      frame.style.setProperty('--crfr-clip', s.clip);
+      frame.className = 'crfr' + (s.cls ? ' ' + s.cls : '');
+    }
     const grid = document.getElementById('cr_grid');
     const svg  = document.getElementById('cr_grid_svg');
     if (grid && svg) {
@@ -5271,6 +5405,7 @@ const app = {
 
   loadRulesFile(input) {
     if (!input.files?.[0]) return;
+    this.toast('Cargando reglas…', 'info');
     const file = input.files[0];
     // Reject files larger than 2 MB
     if (file.size > MAX_JSON_BYTES) { this.toast('Archivo demasiado grande (máx 2 MB)','err'); input.value=''; return; }
@@ -5319,7 +5454,12 @@ const app = {
       gold: this.gold,
       lethality: this.lethality||1,
       apt_tricks: [...(this._aptSel?.tricks||[])],
-      apt_spells: [...(this._aptSel?.spells||[])]
+      apt_spells: [...(this._aptSel?.spells||[])],
+      _prefs: {
+        portSize:  this._portSize  || 'm',
+        portShape: this._portShape || 'rect',
+        fontSize:  localStorage.getItem(STORAGE.KEYS.font) || 'normal'
+      }
     };
     document.querySelectorAll('input[type=text]:not(.inm),input[type=number]:not(.isl):not(#gold_coins_edit)').forEach(el=>{if(el.id)data.inputs[el.id]=el.value});
     document.querySelectorAll('select:not(#inv_db_category):not(#inv_db_item):not(.ityp)').forEach(el=>{if(el.id)data.selects[el.id]=el.value});
@@ -5346,6 +5486,12 @@ const app = {
     for (const id in data.inputs) { const el=document.getElementById(id); if(el)el.value=data.inputs[id]; }
     // Portrait
     if (data.portrait) this._syncPortrait(data.portrait);
+    // Per-character visual preferences
+    if (this._perCharPrefs && data._prefs) {
+      if (data._prefs.portSize)  this.setPortraitSize(data._prefs.portSize);
+      if (data._prefs.portShape) this.setPortraitShape(data._prefs.portShape);
+      if (data._prefs.fontSize)  this.setFontSize(data._prefs.fontSize);
+    }
     if (data.concept) document.getElementById('char_concept').value = data.concept;
     if (data.notes) document.getElementById('char_notes').value = data.notes;
     // Alignment
@@ -5437,6 +5583,7 @@ const app = {
 
   loadJSON(input) {
     if (!input.files?.[0]) return;
+    this.toast('Cargando personaje…', 'info');
     const r = new FileReader();
     r.onload = e => {
       try {
@@ -5560,20 +5707,23 @@ const app = {
 
   /* ── PORTRAIT SHAPE ── */
   setPortraitShape(shape) {
-    // shape: 'rect'|'rounded'|'circle'|'shield'|'hex'
-    const clips = {
-      rect:    {r:'var(--r)',   clip:'none'},
-      rounded: {r:'14px',       clip:'none'},
-      arch:    {r:'140px 140px 8px 8px / 160px 160px 8px 8px', clip:'none'},
-      circle:  {r:'50%',        clip:'none'},
-      shield:  {r:'var(--r)',   clip:'polygon(50% 0%,100% 15%,100% 70%,50% 100%,0% 70%,0% 15%)'},
-      hex:     {r:'var(--r)',   clip:'polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%)'}
+    const shapes = {
+      rect:    {r:'var(--r)',    clip:'none',                                                         poly:false},
+      rounded: {r:'14px',        clip:'none',                                                         poly:false},
+      arch:    {r:'140px 140px 8px 8px / 160px 160px 8px 8px', clip:'none',                          poly:false},
+      circle:  {r:'50%',         clip:'none',                                                         poly:false},
+
     };
-    const d = clips[shape] || clips['rect'];
+    const d = shapes[shape] || shapes['rect'];
     const root = document.documentElement;
-    root.style.setProperty('--port-r', d.r);
+    root.style.setProperty('--port-r',    d.r);
     root.style.setProperty('--port-clip', d.clip);
-    this._portShape = shape;
+    // For polygon shapes, port-card border is clipped away — hide it,
+    // the ::after pseudo (which shares the clip-path) renders the gold border instead
+    this._portShape  = shape;
+    this._portIsPoly = d.poly;
+    // Apply shape to crop frame so editor previews the shape
+    this._syncCropFrameShape(d);
     // Sync UI buttons
     document.querySelectorAll('.psh-btn').forEach(b =>
       b.classList.toggle('active', b.dataset.shape === shape)
@@ -5581,12 +5731,143 @@ const app = {
     localStorage.setItem(STORAGE.KEYS.portShape, shape);
   },
 
+  /** Syncs crop frame appearance to the current portrait shape */
+  _syncCropFrameShape(d) {
+    const frame   = document.getElementById('crop_frame');
+    const overlay = document.getElementById('crop_overlay');
+    if (!frame) return;
+    const crClips = {
+      rect:    {r:'2px',   clip:'none', cls:''},
+      rounded: {r:'14px',  clip:'none', cls:''},
+      arch:    {r:'0',     clip:'none', cls:'arch'},
+      circle:  {r:'50%',   clip:'none', cls:''},
+
+    };
+    const shape = this._portShape || 'rect';
+    const cr = crClips[shape] || crClips['rect'];
+    frame.style.setProperty('--crfr-r',    cr.r);
+    frame.style.setProperty('--crfr-clip', cr.clip);
+    frame.className = 'crfr' + (cr.cls ? ' ' + cr.cls : '');
+    // Punch a matching hole in the overlay for non-rect shapes
+    if (overlay) {
+      if (cr.clip !== 'none') {
+        // SVG clip on overlay to cut matching shape hole
+        overlay.style.clipPath = 'none'; // handled via CSS on frame
+      }
+    }
+  },
+
   _restorePortraitSettings() {
     const size  = localStorage.getItem(STORAGE.KEYS.portSize)  || 'm';
     const shape = localStorage.getItem(STORAGE.KEYS.portShape) || 'rect';
+    this._portBorderMode = localStorage.getItem('ss_port_border') || 'premium';
+    this._applyPortraitBorder();
+    this._perCharPrefs = localStorage.getItem('ss_per_char_prefs') === '1';
     this.setPortraitSize(size);
     this.setPortraitShape(shape);
+    const btn = document.getElementById('per_char_prefs_btn');
+    if (btn) btn.setAttribute('aria-pressed', String(this._perCharPrefs));
   },
+
+
+  setTheme(id) {
+    const tid = id || 'deco';
+    document.documentElement.setAttribute('data-theme', tid);
+    this._theme = tid;
+    document.querySelectorAll('.theme-btn').forEach(b =>
+      b.classList.toggle('active', b.dataset.theme === tid)
+    );
+    localStorage.setItem('ss_theme', tid);
+  },
+
+  _restoreTheme() {
+    this.setTheme(localStorage.getItem('ss_theme') || 'deco');
+  },
+
+
+  /** Set background image for home or app. src = base64 data URL or '' to clear */
+  setBgImage(target, src) {
+    const prop = target === 'home' ? '--bg-home' : '--bg-app';
+    const key  = target === 'home' ? 'ss_bg_home' : 'ss_bg_app';
+    if (src) {
+      document.documentElement.style.setProperty(prop, 'url("' + src + '")');
+      document.documentElement.style.setProperty('--bg-overlay-op', '1');
+      localStorage.setItem(key, src);
+    } else {
+      document.documentElement.style.setProperty(prop, 'none');
+      // Only remove overlay if both are clear
+      const otherKey = target === 'home' ? 'ss_bg_app' : 'ss_bg_home';
+      if (!localStorage.getItem(otherKey)) {
+        document.documentElement.style.setProperty('--bg-overlay-op', '0');
+      }
+      localStorage.removeItem(key);
+    }
+    const btn = document.getElementById('bg_' + target + '_clear');
+    if (btn) btn.style.display = src ? 'inline-flex' : 'none';
+  },
+
+  loadBgImage(target, input) {
+    if (!input.files?.[0]) return;
+    const file = input.files[0];
+    // Accept any size — we compress client-side before storing
+    this.toast('Procesando imagen…', 'info');
+    const r = new FileReader();
+    r.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        // Resize to max 1400px on longest side, compress to JPEG 72%
+        const MAX = 1400;
+        let w = img.naturalWidth, h = img.naturalHeight;
+        if (w > MAX || h > MAX) {
+          if (w >= h) { h = Math.round(h * MAX / w); w = MAX; }
+          else        { w = Math.round(w * MAX / h); h = MAX; }
+        }
+        const cv = document.createElement('canvas');
+        cv.width = w; cv.height = h;
+        const ctx = cv.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        const compressed = cv.toDataURL('image/jpeg', 0.72);
+        this.setBgImage(target, compressed);
+        this.toast('Fondo actualizado', 'ok');
+      };
+      img.onerror = () => this.toast('No se pudo cargar la imagen', 'err');
+      img.src = e.target.result;
+    };
+    r.readAsDataURL(file);
+    input.value = '';
+  },
+
+  _restoreBgImages() {
+    const home = localStorage.getItem('ss_bg_home');
+    const app  = localStorage.getItem('ss_bg_app');
+    if (home) this.setBgImage('home', home);
+    if (app)  this.setBgImage('app',  app);
+  },
+
+  togglePortraitBorder() {
+    // Cycles: premium → subtle (old look) → back
+    // _portBorderMode: 'premium' | 'subtle'
+    this._portBorderMode = (this._portBorderMode === 'premium') ? 'subtle' : 'premium';
+    this._applyPortraitBorder();
+    localStorage.setItem('ss_port_border', this._portBorderMode);
+  },
+
+  _applyPortraitBorder() {
+    const mode = this._portBorderMode || 'premium';
+    document.body.classList.remove('port-border-subtle', 'port-border-none');
+    if (mode === 'subtle') document.body.classList.add('port-border-subtle');
+    const btn = document.getElementById('port_border_btn');
+    if (btn) btn.setAttribute('aria-pressed', mode === 'subtle' ? 'true' : 'false');
+  },
+
+  togglePerCharPrefs() {
+    this._perCharPrefs = !this._perCharPrefs;
+    const btn = document.getElementById('per_char_prefs_btn');
+    if (btn) btn.setAttribute('aria-pressed', String(this._perCharPrefs));
+    localStorage.setItem('ss_per_char_prefs', this._perCharPrefs ? '1' : '0');
+  },
+
+
 
   toggleScrollPreserve() {
     this.scrollPreserve = !this.scrollPreserve;
@@ -5868,6 +6149,10 @@ const app = {
   // Safety net: if something hangs, dismiss loader after 5s regardless
   setTimeout(dismissLoader, TIMING.LOADER_TIMEOUT);
 })();
+
+
+
+
 
 </script>
 </body>
