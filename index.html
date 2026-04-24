@@ -85,7 +85,7 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
 ::selection{background:rgba(200,169,110,.18);color:var(--bright)}
 ::-webkit-scrollbar{display:none}*{scrollbar-width:none;-ms-overflow-style:none}
-html,body{background:var(--void)!important;color:var(--text)}
+html,body{background:var(--void)!important;color:var(--text);-webkit-text-size-adjust:100%;text-size-adjust:100%}
 html{padding-top:env(safe-area-inset-top,0px)}
 body{
   font-family:var(--fb);background:var(--void);color:var(--text);
@@ -100,7 +100,9 @@ body{
   .toggle-btn::after{animation:none!important;transition:none!important;opacity:1!important}
 }
 
-/* LOADER */
+/* ═══════════════════════════════════════════
+   LOADER
+   ═══════════════════════════════════════════ */
 #ss-loader{
   position:fixed;inset:0;z-index:9999;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
@@ -108,35 +110,54 @@ body{
   background:var(--void);
   background-image:
     radial-gradient(ellipse 60% 55% at 50% 42%,rgba(110,21,37,.22) 0%,transparent 60%),
-    radial-gradient(ellipse 35% 35% at 15% 85%,rgba(28,70,130,.1) 0%,transparent 55%),
+    radial-gradient(ellipse 35% 35% at 15% 85%,rgba(28,70,130,.1)  0%,transparent 55%),
     radial-gradient(ellipse 25% 25% at 85% 15%,rgba(200,169,110,.06) 0%,transparent 50%);
 }
 #ss-loader.fade-out{opacity:0;pointer-events:none}
 
-/* Ornament line above loader title */
+/* Reveal: everything fades + rises in together, preventing any layout-shift flash */
+#ss-loader > *{
+  animation:loaderReveal .55s cubic-bezier(.16,.72,.34,1) both;
+}
+#ss-loader .loader-star  { animation-delay:.05s }
+#ss-loader .loader-title { animation-delay:.12s }
+#ss-loader .loader-sub   { animation-delay:.22s }
+#ss-loader .loader-orb   { animation-delay:.32s }
+@keyframes loaderReveal{
+  from{ opacity:0; transform:translateY(10px); }
+  to  { opacity:1; transform:translateY(0); }
+}
 
 .loader-title{
   font-family:var(--ft);
-  font-size:clamp(1.5rem,7vw,2.5rem);
+  /* Fixed rem size — never depends on viewport width, avoids Android vw-jump */
+  font-size:2rem;
   color:var(--gold);
   letter-spacing:.18em;
   text-shadow:0 0 60px rgba(200,169,110,.55),0 0 130px rgba(200,169,110,.12),0 2px 6px rgba(0,0,0,.95);
   text-align:center;line-height:1.2;
+  /* Prevent any text-size-adjust from Android WebView/Chrome */
+  -webkit-text-size-adjust:100%;text-size-adjust:100%;
 }
 .loader-sub{
   font-family:var(--fd);font-size:.55rem;
   color:rgba(138,122,158,.6);
   letter-spacing:.55em;text-transform:uppercase;margin-top:-8px;
 }
-
 .loader-orb{
-  width:36px;height:36px;border-radius:50%;
+  width:32px;height:32px;border-radius:50%;
   border:1px solid rgba(200,169,110,.2);border-top-color:var(--gold);
-  animation:lorb 1.1s linear infinite;
-  box-shadow:0 0 16px rgba(200,169,110,.12);
+  animation:loaderReveal .55s cubic-bezier(.16,.72,.34,1) .32s both,
+            lorb 1.1s linear .87s infinite;
+  box-shadow:0 0 14px rgba(200,169,110,.1);
 }
 @keyframes lorb{to{transform:rotate(360deg)}}
-.loader-star{font-size:1.6rem;animation:lpulse 2.4s ease-in-out infinite;color:var(--gold);text-shadow:0 0 24px rgba(200,169,110,.5)}
+.loader-star{
+  font-size:1.5rem;
+  color:var(--gold);text-shadow:0 0 24px rgba(200,169,110,.5);
+  animation:loaderReveal .55s cubic-bezier(.16,.72,.34,1) .05s both,
+            lpulse 2.4s ease-in-out 1s infinite;
+}
 @keyframes lpulse{0%,100%{opacity:.3;transform:scale(.88)}50%{opacity:1;transform:scale(1.06)}}
 
 /* SCREENS */
