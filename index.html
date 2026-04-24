@@ -42,7 +42,6 @@
   /* Accent colours */
   --gold:   #c9aa6f;
   --goldb:  #e0c27e;
-  --goldh:  #f0d48e;
   --crimson:#6e1525;
   --blood:  #a82a3a;
   --ember:  #d9542a;
@@ -59,9 +58,6 @@
   --fm: 'JetBrains Mono', monospace;
 
   /* Shadows */
-  --shadow-gold: 0 0 20px rgba(200,169,110,.22), 0 0 50px rgba(200,169,110,.06);
-  --shadow-blood: 0 0 20px rgba(168,42,58,.3);
-  --shadow-card:  0 8px 40px rgba(0,0,0,.7), 0 2px 8px rgba(0,0,0,.4);
 
   /* Gradients */
   --line-gold: linear-gradient(90deg,transparent,var(--gold) 30%,var(--goldb) 50%,var(--gold) 70%,transparent);
@@ -74,7 +70,6 @@
   /* Layout */
   --nav:    60px;
   --safe-b: env(safe-area-inset-bottom, 0px);
-  --safe-t: env(safe-area-inset-top, 0px);
   --fs-base: 15px;
   --res-btn-w: 36px;
   --res-btn-h: 44px;
@@ -104,11 +99,6 @@ button, [role="button"], .btn, .nbtn, .sbox, .fbox.cl,
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
-/* Spring-back after release — keeps the feel physical */
-button:not(:active), [role="button"]:not(:active) {
-  transition-duration: .12s;
-}
-
 html{padding-top:env(safe-area-inset-top,0px)}
 body{
   font-family:var(--fb);background:var(--void);color:var(--text);
@@ -443,17 +433,6 @@ body{
 @media(hover:hover){.home-settings-btn:hover{border-color:rgba(61,50,84,.7);color:var(--dim);background:rgba(61,50,84,.3)}}
 .home-settings-btn:active{transform:scale(.97)}
 
-/* Keep legacy classes working */
-.home-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-.roster-lbl{
-  font-family:var(--fd);font-size:.58rem;color:var(--muted);text-transform:uppercase;
-  letter-spacing:.22em;margin-bottom:12px;padding-left:3px;display:flex;align-items:center;gap:10px;
-}
-.roster-lbl::after{content:'';flex:1;height:1px;background:var(--rim)}
-.home-panel{
-  background:rgba(7,5,12,.68);border:1px solid rgba(61,50,84,.35);border-radius:var(--rl);
-  padding:14px;backdrop-filter:blur(16px);box-shadow:0 4px 24px rgba(0,0,0,.5);
-}
 @keyframes cardSlideIn{from{opacity:0;transform:translateX(-12px) scale(.99)}to{opacity:1;transform:none}}
 
 /* APP SHELL */
@@ -1617,8 +1596,7 @@ dialog::backdrop{background:rgba(3,2,8,.88);backdrop-filter:blur(18px) saturate(
 .u-pre-wrap    { white-space: pre-wrap; }
 
 /* Section animations */
-@keyframes sectionFadeIn {
-  from { opacity: 0; transform: translateY(-4px); }
+
   to   { opacity: 1; transform: none; }
 }
 .section-reveal { animation: sectionFadeIn .18s cubic-bezier(.22,.61,.36,1) forwards; }
@@ -1656,8 +1634,6 @@ details[open] > summary::before { content: '▾'; }
 .js-res-formula   { text-align: center; border-radius: var(--r); padding: 6px; }
 .js-res-formula-lbl { font-family: var(--fm); font-size: .54rem; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 2px; }
 .js-res-formula-val { font-family: var(--fd); font-size: .8rem; color: var(--bright); font-weight: 700; }
-
-
 
 /* TOAST */
 #toast-ct,#toast-ct-err{
@@ -1771,8 +1747,6 @@ details[open] > summary::before { content: '▾'; }
   pointer-events:none;z-index:11;
 }
 
-
-
 .crimg{position:absolute;transform-origin:center center;pointer-events:none;will-change:transform;max-width:none;max-height:none}
 .cr-grid{position:absolute;pointer-events:none;opacity:0;transition:opacity .18s;z-index:11}
 .crws.dragging .cr-grid{opacity:1}
@@ -1811,7 +1785,6 @@ details[open]>summary::before{content:'▾'}
 .pill-badge{display:inline-flex;align-items:center;gap:3px;font-family:var(--fm);font-size:.6rem;color:var(--muted);margin-left:auto;background:rgba(24,20,34,.8);border:1px solid rgba(61,50,84,.45);border-radius:2px;padding:2px 9px}
 
 @keyframes sectionFadeIn{from{opacity:0;transform:translateY(-5px) scale(.99)}to{opacity:1;transform:none}}
-.section-reveal{animation:sectionFadeIn .22s cubic-bezier(.22,.61,.36,1) forwards}
 
 /* Swipe drag suppression */
 .pages-track.is-dragging *{pointer-events:none!important}
@@ -1826,11 +1799,7 @@ button:focus-visible,select:focus-visible{outline:1px solid rgba(200,169,110,.6)
 input:focus-visible,textarea:focus-visible{outline:none}
 
 /* Apt manager */
-/* apt-card styles moved to MODALS block */
 
-/* utility & JS classes moved above */
-
-/* Responsive */
 /* ═══════════════════════════════════════════
    RESPONSIVE BREAKPOINTS
    ═══════════════════════════════════════════ */
@@ -1893,8 +1862,6 @@ input:focus-visible,textarea:focus-visible{outline:none}
 
 [data-theme="void"]{--void:#020202;--deep:#060606;--surface:#0c0c0c;--raised:#111111;--panel:#181818;--rim:#252525;--border:#333333;--muted:#666666;--dim:#999999;--text:#cccccc;--bright:#f0f0f0;--gold:#888888;--goldb:#aaaaaa;--goldh:#cccccc;--crimson:#1a1a1a;--blood:#333333;--ember:#555555;--ice:#444444;--sage:#444444;}
 
-
-
 /* Background image overlays — ensure readability */
 #home-screen::before,.pages-wrapper::before{
   content:'';position:absolute;inset:0;
@@ -1929,28 +1896,6 @@ body.port-border-none .port-card-edit{
   border:1px dashed rgba(200,169,110,.15);
 }
 
-/* Home screen button enhancements */
-.home-actions .btn{
-  box-shadow:0 2px 12px rgba(0,0,0,.55),0 1px 3px rgba(0,0,0,.4);
-  backdrop-filter:blur(8px);
-}
-.home-actions .btn-gold{
-  box-shadow:0 2px 14px rgba(200,169,110,.25),0 2px 8px rgba(0,0,0,.5);
-}
-.home-actions .btn-g{
-  background:rgba(16,14,24,.72);
-  border-color:rgba(61,50,84,.8);
-}
-/* Panel backdrop for home body */
-.home-panel{
-  background:rgba(7,5,12,.68);
-  border:1px solid rgba(61,50,84,.35);
-  border-radius:var(--rl);
-  padding:14px;
-  backdrop-filter:blur(16px);
-  box-shadow:0 4px 24px rgba(0,0,0,.5);
-}
-
 [data-theme="blood"]{
   --void:#060205;--deep:#0c0308;--surface:#14050e;--raised:#1e0812;--panel:#280b18;--rim:#3d1020;--border:#5a1830;
   --muted:#8a4858;--dim:#b06878;--text:#e8c8cc;--bright:#f8eaec;
@@ -1970,10 +1915,11 @@ body.port-border-none .port-card-edit{
   --crimson:#6e2810;--blood:#9a3c18;--ember:#c85020;--ice:#5888a0;--sage:#507848;
 }
 
-/* Resource label glow */
-.res-lbl-pv{color:var(--blood);text-shadow:0 0 8px rgba(168,42,58,.4)}
-.res-lbl-adr{color:var(--sage);text-shadow:0 0 8px rgba(63,160,108,.4)}
-.res-lbl-ing{color:var(--ice);text-shadow:0 0 8px rgba(61,143,194,.4)}
+/* ── Inline style helpers (extracted from repeated inline styles) ── */
+.is-field-note{font-family:var(--fb);font-size:.62rem;color:var(--dim);text-transform:none;letter-spacing:0;font-style:italic;font-weight:400}
+.is-field-hint{font-family:var(--fb);font-size:.66rem;color:var(--muted);font-style:italic;margin-top:3px;line-height:1.4;padding-left:2px}
+.is-section-lbl{font-family:var(--fd);font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+
 </style>
 <!-- Fonts injected via JS so they never block window.load or app init -->
 <script>
@@ -2880,11 +2826,6 @@ body.port-border-none .port-card-edit{
 
 <script>
 
-
-
-
-
-
 /* Stars & Sorcery Companion — app object */
 
 /* ══════════════════════════════════════════
@@ -3364,11 +3305,6 @@ const STORAGE = {
   },
 
   /** Delete a single character */
-  deleteChar(name) {
-    const roster = this.loadRoster();
-    delete roster[String(name)];
-    return this.saveRoster(roster);
-  }
 };
 
 const app = {
@@ -5646,7 +5582,7 @@ const app = {
 
     if (cat === 'descriptors') {
       formHtml += `<div style="margin-bottom:10px">
-        <span class="dfl">Clave <span style="font-family:var(--fb);font-size:.62rem;color:var(--dim);text-transform:none;letter-spacing:0;font-style:italic;font-weight:400">— ID interno único</span></span>
+        <span class="dfl">Clave <span class="is-field-note">— ID interno único</span></span>
         <input type="text" id="db_key" value="${key==='new'?'':_e(key)}" placeholder="ej: elfo_oscuro" autocomplete="off" spellcheck="false">
         <div style="font-family:var(--fb);font-size:.66rem;color:var(--muted);font-style:italic;margin-top:3px;line-height:1.4;padding-left:2px">Sin espacios ni acentos. Solo letras, números y guión bajo. Ej: <em>elfo_oscuro</em>, <em>humano_variante</em></div>
       </div>
@@ -5661,7 +5597,7 @@ const app = {
       </div>`;
     } else if (cat === 'archetypes') {
       formHtml += `<div style="margin-bottom:10px">
-        <span class="dfl">Clave <span style="font-family:var(--fb);font-size:.62rem;color:var(--dim);text-transform:none;letter-spacing:0;font-style:italic;font-weight:400">— ID interno único</span></span>
+        <span class="dfl">Clave <span class="is-field-note">— ID interno único</span></span>
         <input type="text" id="db_key" value="${key==='new'?'':_e(key)}" placeholder="ej: paladin" autocomplete="off" spellcheck="false">
         <div style="font-family:var(--fb);font-size:.66rem;color:var(--muted);font-style:italic;margin-top:3px;line-height:1.4;padding-left:2px">Sin espacios ni acentos. Ej: <em>paladin</em>, <em>brujo_pacto</em></div>
       </div>
@@ -5676,7 +5612,7 @@ const app = {
       <div style="margin-bottom:6px"><span class="dfl">Habilidades (separadas por coma)</span><input type="text" id="db_skills" value="${_e((existing?.skills||[]).join(', '))}"></div>`;
     } else if (cat === 'backgrounds') {
       formHtml += `<div style="margin-bottom:10px">
-        <span class="dfl">Clave <span style="font-family:var(--fb);font-size:.62rem;color:var(--dim);text-transform:none;letter-spacing:0;font-style:italic;font-weight:400">— ID interno único</span></span>
+        <span class="dfl">Clave <span class="is-field-note">— ID interno único</span></span>
         <input type="text" id="db_key" value="${key==='new'?'':_e(key)}" placeholder="ej: marinero" autocomplete="off" spellcheck="false">
         <div style="font-family:var(--fb);font-size:.66rem;color:var(--muted);font-style:italic;margin-top:3px;line-height:1.4;padding-left:2px">Sin espacios ni acentos. Ej: <em>marinero</em>, <em>ex_soldado</em></div>
       </div>
@@ -5686,7 +5622,7 @@ const app = {
       <div style="margin-bottom:6px"><span class="dfl">Habilidades (coma)</span><input type="text" id="db_skills" value="${_e((existing?.skills||[]).join(', '))}"></div>`;
     } else if (cat === 'weapons') {
       formHtml += `<div style="margin-bottom:10px">
-        <span class="dfl">Clave <span style="font-family:var(--fb);font-size:.62rem;color:var(--dim);text-transform:none;letter-spacing:0;font-style:italic;font-weight:400">— ID interno único</span></span>
+        <span class="dfl">Clave <span class="is-field-note">— ID interno único</span></span>
         <input type="text" id="db_key" value="${key==='new'?'':_e(key)}" placeholder="ej: espada_larga" autocomplete="off" spellcheck="false">
         <div style="font-family:var(--fb);font-size:.66rem;color:var(--muted);font-style:italic;margin-top:3px;line-height:1.4;padding-left:2px">Sin espacios ni acentos. Ej: <em>espada_larga</em>, <em>ballesta_mano</em></div>
       </div>
@@ -5702,7 +5638,7 @@ const app = {
       </div>`;
     } else if (cat === 'armors') {
       formHtml += `<div style="margin-bottom:10px">
-        <span class="dfl">Clave <span style="font-family:var(--fb);font-size:.62rem;color:var(--dim);text-transform:none;letter-spacing:0;font-style:italic;font-weight:400">— ID interno único</span></span>
+        <span class="dfl">Clave <span class="is-field-note">— ID interno único</span></span>
         <input type="text" id="db_key" value="${key==='new'?'':_e(key)}" placeholder="ej: cota_malla" autocomplete="off" spellcheck="false">
         <div style="font-family:var(--fb);font-size:.66rem;color:var(--muted);font-style:italic;margin-top:3px;line-height:1.4;padding-left:2px">Sin espacios ni acentos. Ej: <em>cota_malla</em>, <em>cuero_tachonado</em></div>
       </div>
@@ -5714,7 +5650,7 @@ const app = {
       </div>`;
     } else if (cat === 'shields') {
       formHtml += `<div style="margin-bottom:10px">
-        <span class="dfl">Clave <span style="font-family:var(--fb);font-size:.62rem;color:var(--dim);text-transform:none;letter-spacing:0;font-style:italic;font-weight:400">— ID interno único</span></span>
+        <span class="dfl">Clave <span class="is-field-note">— ID interno único</span></span>
         <input type="text" id="db_key" value="${key==='new'?'':_e(key)}" placeholder="ej: escudo_torre" autocomplete="off" spellcheck="false">
         <div style="font-family:var(--fb);font-size:.66rem;color:var(--muted);font-style:italic;margin-top:3px;line-height:1.4;padding-left:2px">Sin espacios ni acentos. Ej: <em>escudo_madera</em>, <em>escudo_torre</em></div>
       </div>
@@ -5725,7 +5661,7 @@ const app = {
       </div>`;
     } else if (cat === 'spells') {
       formHtml += `<div style="margin-bottom:10px">
-        <span class="dfl">Clave <span style="font-family:var(--fb);font-size:.62rem;color:var(--dim);text-transform:none;letter-spacing:0;font-style:italic;font-weight:400">— ID interno único</span></span>
+        <span class="dfl">Clave <span class="is-field-note">— ID interno único</span></span>
         <input type="text" id="db_key" value="${key==='new'?'':_e(key)}" placeholder="ej: bola_fuego" autocomplete="off" spellcheck="false">
         <div style="font-family:var(--fb);font-size:.66rem;color:var(--muted);font-style:italic;margin-top:3px;line-height:1.4;padding-left:2px">Sin espacios ni acentos. Ej: <em>bola_fuego</em>, <em>truco_luz</em>, <em>rayo_helado</em></div>
       </div>
@@ -6510,7 +6446,6 @@ const app = {
     this._syncScrollPreserveBtn();
   },
 
-
   /* ── PORTRAIT SIZE ── */
   setPortraitSize(size) {
     // size: 'xs'|'s'|'m'|'l'|'xl'
@@ -6600,7 +6535,6 @@ const app = {
     if (btn) btn.setAttribute('aria-pressed', String(this._perCharPrefs));
   },
 
-
   setTheme(id) {
     const tid = id || 'deco';
     document.documentElement.setAttribute('data-theme', tid);
@@ -6614,7 +6548,6 @@ const app = {
   _restoreTheme() {
     this.setTheme(localStorage.getItem('ss_theme') || 'deco');
   },
-
 
   /** Set background image for home or app. src = base64 data URL or '' to clear */
   setBgImage(target, src) {
@@ -6675,7 +6608,6 @@ const app = {
     if (app)  this.setBgImage('app',  app);
   },
 
-
   /** Applies staged portrait settings to current character (marks unsaved) */
   confirmPortraitSettings() {
     // Portrait settings are already live on the CSS vars — just mark char as changed
@@ -6709,8 +6641,6 @@ const app = {
     if (btn) btn.setAttribute('aria-pressed', String(this._perCharPrefs));
     localStorage.setItem('ss_per_char_prefs', this._perCharPrefs ? '1' : '0');
   },
-
-
 
   toggleScrollPreserve() {
     this.scrollPreserve = !this.scrollPreserve;
@@ -6992,11 +6922,6 @@ const app = {
   // Safety net: if something hangs, dismiss loader after 5s regardless
   setTimeout(dismissLoader, TIMING.LOADER_TIMEOUT);
 })();
-
-
-
-
-
 
 </script>
 </body>
