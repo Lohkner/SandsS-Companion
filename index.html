@@ -3175,6 +3175,21 @@ const app = {
   showScreen(id) {
     document.getElementById('home-screen').classList.toggle('hidden', id !== 'home');
     document.getElementById('app-screen').classList.toggle('hidden', id !== 'app');
+
+    // ── iOS fix: reset pages-track to page 0 with no transition whenever
+    // we leave the app screen.  A non-zero translateX on a will-change:transform
+    // ancestor creates a new stacking context that shifts position:fixed children
+    // (including #home-screen) on iOS Safari.
+    if (id === 'home') {
+      const track = document.getElementById('pages_track');
+      if (track) {
+        track.style.transition = 'none';
+        track.style.transform  = 'translateX(0)';
+      }
+      this.currentPage = 0;
+      document.querySelectorAll('.nbtn').forEach((b, i) => b.classList.toggle('active', i === 0));
+    }
+
     // Limpiar el listener de cierre de swipe cuando salimos de la home,
     // para evitar que se acumulen listeners en document con cada visita.
     if (id !== 'home') {
@@ -3202,6 +3217,10 @@ const app = {
   newChar() {
     this._charLoading = true;
     this.clearCharData();
+    // Pre-reset track before showing app screen (same iOS fix as loadCharToApp)
+    const track = document.getElementById('pages_track');
+    if (track) { track.style.transition = 'none'; track.style.transform = 'translateX(0)'; }
+    this.currentPage = 0;
     this.showScreen('app');
     this.unlockApp();
     this.goToPage(0);
@@ -3235,6 +3254,12 @@ const app = {
     if (!data) return;
     this._charLoading = true;
     this.clearCharData();
+    // Reset track to page 0 with no transition BEFORE making app-screen visible.
+    // This prevents the iOS stacking-context bug where a non-zero translateX
+    // on the will-change:transform track shifts position:fixed elements.
+    const track = document.getElementById('pages_track');
+    if (track) { track.style.transition = 'none'; track.style.transform = 'translateX(0)'; }
+    this.currentPage = 0;
     this.showScreen('app');
     this.unlockApp();
     this.applyCharData(data);
