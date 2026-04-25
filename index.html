@@ -1372,12 +1372,6 @@ dialog::backdrop{background:rgba(3,2,8,.88);backdrop-filter:blur(18px) saturate(
   border-radius:2px;padding:1px 8px;
 }
 
-/* ══════════════════════════════════════════
-   TALENT MANAGER — revamped
-   ══════════════════════════════════════════ */
-.tml{display:grid;grid-template-columns:170px 1fr;height:100%;overflow:hidden;padding:0}
-.tms{background:var(--void);padding:8px;border-right:1px solid rgba(61,50,84,.4);overflow-y:auto;display:flex;flex-direction:column;gap:3px}
-.tmct{padding:10px;overflow-y:auto;background:var(--surface)}
 .catbtn{
   display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:8px 12px;
   background:transparent;border:1px solid transparent;border-radius:var(--r);
@@ -1434,154 +1428,6 @@ dialog::backdrop{background:rgba(3,2,8,.88);backdrop-filter:blur(18px) saturate(
   background:var(--sage);border-color:var(--sage);
   color:#fff;box-shadow:0 0 8px rgba(63,160,108,.4);
 }
-
-/* ══════════════════════════════════════════
-   APT MANAGER (Trucos / Conjuros) — revamped
-   ══════════════════════════════════════════ */
-.apt-layout{
-  display:grid;grid-template-columns:1fr 1fr;
-  height:100%;overflow:hidden;
-}
-.apt-col{
-  display:flex;flex-direction:column;overflow:hidden;
-}
-.apt-col-hdr{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:8px 12px;flex-shrink:0;
-  background:var(--void);
-  border-bottom:1px solid rgba(61,50,84,.4);
-}
-.apt-col-hdr-left{display:flex;align-items:center;gap:6px}
-.apt-col-title{font-family:var(--fd);font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.14em}
-.apt-col-title.active-col{color:var(--ice)}
-.apt-col-body{
-  flex:1;overflow-y:auto;padding:8px;
-  background:var(--void);
-  -webkit-overflow-scrolling:touch;overscroll-behavior:contain;
-}
-.apt-col-body.selected-col{background:var(--surface);border-left:1px solid rgba(61,50,84,.35)}
-.apt-search{
-  width:100%;background:var(--deep);border:1px solid var(--rim);
-  border-radius:var(--r);padding:6px 10px;
-  color:var(--text);font-family:var(--fb);font-size:.78rem;
-  outline:none;transition:border-color .18s;
-}
-.apt-search:focus{border-color:rgba(61,143,194,.4)}
-.apt-search::placeholder{color:var(--border);font-style:italic}
-
-.apt-card{
-  background:var(--raised);border:1px solid rgba(61,50,84,.5);
-  border-radius:var(--r);padding:8px 10px;cursor:pointer;
-  transition:border-color .18s,box-shadow .18s,transform .1s,background .18s;
-  position:relative;overflow:hidden;
-}
-.apt-card::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
-  background:transparent;transition:background .18s;
-}
-@media(hover:hover){.apt-card:hover{border-color:rgba(61,143,194,.4);background:rgba(61,143,194,.04)}}
-.apt-card:active{transform:scale(.97)}
-.apt-card--sel{
-  background:rgba(61,143,194,.07);
-  border-color:rgba(61,143,194,.4);
-}
-.apt-card--sel::before{background:var(--ice)}
-@media(hover:hover){.apt-card--sel:hover{border-color:rgba(168,42,58,.4);background:rgba(168,42,58,.04)}}
-
-.apt-card__row{display:flex;justify-content:space-between;align-items:center;gap:6px}
-.apt-card__name{font-family:var(--fd);font-size:.74rem;color:var(--gold);font-weight:600}
-.apt-card--sel .apt-card__name{color:var(--ice)}
-.apt-card__badge{
-  font-family:var(--fm);font-size:.52rem;padding:2px 7px;border-radius:2px;
-  background:rgba(200,169,110,.08);color:var(--muted);white-space:nowrap;flex-shrink:0;
-  border:1px solid rgba(61,50,84,.4);
-}
-.apt-card--sel .apt-card__badge{background:rgba(61,143,194,.15);color:var(--ice);border-color:rgba(61,143,194,.3)}
-.apt-card__desc{font-size:.7rem;color:var(--muted);margin-top:3px;line-height:1.4}
-.apt-card-action{
-  width:20px;height:20px;border-radius:50%;border:1px solid;
-  display:inline-flex;align-items:center;justify-content:center;
-  font-size:.58rem;font-weight:700;flex-shrink:0;transition:all .15s;
-  cursor:pointer;
-}
-.apt-card-action.add{border-color:rgba(61,143,194,.5);color:var(--ice);background:rgba(61,143,194,.08)}
-.apt-card-action.remove{border-color:rgba(168,42,58,.5);color:var(--blood);background:rgba(168,42,58,.08)}
-
-/* ══════════════════════════════════════════
-   DB EDITOR — revamped
-   ══════════════════════════════════════════ */
-.dbl{display:grid;grid-template-columns:160px 1fr;height:100%;overflow:hidden;min-height:0}
-.dbs{
-  background:var(--void);padding:6px;
-  border-right:1px solid rgba(61,50,84,.4);
-  overflow-y:auto;display:flex;flex-direction:column;gap:1px;
-  scrollbar-width:thin;scrollbar-color:var(--rim) transparent;
-  min-width:0;
-}
-.dbs-section-label{
-  font-family:var(--fd);font-size:.5rem;color:rgba(200,169,110,.45);
-  text-transform:uppercase;letter-spacing:.22em;
-  padding:8px 10px 4px;margin-top:4px;
-  border-top:1px solid rgba(61,50,84,.25);
-  display:flex;align-items:center;gap:5px;
-}
-.dbs-section-label:first-child{margin-top:0;border-top:none}
-.dbs-section-label::before{content:'';flex:0 0 4px;height:4px;border-radius:50%;background:rgba(200,169,110,.4)}
-.catbtn.db-cat{
-  font-size:.7rem;padding:7px 10px;
-  border-radius:var(--r);
-  color:var(--dim);
-}
-.catbtn.db-cat.active{
-  background:linear-gradient(90deg,rgba(61,143,194,.1),rgba(61,143,194,.03));
-  border-color:rgba(61,143,194,.35);color:var(--ice);
-}
-.catbtn.db-cat.active .catbtn-dot{background:var(--ice);box-shadow:0 0 6px rgba(61,143,194,.5)}
-.catbtn.db-cat.active::before{background:var(--ice)}
-
-.dbct{
-  padding:12px;overflow-y:auto;
-  background:var(--surface);
-  display:flex;flex-direction:column;
-  min-height:0;
-}
-.db-list-header{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:8px;
-}
-.db-list-title{font-family:var(--fd);font-size:.68rem;color:var(--ice);letter-spacing:.1em;text-transform:uppercase}
-.db-list-count{font-family:var(--fm);font-size:.6rem;color:var(--muted);background:var(--raised);border:1px solid var(--border);border-radius:2px;padding:1px 8px}
-#db_list_container{flex:1;overflow-y:auto;min-height:80px}
-#db_form_container{flex-shrink:0;max-height:65vh;overflow-y:auto}
-.dbitem{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:7px 10px;background:var(--raised);
-  border:1px solid rgba(61,50,84,.45);
-  border-radius:var(--r);margin-bottom:3px;font-size:.76rem;color:var(--text);
-  transition:border-color .15s,background .15s;min-height:40px;
-  cursor:pointer;position:relative;overflow:hidden;
-}
-.dbitem::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
-  background:transparent;transition:background .15s;
-}
-@media(hover:hover){.dbitem:hover{border-color:rgba(200,169,110,.3);background:rgba(200,169,110,.03)}}
-.dbitem:hover::before,.dbitem.active::before{background:var(--gold)}
-.dbitem.active{border-color:rgba(200,169,110,.35);background:rgba(200,169,110,.04)}
-.dbitem-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dbitem-actions{display:flex;gap:4px;flex-shrink:0}
-
-/* DB form section separator */
-.dfl{font-family:var(--fd);font-size:.56rem;color:var(--dim);letter-spacing:.16em;text-transform:uppercase;display:block;margin:9px 0 3px}
-.dfl em{font-style:italic;font-family:var(--fb);text-transform:none;letter-spacing:0;font-size:.62rem;color:var(--muted);opacity:.75}
-
-/* DB empty state */
-.db-empty{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:40px 20px;text-align:center;gap:10px;color:var(--muted);
-}
-.db-empty-icon{font-size:2rem;opacity:.3;margin-bottom:4px}
-.db-empty p{font-family:var(--fd);font-size:.72rem;letter-spacing:.06em;line-height:1.6}
 
 /* ═══════════════════════════════════════════
    UTILITY CLASSES
@@ -1831,7 +1677,6 @@ input:focus-visible,textarea:focus-visible{outline:none}
   .catbtn.active::before{display:none}
   /* APT manager — stack available/selected */
   .apt-layout{grid-template-columns:1fr;grid-template-rows:1fr 1fr}
-  .apt-col-body.selected-col{border-left:none;border-top:1px solid rgba(61,50,84,.35)}
   .home-title{font-size:1.4rem;letter-spacing:.08em}
 }
 @media(max-width:400px){
@@ -1839,7 +1684,6 @@ input:focus-visible,textarea:focus-visible{outline:none}
   .saves-grid{grid-template-columns:repeat(3,1fr)}
 }
 #db_list_container{min-height:120px}
-#db_form_container{padding-top:14px!important;border-top:1px solid rgba(61,50,84,.4)}
 #db_key:not(:placeholder-shown){border-color:rgba(61,143,194,.35)}
 .db-section-sep{font-family:var(--fd);font-size:.54rem;color:rgba(200,169,110,.5);text-transform:uppercase;letter-spacing:.2em;padding:10px 0 5px;border-bottom:1px solid rgba(61,50,84,.28);margin-bottom:8px;display:flex;align-items:center;gap:6px}
 .db-section-sep::before{content:'';flex:0 0 3px;height:3px;border-radius:50%;background:rgba(200,169,110,.5)}
@@ -1860,7 +1704,7 @@ input:focus-visible,textarea:focus-visible{outline:none}
 /* Per-shape gold border match */
 .crfr.arch{border-radius:140px 140px 2px 2px / 160px 160px 2px 2px}
 
-[data-theme="void"]{--void:#020202;--deep:#060606;--surface:#0c0c0c;--raised:#111111;--panel:#181818;--rim:#252525;--border:#333333;--muted:#666666;--dim:#999999;--text:#cccccc;--bright:#f0f0f0;--gold:#888888;--goldb:#aaaaaa;--goldh:#cccccc;--crimson:#1a1a1a;--blood:#333333;--ember:#555555;--ice:#444444;--sage:#444444;}
+[data-theme="void"]{--void:#020202;--deep:#060606;--surface:#0c0c0c;--raised:#111111;--panel:#181818;--rim:#252525;--border:#333333;--muted:#666666;--dim:#999999;--text:#cccccc;--bright:#f0f0f0;--gold:#888888;--goldb:#aaaaaa;--crimson:#1a1a1a;--blood:#333333;--ember:#555555;--ice:#444444;--sage:#444444;}
 
 /* Background image overlays — ensure readability */
 #home-screen::before,.pages-wrapper::before{
@@ -1899,19 +1743,19 @@ body.port-border-none .port-card-edit{
 [data-theme="blood"]{
   --void:#060205;--deep:#0c0308;--surface:#14050e;--raised:#1e0812;--panel:#280b18;--rim:#3d1020;--border:#5a1830;
   --muted:#8a4858;--dim:#b06878;--text:#e8c8cc;--bright:#f8eaec;
-  --gold:#d44060;--goldb:#e85870;--goldh:#ff7088;
+  --gold:#d44060;--goldb:#e85870;
   --crimson:#800020;--blood:#b02040;--ember:#e04060;--ice:#6090b0;--sage:#508068;
 }
 [data-theme="arcane"]{
   --void:#020308;--deep:#050610;--surface:#090b1a;--raised:#0e1024;--panel:#13162e;--rim:#1e2248;--border:#2c3068;
   --muted:#5858a0;--dim:#8080c8;--text:#c0c0f0;--bright:#e8e8ff;
-  --gold:#a060e8;--goldb:#b878f8;--goldh:#cc99ff;
+  --gold:#a060e8;--goldb:#b878f8;
   --crimson:#3a1080;--blood:#5820b0;--ember:#7830e0;--ice:#4090d8;--sage:#309890;
 }
 [data-theme="parchment"]{
   --void:#1a1408;--deep:#221c0c;--surface:#2e2410;--raised:#3a2e14;--panel:#48381a;--rim:#5e4a24;--border:#785e30;
   --muted:#9a8060;--dim:#b89a78;--text:#e8d8b8;--bright:#f8edd8;
-  --gold:#c8941e;--goldb:#dea832;--goldh:#f0bf48;
+  --gold:#c8941e;--goldb:#dea832;
   --crimson:#6e2810;--blood:#9a3c18;--ember:#c85020;--ice:#5888a0;--sage:#507848;
 }
 
@@ -1921,123 +1765,310 @@ body.port-border-none .port-card-edit{
 .is-section-lbl{font-family:var(--fd);font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
 
 /* ═══════════════════════════════════════════
-   FULLSCREEN PANELS — reemplazan modales para
-   Gestor Talentos, Gestor Trucos/Conjuros,
-   Editor de Base de Datos.
-   Se apilan sobre la pantalla activa sin
-   backdrop ni top-layer, deslizando desde
-   la derecha como una pantalla nativa.
+   FULLSCREEN PANELS — revamped UX
    ═══════════════════════════════════════════ */
 .fs-panel{
-  position:fixed;
-  inset:0;
-  z-index:150;
-  display:flex;
-  flex-direction:column;
+  position:fixed;inset:0;z-index:150;
+  display:flex;flex-direction:column;
   background:var(--void);
-  /* Slide in desde la derecha */
   transform:translateX(100%);
-  transition:transform .26s cubic-bezier(.25,.46,.45,.94);
-  /* Prevent scroll bleed */
+  transition:transform .24s cubic-bezier(.25,.46,.45,.94);
   overscroll-behavior:contain;
-  /* Safe areas */
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px);
   will-change:transform;
   -webkit-backface-visibility:hidden;
 }
-.fs-panel.fs-open{
-  transform:translateX(0);
-}
-/* Header — mismo patrón que app-hdr */
+.fs-panel.fs-open{ transform:translateX(0); }
+
+/* Header */
 .fs-hdr{
-  flex-shrink:0;
-  display:flex;align-items:center;gap:10px;
+  flex-shrink:0;display:flex;align-items:center;gap:10px;
   padding:10px 14px;
   border-bottom:1px solid rgba(61,50,84,.5);
-  background:linear-gradient(180deg,rgba(5,4,10,.97) 0%,rgba(10,8,16,.92) 100%);
+  background:linear-gradient(180deg,rgba(5,4,10,.98) 0%,rgba(10,8,16,.94) 100%);
   backdrop-filter:blur(24px);
-  box-shadow:0 1px 0 rgba(200,169,110,.04),0 4px 24px rgba(0,0,0,.5);
-  position:relative;
-  min-height:52px;
+  box-shadow:0 1px 0 rgba(200,169,110,.04),0 4px 24px rgba(0,0,0,.6);
+  position:relative;min-height:54px;
 }
 .fs-hdr::after{
   content:'';position:absolute;bottom:-1px;left:10%;right:10%;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(200,169,110,.14),transparent);
+  background:linear-gradient(90deg,transparent,rgba(200,169,110,.16),transparent);
 }
 .fs-hdr-back{
   width:44px;height:44px;border-radius:var(--r);
-  background:transparent;border:1px solid rgba(61,50,84,.8);
-  color:var(--dim);font-size:.9rem;cursor:pointer;
+  background:rgba(61,50,84,.15);border:1px solid rgba(61,50,84,.7);
+  color:var(--dim);font-size:1rem;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
-  transition:border-color .14s,color .14s,background .14s;
+  transition:border-color .12s,color .12s,background .12s;
   flex-shrink:0;font-weight:700;
   touch-action:manipulation;-webkit-tap-highlight-color:transparent;
 }
-@media(hover:hover){.fs-hdr-back:hover{border-color:rgba(200,169,110,.4);color:var(--gold);background:rgba(200,169,110,.05)}}
-.fs-hdr-back:active{transform:scale(.88);background:rgba(200,169,110,.08);border-color:rgba(200,169,110,.4)}
+@media(hover:hover){.fs-hdr-back:hover{border-color:rgba(200,169,110,.45);color:var(--gold);background:rgba(200,169,110,.06)}}
+.fs-hdr-back:active{transform:scale(.86);background:rgba(200,169,110,.1);border-color:rgba(200,169,110,.4)}
 .fs-hdr-center{flex:1;min-width:0}
 .fs-hdr-ttl{
   font-family:var(--fd);font-size:.76rem;font-weight:600;
-  color:var(--goldb);letter-spacing:.12em;text-transform:uppercase;
+  color:var(--goldb);letter-spacing:.1em;text-transform:uppercase;
   display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .fs-hdr-sub{
-  font-family:var(--fm);font-size:.52rem;
-  color:var(--muted);letter-spacing:.06em;
-  display:block;margin-top:1px;
+  font-family:var(--fm);font-size:.52rem;color:var(--muted);
+  letter-spacing:.05em;display:block;margin-top:2px;
 }
 .fs-hdr-actions{display:flex;align-items:center;gap:6px;flex-shrink:0}
-/* Body — flex 1, scroll interno por sección */
-.fs-body{
-  flex:1;min-height:0;
-  display:flex;flex-direction:column;
-  overflow:hidden;
-}
-/* Footer — confirm bar */
+
+/* Body */
+.fs-body{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+
+/* Footer */
 .fs-footer{
-  flex-shrink:0;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:10px 16px;
+  flex-shrink:0;display:flex;align-items:center;justify-content:space-between;
+  padding:10px 16px 12px;
   border-top:1px solid rgba(61,50,84,.4);
   background:linear-gradient(0deg,var(--panel) 0%,var(--raised) 100%);
-  gap:8px;
+  gap:8px;padding-bottom:max(12px,env(safe-area-inset-bottom,0px));
 }
-.fs-footer-info{
-  font-family:var(--fm);font-size:.68rem;color:var(--dim);
-  display:flex;align-items:center;gap:6px;
-}
+.fs-footer-info{font-family:var(--fm);font-size:.68rem;color:var(--dim);display:flex;align-items:center;gap:6px}
 
-/* ── TALENT PANEL specific ── */
+/* ─────────────────────────────────────────
+   TALENT PANEL
+   ───────────────────────────────────────── */
 #talent_panel .fs-body{flex-direction:row}
-#talent_panel .tms{overflow-y:auto;border-right:1px solid rgba(61,50,84,.4)}
-#talent_panel .tmct{flex:1;overflow-y:auto;background:var(--surface)}
 
-/* ── APT PANEL specific ── */
-#apt_panel .fs-body{flex-direction:column;overflow:hidden}
-#apt_panel .apt-layout{flex:1;min-height:0;overflow:hidden}
+/* Category rail — left sidebar on tablet, top chips on mobile */
+#talent_panel .tms{
+  width:160px;flex-shrink:0;overflow-y:auto;
+  border-right:1px solid rgba(61,50,84,.4);
+  background:var(--void);padding:6px;
+  display:flex;flex-direction:column;gap:2px;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+}
+#talent_panel .tms::-webkit-scrollbar{display:none}
 
-/* ── DB PANEL specific ── */
+/* Content area */
+#talent_panel .tmct{
+  flex:1;overflow-y:auto;background:var(--surface);
+  padding:10px;
+  -webkit-overflow-scrolling:touch;overscroll-behavior:contain;
+  scrollbar-width:none;
+}
+#talent_panel .tmct::-webkit-scrollbar{display:none}
+
+/* Count badge in footer */
+.talent-count-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  font-family:var(--fm);font-size:.72rem;font-weight:700;
+  color:var(--gold);
+  background:rgba(200,169,110,.08);border:1px solid rgba(200,169,110,.22);
+  border-radius:2px;padding:2px 10px;
+  transition:background .2s,border-color .2s,color .2s;
+}
+.talent-count-badge.full{
+  color:var(--sage);background:rgba(63,160,108,.12);border-color:rgba(63,160,108,.3);
+}
+
+/* ─────────────────────────────────────────
+   APT PANEL (Trucos / Conjuros)
+   ───────────────────────────────────────── */
+#apt_panel .fs-body{overflow:hidden}
+#apt_panel .apt-layout{
+  display:grid;grid-template-columns:1fr 1fr;
+  flex:1;min-height:0;overflow:hidden;
+}
+
+/* Available column */
+#apt_panel .apt-col:first-child{
+  display:flex;flex-direction:column;overflow:hidden;min-height:0;
+  border-right:1px solid rgba(61,50,84,.35);
+}
+/* Selected column */
+#apt_panel .apt-col:last-child{
+  display:flex;flex-direction:column;overflow:hidden;min-height:0;
+  background:rgba(8,6,14,.4);
+}
+
+.apt-col-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 10px;flex-shrink:0;
+  background:rgba(5,4,10,.6);
+  border-bottom:1px solid rgba(61,50,84,.3);
+}
+.apt-col-title{
+  font-family:var(--fd);font-size:.58rem;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.14em;
+}
+.apt-col-title.active-col{color:var(--ice)}
+.apt-search-wrap{
+  padding:6px 8px;background:var(--void);
+  border-bottom:1px solid rgba(61,50,84,.25);flex-shrink:0;
+}
+.apt-col-body{
+  flex:1;overflow-y:auto;padding:6px;
+  min-height:0;
+  -webkit-overflow-scrolling:touch;overscroll-behavior:contain;
+  scrollbar-width:none;
+}
+.apt-col-body::-webkit-scrollbar{display:none}
+
+/* APT card — richer feedback */
+.apt-card{
+  background:var(--raised);border:1px solid rgba(61,50,84,.5);
+  border-radius:var(--r);padding:9px 11px;cursor:pointer;
+  transition:border-color .12s,background .12s,transform .08s;
+  position:relative;overflow:hidden;margin-bottom:4px;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+}
+.apt-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:transparent;border-radius:3px 0 0 3px;
+  transition:background .12s;
+}
+.apt-card:active{transform:scale(.97)}
+@media(hover:hover){.apt-card:hover{border-color:rgba(61,143,194,.35);background:rgba(61,143,194,.04)}}
+.apt-card--sel{background:rgba(61,143,194,.07);border-color:rgba(61,143,194,.38)}
+.apt-card--sel::before{background:var(--ice)}
+@media(hover:hover){.apt-card--sel:hover{border-color:rgba(168,42,58,.35);background:rgba(168,42,58,.05)}}
+.apt-card--sel:active{transform:scale(.97)}
+.apt-card__row{display:flex;justify-content:space-between;align-items:center;gap:6px}
+.apt-card__name{font-family:var(--fd);font-size:.74rem;color:var(--gold);font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.apt-card--sel .apt-card__name{color:var(--ice)}
+.apt-card__badge{
+  font-family:var(--fm);font-size:.52rem;padding:2px 8px;border-radius:2px;
+  background:rgba(61,143,194,.1);color:var(--ice);
+  border:1px solid rgba(61,143,194,.25);white-space:nowrap;flex-shrink:0;
+  transition:background .12s,color .12s,border-color .12s;
+}
+.apt-card__badge.badge-add{
+  background:rgba(200,169,110,.08);color:var(--muted);
+  border-color:rgba(61,50,84,.4);
+}
+.apt-card__desc{font-size:.7rem;color:var(--muted);margin-top:3px;line-height:1.45}
+
+/* Sel count pulse */
+@keyframes countPulse{
+  0%{transform:scale(1)}40%{transform:scale(1.25)}100%{transform:scale(1)}
+}
+.mft-count.pulse{animation:countPulse .22s cubic-bezier(.34,1.56,.64,1)}
+
+/* Empty state shared */
+.apt-empty{display:flex;flex-direction:column;align-items:center;gap:10px;padding:28px 16px;text-align:center}
+.apt-empty p{color:var(--muted);font-size:.76rem;font-style:italic;line-height:1.6}
+
+/* ─────────────────────────────────────────
+   DB PANEL
+   ───────────────────────────────────────── */
 #db_panel .fs-body{flex-direction:row}
-#db_panel .dbs{overflow-y:auto;border-right:1px solid rgba(61,50,84,.4)}
-#db_panel .dbct{flex:1;overflow-y:auto;background:var(--surface)}
+#db_panel .dbs{
+  width:160px;flex-shrink:0;overflow-y:auto;
+  border-right:1px solid rgba(61,50,84,.4);
+  background:var(--void);padding:6px;
+  display:flex;flex-direction:column;gap:2px;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+}
+#db_panel .dbs::-webkit-scrollbar{display:none}
+#db_panel .dbct{
+  /* Single scroll container — list + form scroll together.
+     No flex column here: both children stack in normal flow. */
+  flex:1;overflow-y:auto;background:var(--surface);
+  -webkit-overflow-scrolling:touch;overscroll-behavior:contain;
+  scrollbar-width:none;padding:12px;
+}
+#db_panel .dbct::-webkit-scrollbar{display:none}
 
-/* DB panel category view (mobile: chips at top) */
+/* DB form — inline after the list, no flex tricks needed */
+#db_form_container{
+  margin-top:0;
+  padding:14px;
+  border-top:2px solid rgba(61,50,84,.45);
+  background:var(--panel);
+  border-radius:0 0 var(--r) var(--r);
+}
+/* Only animate on first show, not on every innerHTML rewrite.
+   JS adds .animate class once, then removes it. */
+#db_form_container.animate{
+  animation:formSlideUp .2s cubic-bezier(.25,.46,.45,.94);
+}
+@keyframes formSlideUp{
+  from{opacity:0;transform:translateY(10px)}
+  to  {opacity:1;transform:translateY(0)}
+}
+
+/* dbitem bigger tap target */
+.dbitem{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 10px;background:var(--raised);
+  border:1px solid rgba(61,50,84,.45);border-radius:var(--r);
+  margin-bottom:4px;font-size:.78rem;color:var(--text);
+  transition:border-color .12s,background .12s;
+  min-height:48px;cursor:pointer;position:relative;overflow:hidden;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+}
+.dbitem::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:transparent;transition:background .12s;
+}
+@media(hover:hover){.dbitem:hover{border-color:rgba(200,169,110,.3);background:rgba(200,169,110,.03)}}
+.dbitem:active{transform:scale(.98);background:rgba(200,169,110,.04)}
+.dbitem:hover::before,.dbitem.active::before{background:var(--gold)}
+.dbitem.active{border-color:rgba(200,169,110,.35);background:rgba(200,169,110,.04)}
+.dbitem-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:8px}
+.dbitem-actions{display:flex;gap:4px;flex-shrink:0}
+
+/* ── DB shared helpers (used by dbEditCategory JS) ── */
+.dfl{font-family:var(--fd);font-size:.56rem;color:var(--dim);letter-spacing:.16em;text-transform:uppercase;display:block;margin:9px 0 3px}
+.dfl em{font-style:italic;font-family:var(--fb);text-transform:none;letter-spacing:0;font-size:.62rem;color:var(--muted);opacity:.75}
+.db-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;text-align:center;gap:10px;color:var(--muted)}
+.db-empty-icon{font-size:2rem;opacity:.3;margin-bottom:4px}
+.db-empty p{font-family:var(--fd);font-size:.72rem;letter-spacing:.06em;line-height:1.6}
+.db-list-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.db-list-title{font-family:var(--fd);font-size:.68rem;color:var(--ice);letter-spacing:.1em;text-transform:uppercase}
+.db-list-count{font-family:var(--fm);font-size:.6rem;color:var(--muted);background:var(--raised);border:1px solid var(--border);border-radius:2px;padding:1px 8px}
+
+/* ─────────────────────────────────────────
+   MOBILE overrides (≤480px)
+   ───────────────────────────────────────── */
 @media(max-width:480px){
-  #talent_panel .fs-body,
-  #db_panel .fs-body{flex-direction:column}
-  #talent_panel .tms,
-  #db_panel .dbs{
-    border-right:none;border-bottom:1px solid rgba(61,50,84,.4);
-    flex-direction:row;flex-wrap:wrap;gap:4px;padding:6px;
-    overflow-y:visible;max-height:none;
+  /* Talent: categories become horizontal scrollable chips */
+  #talent_panel .fs-body{flex-direction:column}
+  #talent_panel .tms{
+    width:auto;flex-shrink:0;border-right:none;
+    border-bottom:1px solid rgba(61,50,84,.4);
+    flex-direction:row;padding:6px 8px;
+    overflow-x:auto;overflow-y:visible;
+    gap:5px;max-height:none;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
   }
-  #talent_panel .tms .catbtn,
-  #db_panel .dbs .catbtn{width:auto;padding:7px 12px;font-size:.68rem;flex:0 0 auto}
-  #db_panel .dbs .dbs-section-label{display:none}
+  #talent_panel .tms .catbtn{
+    flex:0 0 auto;width:auto;padding:8px 14px;font-size:.68rem;
+    scroll-snap-align:start;
+  }
   #talent_panel .tms .catbtn.active::before{display:none}
-  #apt_panel .apt-layout{grid-template-columns:1fr;grid-template-rows:1fr 1fr}
-  #apt_panel .apt-col-body.selected-col{border-left:none;border-top:1px solid rgba(61,50,84,.35)}
+  #talent_panel .tmct{padding:8px}
+
+  /* DB: same chip treatment */
+  #db_panel .fs-body{flex-direction:column}
+  #db_panel .dbs{
+    width:auto;flex-shrink:0;border-right:none;
+    border-bottom:1px solid rgba(61,50,84,.4);
+    flex-direction:row;padding:6px 8px;
+    overflow-x:auto;overflow-y:visible;
+    gap:5px;max-height:none;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+  }
+  #db_panel .dbs .catbtn{flex:0 0 auto;width:auto;padding:8px 14px;font-size:.68rem;scroll-snap-align:start}
+  #db_panel .dbs .dbs-section-label{display:none}
+
+  /* APT: stack columns vertically with min-height so keyboard can't crush them */
+  #apt_panel .apt-layout{
+    grid-template-columns:1fr;
+    grid-template-rows:minmax(160px,1fr) minmax(120px,1fr);
+  }
+  #apt_panel .apt-col:first-child{border-right:none;border-bottom:1px solid rgba(61,50,84,.35)}
 }
 
 </style>
@@ -2115,31 +2146,34 @@ body.port-border-none .port-card-edit{
   </div>
 
   <div class="fs-body">
-    <!-- Two-column layout: Available | Selected -->
-    <div class="apt-layout" style="flex:1;min-height:0">
+    <div class="apt-layout">
       <!-- LEFT: Available -->
       <div class="apt-col">
         <div class="apt-col-hdr">
           <span class="apt-col-title">Disponibles</span>
         </div>
-        <div style="padding:6px 8px;background:var(--void);border-bottom:1px solid rgba(61,50,84,.3)">
-          <input class="apt-search" id="apt_search" type="search" placeholder="Buscar…" autocomplete="off" spellcheck="false" oninput="app._aptFilter(this.value)">
+        <div class="apt-search-wrap">
+          <input class="apt-search" id="apt_search" type="search"
+            placeholder="Buscar…" autocomplete="off" spellcheck="false"
+            oninput="app._aptFilter(this.value)">
         </div>
         <div class="apt-col-body" id="apt_available_list"></div>
       </div>
       <!-- RIGHT: Selected -->
       <div class="apt-col">
-        <div class="apt-col-hdr" style="background:var(--surface)">
-          <div style="display:flex;align-items:center;gap:8px">
+        <div class="apt-col-hdr">
+          <div style="display:flex;align-items:center;gap:7px">
             <span class="apt-col-title active-col">Seleccionados</span>
             <span class="mft-count" id="apt_sel_count">0</span>
           </div>
-          <button class="bmini br" style="font-size:.58rem;padding:3px 9px;min-height:26px" onclick="app._aptClearAll()" title="Quitar todos">✕ Limpiar</button>
+          <button class="bmini br" style="font-size:.56rem;padding:3px 8px;min-height:30px"
+            onclick="app._aptClearAll()">✕ Limpiar</button>
         </div>
-        <div class="apt-col-body selected-col" id="apt_selected_list">
-          <p id="apt_selected_empty" style="display:none;text-align:center;color:var(--muted);font-style:italic;font-size:.76rem;margin-top:24px;line-height:1.7">
+        <div class="apt-col-body" id="apt_selected_list">
+          <p id="apt_selected_empty" style="display:none;text-align:center;color:var(--muted);
+            font-style:italic;font-size:.72rem;margin-top:20px;line-height:1.8;padding:0 12px">
             Sin selección.<br>
-            <span style="font-size:.64rem;color:var(--border)">Toca un ítem para añadir.</span>
+            <span style="font-size:.62rem;color:var(--border)">Toca un ítem para añadir.</span>
           </p>
         </div>
       </div>
@@ -2847,7 +2881,7 @@ body.port-border-none .port-card-edit{
           <p>Selecciona una categoría<br>en el panel izquierdo</p>
         </div>
       </div>
-      <div id="db_form_container" style="display:none;margin-top:0;border-top:1px solid rgba(74,63,94,.4);padding-top:14px"></div>
+      <div id="db_form_container" style="display:none"></div>
     </div>
   </div>
 </div>
@@ -5108,10 +5142,13 @@ const app = {
     if (this.activeTalentCat) {
       const btn = document.querySelector(`#tm_categories .catbtn[data-cat="${this.activeTalentCat}"]`);
       this.showTalentCategory(this.activeTalentCat, btn);
+      // Scroll active chip into view on mobile
+      requestAnimationFrame(() => btn?.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'}));
     } else if (firstKey) {
       this.showTalentCategory(firstKey, document.querySelector('#tm_categories .catbtn'));
     }
     this.updateTalentCount();
+    this._attachPanelSwipeBack(panel, () => this.closeTalentManager());
   },
 
   closeTalentManager() {
@@ -5196,8 +5233,17 @@ const app = {
 
   updateTalentCount() {
     const n = document.querySelectorAll('input[name="chk_talents_hidden"]').length;
-    const el1 = document.getElementById('talent_count_main'); if(el1) el1.textContent=n;
-    const el2 = document.getElementById('talent_count_modal'); if(el2) el2.textContent=n;
+    const el1 = document.getElementById('talent_count_main');
+    if (el1) el1.textContent = n;
+    const el2 = document.getElementById('talent_count_modal');
+    if (el2) {
+      el2.textContent = n;
+      el2.classList.toggle('full', n >= 3);
+      // Pulse
+      el2.classList.remove('pulse');
+      void el2.offsetWidth;
+      el2.classList.add('pulse');
+    }
     // Update category dots
     if (this.DB.talents) {
       Object.keys(this.DB.talents).forEach(k => {
@@ -5403,10 +5449,10 @@ const app = {
   openAptManager(sec) {
     this._aptMode = sec;
     this._modalOpener = document.activeElement;
-    const panel  = document.getElementById('apt_panel');
-    const title  = document.getElementById('apt_manager_title');
-    const sub    = document.getElementById('apt_manager_sub');
-    const icon   = document.getElementById('apt_modal_icon');
+    const panel   = document.getElementById('apt_panel');
+    const title   = document.getElementById('apt_manager_title');
+    const sub     = document.getElementById('apt_manager_sub');
+    const icon    = document.getElementById('apt_modal_icon');
     const typeLbl = document.getElementById('apt_type_label');
     if (sec === 'tricks') {
       title.textContent = 'Gestor de Trucos';
@@ -5425,10 +5471,8 @@ const app = {
     this._renderAptManager();
     panel.classList.add('fs-open');
     document.body.style.overflow = 'hidden';
-    requestAnimationFrame(() => {
-      const s = document.getElementById('apt_search');
-      if (s) s.focus();
-    });
+    requestAnimationFrame(() => document.getElementById('apt_search')?.focus());
+    this._attachPanelSwipeBack(panel, () => this.closeAptManager());
   },
 
   _aptFilter(query) {
@@ -5479,7 +5523,7 @@ const app = {
       nameSpan.textContent = s.name || k;
 
       const badge = document.createElement('span');
-      badge.className = 'apt-card__badge';
+      badge.className = 'apt-card__badge' + (isSelected ? '' : ' badge-add');
       badge.textContent = isSelected ? '✓ Quitar' : '+ Añadir';
 
       topRow.appendChild(nameSpan);
@@ -5498,16 +5542,24 @@ const app = {
         if (nowSelected) {
           sel.delete(k);
           card.classList.remove('apt-card--sel');
+          badge.className = 'apt-card__badge badge-add';
           badge.textContent = '+ Añadir';
           availList.insertBefore(card, availList.firstChild);
         } else {
           sel.add(k);
           card.classList.add('apt-card--sel');
+          badge.className = 'apt-card__badge';
           badge.textContent = '✓ Quitar';
           selList.appendChild(card);
         }
         const count = selList.querySelectorAll('.apt-card').length;
-        if (selCount) selCount.textContent = count;
+        if (selCount) {
+          selCount.textContent = count;
+          // Pulse animation on change
+          selCount.classList.remove('pulse');
+          void selCount.offsetWidth; // reflow
+          selCount.classList.add('pulse');
+        }
         if (selEmpty) selEmpty.style.display = count ? 'none' : 'block';
         this._renderAptSummary(sec);
       });
@@ -5546,12 +5598,13 @@ const app = {
   },
 
   openDatabaseEditor() {
-    // Close settings modal if open
     const sm = document.getElementById('settings_modal');
     if (sm.open) sm.close();
-    document.getElementById('db_panel').classList.add('fs-open');
+    const panel = document.getElementById('db_panel');
+    panel.classList.add('fs-open');
     document.body.style.overflow = 'hidden';
     this.dbEditCategory('descriptors');
+    this._attachPanelSwipeBack(panel, () => this.closeDatabaseEditor());
   },
 
   closeDatabaseEditor() {
@@ -5559,10 +5612,57 @@ const app = {
     document.body.style.overflow = '';
   },
 
+  /** Attaches an iOS-style edge-swipe-back gesture to a fullscreen panel.
+   *  Dragging right from the left ~22% of the panel slides it back.
+   *  Each call tears down any previous listener on that panel first. */
+  _attachPanelSwipeBack(panel, closeFn) {
+    if (panel._swipeBackHandler) {
+      panel.removeEventListener('touchstart', panel._swipeBackHandler, {passive:true});
+    }
+    let startX = 0, startY = 0, tracking = false;
+    const EDGE_WIDTH = Math.min(window.innerWidth * 0.22, 80); // px from left edge
+    const THRESHOLD  = 80;  // px drag to trigger close
+    const RATIO      = 2.2; // H/V ratio: must be more horizontal than vertical
+
+    const onStart = e => {
+      const t = e.touches[0];
+      if (t.clientX > EDGE_WIDTH) return;
+      startX = t.clientX; startY = t.clientY; tracking = true;
+      panel.style.transition = 'none';
+    };
+    const onMove = e => {
+      if (!tracking) return;
+      const t  = e.touches[0];
+      const dx = t.clientX - startX;
+      const dy = Math.abs(t.clientY - startY);
+      if (dx < 0 || dy * RATIO > dx) { tracking = false; panel.style.transition = ''; return; }
+      panel.style.transform = `translateX(${Math.max(0, dx)}px)`;
+    };
+    const onEnd = e => {
+      if (!tracking) return;
+      tracking = false;
+      panel.style.transition = '';
+      const dx = e.changedTouches[0].clientX - startX;
+      if (dx >= THRESHOLD) {
+        panel.style.transform = '';
+        closeFn();
+      } else {
+        panel.style.transform = 'translateX(0)';
+      }
+    };
+
+    panel.addEventListener('touchstart', onStart, {passive:true});
+    panel.addEventListener('touchmove',  onMove,  {passive:true});
+    panel.addEventListener('touchend',   onEnd,   {passive:true});
+    panel._swipeBackHandler = onStart;
+  },
+
   dbEditCategory(cat) {
     this.currentEditorCat = cat;
     const lc = document.getElementById('db_list_container');
-    document.getElementById('db_form_container').style.display = 'none';
+    const fc = document.getElementById('db_form_container');
+    fc.style.display = 'none';
+    fc.classList.remove('animate');
     const src = this.DB[cat] || {};
     const labels = {descriptors:'Linajes',archetypes:'Arquetipos',backgrounds:'Trasfondos',talents:'Talentos',weapons:'Armas',armors:'Armaduras',shields:'Escudos',spells:'Trucos / Conjuros'};
     const catLabel = labels[cat] || cat;
@@ -5769,11 +5869,21 @@ const app = {
     }
 
     formHtml += `<div style="display:flex;gap:8px;margin-top:14px">
-      <button class="btn btn-g" style="flex:1;min-height:40px" onclick="document.getElementById('db_form_container').style.display='none';document.getElementById('db_list_container').scrollIntoView({behavior:'smooth',block:'start'})">✕ Cancelar</button>
-      <button class="btn btn-p" style="flex:1;min-height:40px" id="db_save_btn">✓ Guardar</button>
+      <button class="btn btn-g" style="flex:1;min-height:44px" onclick="
+        const fc=document.getElementById('db_form_container');
+        fc.style.display='none';
+        document.querySelector('#db_panel .dbct')?.scrollTo({top:0,behavior:'smooth'})
+      ">✕ Cancelar</button>
+      <button class="btn btn-p" style="flex:1;min-height:44px" id="db_save_btn">✓ Guardar</button>
     </div>`;
     fc.innerHTML = formHtml;
-    // Attach save handler via addEventListener
+    // Trigger slide-up animation only on open (not on every re-render)
+    fc.style.display = 'block';
+    fc.classList.remove('animate');
+    void fc.offsetWidth; // force reflow
+    fc.classList.add('animate');
+    // Scroll the form into view within the dbct scroll container
+    requestAnimationFrame(() => fc.scrollIntoView({behavior:'smooth', block:'nearest'}));
     const saveBtn = fc.querySelector('#db_save_btn');
     if (saveBtn) saveBtn.addEventListener('click', () => this.dbSaveEntry(key));
     // Live key normalization preview
