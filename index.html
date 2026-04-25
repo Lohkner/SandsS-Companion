@@ -1797,15 +1797,31 @@ body.port-border-none .port-card-edit{
 }
 .fs-hdr-back{
   width:44px;height:44px;border-radius:var(--r);
-  background:rgba(61,50,84,.15);border:1px solid rgba(61,50,84,.7);
-  color:var(--dim);font-size:1rem;cursor:pointer;
+  background:rgba(61,50,84,.25);border:1px solid rgba(61,50,84,.8);
+  color:var(--text);font-size:1.1rem;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
   transition:border-color .12s,color .12s,background .12s;
   flex-shrink:0;font-weight:700;
   touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+  /* Shadow so it reads clearly against any background */
+  box-shadow:0 1px 6px rgba(0,0,0,.4);
 }
 @media(hover:hover){.fs-hdr-back:hover{border-color:rgba(200,169,110,.45);color:var(--gold);background:rgba(200,169,110,.06)}}
-.fs-hdr-back:active{transform:scale(.86);background:rgba(200,169,110,.1);border-color:rgba(200,169,110,.4)}
+.fs-hdr-back:active{transform:scale(.84);background:rgba(200,169,110,.12);border-color:rgba(200,169,110,.5);color:var(--goldb)}
+
+/* Left-edge swipe hint strip — subtle visual affordance */
+.fs-panel::before{
+  content:'';
+  position:absolute;left:0;top:15%;bottom:15%;
+  width:3px;border-radius:0 3px 3px 0;
+  background:linear-gradient(180deg,transparent,rgba(200,169,110,.25) 30%,rgba(200,169,110,.25) 70%,transparent);
+  opacity:0;
+  transition:opacity .3s;
+  pointer-events:none;z-index:1;
+}
+.fs-panel.fs-open::before{ opacity:1; }
+/* Hide hint once user has used swipe (JS adds .swipe-used) */
+.fs-panel.swipe-used::before{ opacity:0 !important; }
 .fs-hdr-center{flex:1;min-width:0}
 .fs-hdr-ttl{
   font-family:var(--fd);font-size:.76rem;font-weight:600;
@@ -5152,7 +5168,10 @@ const app = {
   },
 
   closeTalentManager() {
-    document.getElementById('talent_panel').classList.remove('fs-open');
+    const panel = document.getElementById('talent_panel');
+    panel.style.transform = '';
+    panel.style.opacity   = '';
+    panel.classList.remove('fs-open');
     document.body.style.overflow = '';
     this.showTalentSummary();
     this.updateTalentCount();
@@ -5589,7 +5608,10 @@ const app = {
   },
 
   closeAptManager() {
-    document.getElementById('apt_panel').classList.remove('fs-open');
+    const panel = document.getElementById('apt_panel');
+    panel.style.transform = '';
+    panel.style.opacity   = '';
+    panel.classList.remove('fs-open');
     document.body.style.overflow = '';
     this._renderAptSummary(this._aptMode);
     if (this._modalOpener?.focus) {
@@ -5608,53 +5630,110 @@ const app = {
   },
 
   closeDatabaseEditor() {
-    document.getElementById('db_panel').classList.remove('fs-open');
+    const panel = document.getElementById('db_panel');
+    panel.style.transform = '';
+    panel.style.opacity   = '';
+    panel.classList.remove('fs-open');
     document.body.style.overflow = '';
   },
 
-  /** Attaches an iOS-style edge-swipe-back gesture to a fullscreen panel.
-   *  Dragging right from the left ~22% of the panel slides it back.
-   *  Each call tears down any previous listener on that panel first. */
+  /** Attaches swipe-back gesture to a fullscreen panel.
+   *  Primary close = ← button in header (always works).
+   *  Swipe-back = wider zone (40%), velocity-aware, cleans up all listeners. */
   _attachPanelSwipeBack(panel, closeFn) {
-    if (panel._swipeBackHandler) {
-      panel.removeEventListener('touchstart', panel._swipeBackHandler, {passive:true});
+    // Tear down all previous listeners
+    if (panel._swipeHandlers) {
+      panel.removeEventListener('touchstart', panel._swipeHandlers.start, {passive:true});
+      panel.removeEventListener('touchmove',  panel._swipeHandlers.move,  {passive:true});
+      panel.removeEventListener('touchend',   panel._swipeHandlers.end);
+      panel.removeEventListener('touchcancel',panel._swipeHandlers.cancel);
     }
-    let startX = 0, startY = 0, tracking = false;
-    const EDGE_WIDTH = Math.min(window.innerWidth * 0.22, 80); // px from left edge
-    const THRESHOLD  = 80;  // px drag to trigger close
-    const RATIO      = 2.2; // H/V ratio: must be more horizontal than vertical
+
+    let startX = 0, startY = 0, lastX = 0, lastT = 0;
+    let tracking = false, dragging = false;
+    const W          = () => panel.offsetWidth || window.innerWidth;
+    const EDGE_FRAC  = 0.40;   // 40% of screen — easy to reach
+    const VEL_THRESH = 0.4;    // px/ms — flick velocity to trigger close
+    const DIST_THRESH = 0.35;  // 35% of screen width to trigger close by distance
+
+    const reset = () => {
+      if (!dragging) return;
+      dragging = false;
+      tracking = false;
+      panel.style.transition = 'transform .24s cubic-bezier(.25,.46,.45,.94)';
+      panel.style.transform  = 'translateX(0)';
+      // Clean transition after snap
+      setTimeout(() => { panel.style.transition = ''; panel.style.transform = ''; }, 260);
+    };
+
+    const doClose = () => {
+      dragging = false; tracking = false;
+      panel.classList.add('swipe-used'); // hide hint strip after first use
+      panel.style.transition = 'transform .24s cubic-bezier(.25,.46,.45,.94)';
+      panel.style.transform  = `translateX(${W()}px)`;
+      setTimeout(() => {
+        panel.style.transition = '';
+        panel.style.transform  = '';
+        closeFn();
+      }, 240);
+    };
 
     const onStart = e => {
+      if (e.touches.length > 1) return;
       const t = e.touches[0];
-      if (t.clientX > EDGE_WIDTH) return;
-      startX = t.clientX; startY = t.clientY; tracking = true;
+      if (t.clientX > W() * EDGE_FRAC) return;
+      // Don't interfere with inputs or scrollable areas
+      if (e.target.closest('input,textarea,select,.apt-col-body,.dbct,.tms,.dbs,.tmct')) return;
+      startX = lastX = t.clientX;
+      startY = t.clientY;
+      lastT  = Date.now();
+      tracking = true; dragging = false;
       panel.style.transition = 'none';
     };
+
     const onMove = e => {
-      if (!tracking) return;
+      if (!tracking || e.touches.length > 1) return;
       const t  = e.touches[0];
       const dx = t.clientX - startX;
       const dy = Math.abs(t.clientY - startY);
-      if (dx < 0 || dy * RATIO > dx) { tracking = false; panel.style.transition = ''; return; }
-      panel.style.transform = `translateX(${Math.max(0, dx)}px)`;
+      // Cancel if predominantly vertical
+      if (!dragging && dy > Math.abs(dx) * 1.5 && dy > 8) { reset(); return; }
+      if (dx <= 0) return; // Only right-swipe
+      dragging = true;
+      // Track velocity
+      const now = Date.now();
+      lastX = t.clientX; lastT = now;
+      const clamped = Math.min(dx, W());
+      panel.style.transform = `translateX(${clamped}px)`;
+      // Visual resistance — panel darkens as it moves
+      panel.style.opacity = String(Math.max(0.85, 1 - (clamped / W()) * 0.15));
     };
+
     const onEnd = e => {
       if (!tracking) return;
-      tracking = false;
-      panel.style.transition = '';
-      const dx = e.changedTouches[0].clientX - startX;
-      if (dx >= THRESHOLD) {
-        panel.style.transform = '';
-        closeFn();
+      if (!dragging) { tracking = false; panel.style.transition = ''; return; }
+      const t  = e.changedTouches[0];
+      const dx = t.clientX - startX;
+      const dt = Date.now() - lastT;
+      const vel = dt > 0 ? (t.clientX - lastX) / dt : 0; // px/ms
+      panel.style.opacity = '';
+      // Close if flick OR dragged past threshold
+      if (vel >= VEL_THRESH || dx >= W() * DIST_THRESH) {
+        doClose();
       } else {
-        panel.style.transform = 'translateX(0)';
+        reset();
       }
     };
 
-    panel.addEventListener('touchstart', onStart, {passive:true});
-    panel.addEventListener('touchmove',  onMove,  {passive:true});
-    panel.addEventListener('touchend',   onEnd,   {passive:true});
-    panel._swipeBackHandler = onStart;
+    const onCancel = () => { panel.style.opacity = ''; reset(); };
+
+    panel.addEventListener('touchstart',  onStart, {passive:true});
+    panel.addEventListener('touchmove',   onMove,  {passive:true});
+    panel.addEventListener('touchend',    onEnd,   {passive:false});
+    panel.addEventListener('touchcancel', onCancel,{passive:true});
+
+    // Store all 4 handlers for future cleanup
+    panel._swipeHandlers = { start:onStart, move:onMove, end:onEnd, cancel:onCancel };
   },
 
   dbEditCategory(cat) {
