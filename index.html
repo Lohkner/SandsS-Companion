@@ -1920,6 +1920,126 @@ body.port-border-none .port-card-edit{
 .is-field-hint{font-family:var(--fb);font-size:.66rem;color:var(--muted);font-style:italic;margin-top:3px;line-height:1.4;padding-left:2px}
 .is-section-lbl{font-family:var(--fd);font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
 
+/* ═══════════════════════════════════════════
+   FULLSCREEN PANELS — reemplazan modales para
+   Gestor Talentos, Gestor Trucos/Conjuros,
+   Editor de Base de Datos.
+   Se apilan sobre la pantalla activa sin
+   backdrop ni top-layer, deslizando desde
+   la derecha como una pantalla nativa.
+   ═══════════════════════════════════════════ */
+.fs-panel{
+  position:fixed;
+  inset:0;
+  z-index:150;
+  display:flex;
+  flex-direction:column;
+  background:var(--void);
+  /* Slide in desde la derecha */
+  transform:translateX(100%);
+  transition:transform .26s cubic-bezier(.25,.46,.45,.94);
+  /* Prevent scroll bleed */
+  overscroll-behavior:contain;
+  /* Safe areas */
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  will-change:transform;
+  -webkit-backface-visibility:hidden;
+}
+.fs-panel.fs-open{
+  transform:translateX(0);
+}
+/* Header — mismo patrón que app-hdr */
+.fs-hdr{
+  flex-shrink:0;
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;
+  border-bottom:1px solid rgba(61,50,84,.5);
+  background:linear-gradient(180deg,rgba(5,4,10,.97) 0%,rgba(10,8,16,.92) 100%);
+  backdrop-filter:blur(24px);
+  box-shadow:0 1px 0 rgba(200,169,110,.04),0 4px 24px rgba(0,0,0,.5);
+  position:relative;
+  min-height:52px;
+}
+.fs-hdr::after{
+  content:'';position:absolute;bottom:-1px;left:10%;right:10%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(200,169,110,.14),transparent);
+}
+.fs-hdr-back{
+  width:44px;height:44px;border-radius:var(--r);
+  background:transparent;border:1px solid rgba(61,50,84,.8);
+  color:var(--dim);font-size:.9rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:border-color .14s,color .14s,background .14s;
+  flex-shrink:0;font-weight:700;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+}
+@media(hover:hover){.fs-hdr-back:hover{border-color:rgba(200,169,110,.4);color:var(--gold);background:rgba(200,169,110,.05)}}
+.fs-hdr-back:active{transform:scale(.88);background:rgba(200,169,110,.08);border-color:rgba(200,169,110,.4)}
+.fs-hdr-center{flex:1;min-width:0}
+.fs-hdr-ttl{
+  font-family:var(--fd);font-size:.76rem;font-weight:600;
+  color:var(--goldb);letter-spacing:.12em;text-transform:uppercase;
+  display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.fs-hdr-sub{
+  font-family:var(--fm);font-size:.52rem;
+  color:var(--muted);letter-spacing:.06em;
+  display:block;margin-top:1px;
+}
+.fs-hdr-actions{display:flex;align-items:center;gap:6px;flex-shrink:0}
+/* Body — flex 1, scroll interno por sección */
+.fs-body{
+  flex:1;min-height:0;
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+/* Footer — confirm bar */
+.fs-footer{
+  flex-shrink:0;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 16px;
+  border-top:1px solid rgba(61,50,84,.4);
+  background:linear-gradient(0deg,var(--panel) 0%,var(--raised) 100%);
+  gap:8px;
+}
+.fs-footer-info{
+  font-family:var(--fm);font-size:.68rem;color:var(--dim);
+  display:flex;align-items:center;gap:6px;
+}
+
+/* ── TALENT PANEL specific ── */
+#talent_panel .fs-body{flex-direction:row}
+#talent_panel .tms{overflow-y:auto;border-right:1px solid rgba(61,50,84,.4)}
+#talent_panel .tmct{flex:1;overflow-y:auto;background:var(--surface)}
+
+/* ── APT PANEL specific ── */
+#apt_panel .fs-body{flex-direction:column;overflow:hidden}
+#apt_panel .apt-layout{flex:1;min-height:0;overflow:hidden}
+
+/* ── DB PANEL specific ── */
+#db_panel .fs-body{flex-direction:row}
+#db_panel .dbs{overflow-y:auto;border-right:1px solid rgba(61,50,84,.4)}
+#db_panel .dbct{flex:1;overflow-y:auto;background:var(--surface)}
+
+/* DB panel category view (mobile: chips at top) */
+@media(max-width:480px){
+  #talent_panel .fs-body,
+  #db_panel .fs-body{flex-direction:column}
+  #talent_panel .tms,
+  #db_panel .dbs{
+    border-right:none;border-bottom:1px solid rgba(61,50,84,.4);
+    flex-direction:row;flex-wrap:wrap;gap:4px;padding:6px;
+    overflow-y:visible;max-height:none;
+  }
+  #talent_panel .tms .catbtn,
+  #db_panel .dbs .catbtn{width:auto;padding:7px 12px;font-size:.68rem;flex:0 0 auto}
+  #db_panel .dbs .dbs-section-label{display:none}
+  #talent_panel .tms .catbtn.active::before{display:none}
+  #apt_panel .apt-layout{grid-template-columns:1fr;grid-template-rows:1fr 1fr}
+  #apt_panel .apt-col-body.selected-col{border-left:none;border-top:1px solid rgba(61,50,84,.35)}
+}
+
 </style>
 <!-- Fonts injected via JS so they never block window.load or app init -->
 <script>
@@ -1982,62 +2102,57 @@ body.port-border-none .port-card-edit{
   </div>
 </div>
 <input type="file" id="img_input" accept="image/*" style="display:none" onchange="app.startCrop(this)">
-<dialog id="apt_manager_modal" class="modal" aria-labelledby="apt_manager_title" style="max-width:min(960px,96vw);height:min(85dvh,calc(90svh - env(safe-area-inset-top,0px)))">
-  <div class="mhd">
-    <div class="mhd-left">
-      <div class="mhd-icon" id="apt_modal_icon">✦</div>
-      <div>
-        <span class="mttl" id="apt_manager_title">Gestor de Trucos</span>
-        <span class="mttl-sub" id="apt_manager_sub">Selecciona los trucos del personaje</span>
-      </div>
+<div id="apt_panel" class="fs-panel" role="region" aria-label="Gestor de aptitudes">
+  <div class="fs-hdr">
+    <button class="fs-hdr-back" onclick="app.closeAptManager()" aria-label="Volver">←</button>
+    <div class="fs-hdr-center">
+      <span class="fs-hdr-ttl" id="apt_manager_title">Gestor de Trucos</span>
+      <span class="fs-hdr-sub" id="apt_manager_sub">Selecciona los trucos del personaje</span>
     </div>
-    <div class="mhd-actions">
-      <button class="bcls" onclick="app.closeAptManager()" aria-label="Cerrar gestor">✕</button>
+    <div class="fs-hdr-actions">
+      <span id="apt_modal_icon" style="font-size:1.1rem;color:var(--gold)">✦</span>
     </div>
   </div>
 
-  <!-- Two-column layout: Available | Selected -->
-  <div class="apt-layout" style="flex:1;min-height:0">
-    <!-- LEFT: Available -->
-    <div class="apt-col">
-      <div class="apt-col-hdr">
-        <div class="apt-col-left" style="display:flex;flex-direction:column;gap:2px">
+  <div class="fs-body">
+    <!-- Two-column layout: Available | Selected -->
+    <div class="apt-layout" style="flex:1;min-height:0">
+      <!-- LEFT: Available -->
+      <div class="apt-col">
+        <div class="apt-col-hdr">
           <span class="apt-col-title">Disponibles</span>
         </div>
-      </div>
-      <!-- Search bar -->
-      <div style="padding:6px 8px;background:var(--void);border-bottom:1px solid rgba(61,50,84,.3)">
-        <input class="apt-search" id="apt_search" type="search" placeholder="Buscar…" autocomplete="off" spellcheck="false" oninput="app._aptFilter(this.value)">
-      </div>
-      <div class="apt-col-body" id="apt_available_list"></div>
-    </div>
-
-    <!-- RIGHT: Selected -->
-    <div class="apt-col">
-      <div class="apt-col-hdr" style="background:var(--surface)">
-        <div style="display:flex;align-items:center;gap:8px">
-          <span class="apt-col-title active-col">Seleccionados</span>
-          <span class="mft-count" id="apt_sel_count">0</span>
+        <div style="padding:6px 8px;background:var(--void);border-bottom:1px solid rgba(61,50,84,.3)">
+          <input class="apt-search" id="apt_search" type="search" placeholder="Buscar…" autocomplete="off" spellcheck="false" oninput="app._aptFilter(this.value)">
         </div>
-        <button class="bmini br" style="font-size:.58rem;padding:3px 9px;min-height:26px" onclick="app._aptClearAll()" title="Quitar todos">✕ Limpiar</button>
+        <div class="apt-col-body" id="apt_available_list"></div>
       </div>
-      <div class="apt-col-body selected-col" id="apt_selected_list">
-        <p id="apt_selected_empty" style="display:none;text-align:center;color:var(--muted);font-style:italic;font-size:.76rem;margin-top:24px;line-height:1.7">
-          Sin selección.<br>
-          <span style="font-size:.64rem;color:var(--border)">Toca un ítem para añadir.</span>
-        </p>
+      <!-- RIGHT: Selected -->
+      <div class="apt-col">
+        <div class="apt-col-hdr" style="background:var(--surface)">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="apt-col-title active-col">Seleccionados</span>
+            <span class="mft-count" id="apt_sel_count">0</span>
+          </div>
+          <button class="bmini br" style="font-size:.58rem;padding:3px 9px;min-height:26px" onclick="app._aptClearAll()" title="Quitar todos">✕ Limpiar</button>
+        </div>
+        <div class="apt-col-body selected-col" id="apt_selected_list">
+          <p id="apt_selected_empty" style="display:none;text-align:center;color:var(--muted);font-style:italic;font-size:.76rem;margin-top:24px;line-height:1.7">
+            Sin selección.<br>
+            <span style="font-size:.64rem;color:var(--border)">Toca un ítem para añadir.</span>
+          </p>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Footer -->
-  <div class="mft">
-    <div class="mft-info">
+  <div class="fs-footer">
+    <div class="fs-footer-info">
       <span id="apt_type_label" style="color:var(--muted)">—</span>
     </div>
     <button class="btn btn-gold" onclick="app.closeAptManager()">✓ Confirmar</button>
   </div>
-</dialog>
+</div>
 <input type="file" id="bg_home_input" accept="image/*" style="display:none" onchange="app.loadBgImage('home',this)">
 <input type="file" id="bg_app_input"  accept="image/*" style="display:none" onchange="app.loadBgImage('app',this)">
 <input type="file" id="json_char_input" accept=".json" style="display:none" onchange="app.loadJSON(this)">
@@ -2698,52 +2813,31 @@ body.port-border-none .port-card-edit{
     <button class="bcnf" style="width:100%;margin-top:4px" onclick="document.getElementById('settings_modal').close()">✓ Confirmar</button>
   </div>
 </dialog>
-<dialog id="db_editor_modal" class="modal" aria-labelledby="db_editor_title" style="max-width:min(1000px,96vw);height:min(94dvh,calc(95svh - env(safe-area-inset-top,0px)));max-height:none">
-  <div class="mhd" style="background:linear-gradient(180deg,rgba(10,8,24,.97) 0%,var(--raised) 100%)">
-    <div class="mhd-left">
-      <div class="mhd-icon" style="background:rgba(61,143,194,.1);border-color:rgba(61,143,194,.3);color:var(--ice)">⚙</div>
-      <div>
-        <span class="mttl" style="color:var(--ice)" id="db_editor_title">Editor de Reglas</span>
-        <span class="mttl-sub">Base de datos del sistema de juego</span>
-      </div>
+<div id="db_panel" class="fs-panel" role="region" aria-label="Editor de reglas">
+  <div class="fs-hdr" style="background:linear-gradient(180deg,rgba(10,8,24,.97) 0%,var(--raised) 100%)">
+    <button class="fs-hdr-back" onclick="app.closeDatabaseEditor()" aria-label="Volver">←</button>
+    <div class="fs-hdr-center">
+      <span class="fs-hdr-ttl" style="color:var(--ice)" id="db_editor_title">Editor de Reglas</span>
+      <span class="fs-hdr-sub">Base de datos del sistema de juego</span>
     </div>
-    <div class="mhd-actions">
-      <button class="btn btn-g" style="font-size:.58rem;padding:5px 10px;min-height:28px;color:var(--dim)" onclick="app.exportRulesDB()" title="Exportar JSON" aria-label="Exportar reglas">↓ Exportar</button>
-      <button class="bcls" onclick="document.getElementById('db_editor_modal').close()" aria-label="Cerrar editor de reglas">✕</button>
+    <div class="fs-hdr-actions">
+      <button class="btn btn-g" style="font-size:.58rem;padding:5px 10px;min-height:36px;color:var(--dim)" onclick="app.exportRulesDB()" aria-label="Exportar reglas">↓ Exportar</button>
     </div>
   </div>
-  <div class="mbd dbl" style="padding:0">
+
+  <div class="fs-body">
     <div class="dbs" id="db_sidebar">
-      <!-- Personaje -->
       <div class="dbs-section-label">Personaje</div>
-      <button class="catbtn db-cat" onclick="app.dbEditCategory('descriptors')" aria-label="Editar Linajes">
-        <span class="catbtn-dot"></span>Linajes
-      </button>
-      <button class="catbtn db-cat" onclick="app.dbEditCategory('archetypes')" aria-label="Editar Arquetipos">
-        <span class="catbtn-dot"></span>Arquetipos
-      </button>
-      <button class="catbtn db-cat" onclick="app.dbEditCategory('backgrounds')" aria-label="Editar Trasfondos">
-        <span class="catbtn-dot"></span>Trasfondos
-      </button>
-      <button class="catbtn db-cat" onclick="app.dbEditCategory('talents')" aria-label="Editar Talentos">
-        <span class="catbtn-dot"></span>Talentos
-      </button>
-      <!-- Equipo -->
+      <button class="catbtn db-cat" onclick="app.dbEditCategory('descriptors')" aria-label="Editar Linajes"><span class="catbtn-dot"></span>Linajes</button>
+      <button class="catbtn db-cat" onclick="app.dbEditCategory('archetypes')" aria-label="Editar Arquetipos"><span class="catbtn-dot"></span>Arquetipos</button>
+      <button class="catbtn db-cat" onclick="app.dbEditCategory('backgrounds')" aria-label="Editar Trasfondos"><span class="catbtn-dot"></span>Trasfondos</button>
+      <button class="catbtn db-cat" onclick="app.dbEditCategory('talents')" aria-label="Editar Talentos"><span class="catbtn-dot"></span>Talentos</button>
       <div class="dbs-section-label">Equipo</div>
-      <button class="catbtn db-cat" onclick="app.dbEditCategory('weapons')" aria-label="Editar Armas">
-        <span class="catbtn-dot"></span>Armas
-      </button>
-      <button class="catbtn db-cat" onclick="app.dbEditCategory('armors')" aria-label="Editar Armaduras">
-        <span class="catbtn-dot"></span>Armaduras
-      </button>
-      <button class="catbtn db-cat" onclick="app.dbEditCategory('shields')" aria-label="Editar Escudos">
-        <span class="catbtn-dot"></span>Escudos
-      </button>
-      <!-- Magia -->
+      <button class="catbtn db-cat" onclick="app.dbEditCategory('weapons')" aria-label="Editar Armas"><span class="catbtn-dot"></span>Armas</button>
+      <button class="catbtn db-cat" onclick="app.dbEditCategory('armors')" aria-label="Editar Armaduras"><span class="catbtn-dot"></span>Armaduras</button>
+      <button class="catbtn db-cat" onclick="app.dbEditCategory('shields')" aria-label="Editar Escudos"><span class="catbtn-dot"></span>Escudos</button>
       <div class="dbs-section-label">Magia</div>
-      <button class="catbtn db-cat" onclick="app.dbEditCategory('spells')" aria-label="Editar Trucos y Conjuros">
-        <span class="catbtn-dot"></span>Trucos / Conjuros
-      </button>
+      <button class="catbtn db-cat" onclick="app.dbEditCategory('spells')" aria-label="Editar Trucos y Conjuros"><span class="catbtn-dot"></span>Trucos / Conjuros</button>
       <div style="flex:1"></div>
     </div>
     <div class="dbct">
@@ -2756,38 +2850,33 @@ body.port-border-none .port-card-edit{
       <div id="db_form_container" style="display:none;margin-top:0;border-top:1px solid rgba(74,63,94,.4);padding-top:14px"></div>
     </div>
   </div>
-</dialog>
-<dialog id="talent_modal" class="modal" aria-labelledby="talent_modal_title" style="max-width:min(960px,96vw);height:min(85dvh,calc(90svh - env(safe-area-inset-top,0px)))">
-  <div class="mhd">
-    <div class="mhd-left">
-      <div class="mhd-icon" style="background:rgba(63,160,108,.1);border-color:rgba(63,160,108,.3);color:var(--sage)">★</div>
-      <div>
-        <span class="mttl" id="talent_modal_title">Gestor de Talentos</span>
-        <span class="mttl-sub">Elige hasta 3 talentos para el personaje</span>
-      </div>
+</div>
+<div id="talent_panel" class="fs-panel" role="region" aria-label="Gestor de talentos">
+  <div class="fs-hdr">
+    <button class="fs-hdr-back" onclick="app.closeTalentManager()" aria-label="Volver">←</button>
+    <div class="fs-hdr-center">
+      <span class="fs-hdr-ttl" id="talent_modal_title">Gestor de Talentos</span>
+      <span class="fs-hdr-sub">Elige hasta 3 talentos para el personaje</span>
     </div>
-    <div class="mhd-actions">
-      <button class="btn btn-g" style="font-size:.6rem;padding:5px 10px;min-height:28px;color:var(--blood);border-color:rgba(168,42,58,.4)" onclick="app.clearTalents()">✕ Limpiar</button>
-      <button class="bcls" onclick="app.closeTalentManager()" aria-label="Cerrar gestor de talentos">✕</button>
+    <div class="fs-hdr-actions">
+      <button class="btn btn-g" style="font-size:.6rem;padding:5px 10px;min-height:36px;color:var(--blood);border-color:rgba(168,42,58,.4)" onclick="app.clearTalents()">✕ Limpiar</button>
     </div>
   </div>
 
-  <!-- Body: sidebar + content -->
-  <div class="mbd tml" style="padding:0;flex:1;min-height:0">
+  <div class="fs-body">
     <div class="tms" id="tm_categories" style="overflow-y:auto"></div>
     <div class="tmct" id="tm_list">
       <p style="color:var(--muted);margin-top:28px;text-align:center;font-style:italic;font-size:.8rem">Selecciona una categoría.</p>
     </div>
   </div>
 
-  <!-- Footer -->
-  <div class="mft">
-    <div class="mft-info">
+  <div class="fs-footer">
+    <div class="fs-footer-info">
       Talentos: <span class="mft-count" id="talent_count_modal">0</span><span style="color:var(--border)">/3</span>
     </div>
     <button class="btn btn-gold" onclick="app.closeTalentManager()">✓ Confirmar</button>
   </div>
-</dialog>
+</div>
 <dialog id="crop_modal" class="modal" aria-labelledby="crop_modal_title">
   <div class="crl">
     <div class="mhd">
@@ -5012,7 +5101,9 @@ const app = {
   openTalentManager() {
     if (!this.DB.talents) return;
     this._talentModalOpener = document.activeElement;
-    document.getElementById('talent_modal').showModal();
+    const panel = document.getElementById('talent_panel');
+    panel.classList.add('fs-open');
+    document.body.style.overflow = 'hidden';
     const firstKey = Object.keys(this.DB.talents)[0];
     if (this.activeTalentCat) {
       const btn = document.querySelector(`#tm_categories .catbtn[data-cat="${this.activeTalentCat}"]`);
@@ -5024,13 +5115,13 @@ const app = {
   },
 
   closeTalentManager() {
-    document.getElementById('talent_modal').close();
+    document.getElementById('talent_panel').classList.remove('fs-open');
+    document.body.style.overflow = '';
     this.showTalentSummary();
     this.updateTalentCount();
     this.calc();
-    // Restore focus — Safari iOS needs setTimeout 0 after dialog.close()
-    if (this._talentModalOpener && typeof this._talentModalOpener.focus === 'function') {
-      setTimeout(() => { try { this._talentModalOpener?.focus(); } catch(e) {} this._talentModalOpener = null; }, 0);
+    if (this._talentModalOpener?.focus) {
+      setTimeout(() => { try { this._talentModalOpener?.focus(); } catch(e){} this._talentModalOpener = null; }, 0);
     }
   },
 
@@ -5088,11 +5179,8 @@ const app = {
   },
 
   clearTalents() {
-    // El <dialog> talent_modal se renderiza en el top layer del navegador,
-    // por lo que cualquier overlay creado en document.body queda por debajo.
-    // La solución es inyectar el overlay de confirmación dentro del propio dialog.
-    const dialog = document.getElementById('talent_modal');
-    const container = (dialog && dialog.open) ? dialog : document.body;
+    const panel = document.getElementById('talent_panel');
+    const container = panel?.classList.contains('fs-open') ? panel : document.body;
     this._confirmInContainer(container, '¿Limpiar talentos?', 'Se eliminarán todos los talentos seleccionados.', '✓ Limpiar', () => this._doCleanTalents());
   },
 
@@ -5314,33 +5402,32 @@ const app = {
 
   openAptManager(sec) {
     this._aptMode = sec;
-    this._modalOpener = document.activeElement; // remember opener for focus restore
-    const modal = document.getElementById('apt_manager_modal');
-    const title = document.getElementById('apt_manager_title');
-    const sub   = document.getElementById('apt_manager_sub');
-    const icon  = document.getElementById('apt_modal_icon');
+    this._modalOpener = document.activeElement;
+    const panel  = document.getElementById('apt_panel');
+    const title  = document.getElementById('apt_manager_title');
+    const sub    = document.getElementById('apt_manager_sub');
+    const icon   = document.getElementById('apt_modal_icon');
     const typeLbl = document.getElementById('apt_type_label');
     if (sec === 'tricks') {
       title.textContent = 'Gestor de Trucos';
-      if (sub)  sub.textContent  = 'Selecciona los trucos del personaje';
-      if (icon) { icon.textContent = '✦'; icon.style.color='var(--gold)'; }
+      if (sub)    sub.textContent    = 'Selecciona los trucos del personaje';
+      if (icon)   { icon.textContent = '✦'; icon.style.color = 'var(--gold)'; }
       if (typeLbl) typeLbl.textContent = 'Trucos activos del personaje';
     } else {
       title.textContent = 'Gestor de Conjuros';
-      if (sub)  sub.textContent  = 'Selecciona los conjuros del personaje';
-      if (icon) { icon.textContent = '✧'; icon.style.color='var(--ice)'; }
+      if (sub)    sub.textContent    = 'Selecciona los conjuros del personaje';
+      if (icon)   { icon.textContent = '✧'; icon.style.color = 'var(--ice)'; }
       if (typeLbl) typeLbl.textContent = 'Conjuros activos del personaje';
     }
-    // Clear search
     const srch = document.getElementById('apt_search');
     if (srch) srch.value = '';
     this._aptFilterQuery = '';
     this._renderAptManager();
-    modal.showModal();
-    // Move focus to search or close button
+    panel.classList.add('fs-open');
+    document.body.style.overflow = 'hidden';
     requestAnimationFrame(() => {
-      const s = modal.querySelector('#apt_search');
-      if (s) s.focus(); else modal.querySelector('.bcls')?.focus();
+      const s = document.getElementById('apt_search');
+      if (s) s.focus();
     });
   },
 
@@ -5433,7 +5520,7 @@ const app = {
 
     if (!allItems.length) {
       const label = sec === 'tricks' ? 'trucos' : 'conjuros';
-      availList.innerHTML = `<div class="apt-empty"><p>No hay ${label} en la base de datos.<br>Añádelos en el Editor de Reglas.</p><button class="btn btn-g" style="font-size:.68rem" onclick="document.getElementById('db_editor_modal').showModal()">Editor de Reglas</button></div>`;
+      availList.innerHTML = `<div class="apt-empty"><p>No hay ${label} en la base de datos.<br>Añádelos en el Editor de Reglas.</p><button class="btn btn-g" style="font-size:.68rem" onclick="app.closeAptManager();setTimeout(()=>app.openDatabaseEditor(),260)">Editor de Reglas</button></div>`;
     } else {
       notSel.forEach(k => availList.appendChild(makeCard(k, false)));
       if (!notSel.length) {
@@ -5450,22 +5537,26 @@ const app = {
   },
 
   closeAptManager() {
-    document.getElementById('apt_manager_modal').close();
+    document.getElementById('apt_panel').classList.remove('fs-open');
+    document.body.style.overflow = '';
     this._renderAptSummary(this._aptMode);
-    // Restore focus to opener — with Safari iOS fallback
-    if (this._modalOpener && typeof this._modalOpener.focus === 'function') {
-      // setTimeout 0 needed for Safari iOS where dialog close steals focus to body
-      setTimeout(() => {
-        try { this._modalOpener?.focus(); } catch(e) {}
-        this._modalOpener = null;
-      }, 0);
+    if (this._modalOpener?.focus) {
+      setTimeout(() => { try { this._modalOpener?.focus(); } catch(e){} this._modalOpener = null; }, 0);
     }
   },
 
   openDatabaseEditor() {
-    document.getElementById('settings_modal').close();
-    document.getElementById('db_editor_modal').showModal();
+    // Close settings modal if open
+    const sm = document.getElementById('settings_modal');
+    if (sm.open) sm.close();
+    document.getElementById('db_panel').classList.add('fs-open');
+    document.body.style.overflow = 'hidden';
     this.dbEditCategory('descriptors');
+  },
+
+  closeDatabaseEditor() {
+    document.getElementById('db_panel').classList.remove('fs-open');
+    document.body.style.overflow = '';
   },
 
   dbEditCategory(cat) {
@@ -5789,8 +5880,8 @@ const app = {
   dbDeleteEntry(key) {
     const cat = this.currentEditorCat;
     const label = key.includes('|') ? key.split('|')[0]+' (talento)' : key;
-    const dialog = document.getElementById('db_editor_modal');
-    const container = (dialog && dialog.open) ? dialog : document.body;
+    const panel = document.getElementById('db_panel');
+    const container = panel?.classList.contains('fs-open') ? panel : document.body;
     this._confirmInContainer(container, `¿Eliminar "${label}"?`, 'Esta entrada se eliminará de la base de datos.', '✓ Eliminar', () => {
       if (cat === 'talents' && key.includes('|')) {
         const [sub,idx] = key.split('|');
