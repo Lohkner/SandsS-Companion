@@ -3827,8 +3827,7 @@ const app = {
                      'pointerdown','pointermove','pointerup','pointercancel',
                      'mousedown','mousemove','mouseup','click'];
     const captureBlock = (e) => {
-      if (!overlay.isConnected) return; // overlay already gone — release
-      if (!card.contains(e.target))    { e.stopPropagation(); e.preventDefault(); }
+      if (!card.contains(e.target)) { e.stopPropagation(); e.preventDefault(); }
     };
     BLOCKED.forEach(evt =>
       document.addEventListener(evt, captureBlock, {capture:true, passive:false})
@@ -3844,11 +3843,15 @@ const app = {
     const close = (cancelled) => {
       if (handled) return;
       handled = true;
-      overlay.remove();
-      // Remove capture blocker AFTER overlay is gone — a second rAF ensures
-      // the synthesised iOS click that follows pointerup has already been
-      // swallowed by captureBlock (overlay still connected during that tick)
+      // Make overlay invisible immediately (user sees it close)
+      // but keep it in the DOM so captureBlock keeps blocking events.
+      // iOS synthesises a click ~300ms after pointerup — we need the
+      // blocker alive for that entire window.
+      overlay.style.opacity = '0';
+      overlay.style.pointerEvents = 'none'; // pass through visually but captureBlock still runs
+      // Two rAFs covers the synthesised-click window reliably.
       requestAnimationFrame(() => requestAnimationFrame(() => {
+        overlay.remove();
         cleanup();
         if (cancelled && onCancel) onCancel();
       }));
