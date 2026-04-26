@@ -391,7 +391,7 @@ body{
   transition:background .1s;
 }
 .char-card-delete:active,.char-card-delete.pressing{ background:#7a1020; }
-.char-card-delete .del-icon{ font-size:1.1rem; line-height:1; }
+.char-card-delete .del-icon{ display:flex;align-items:center;justify-content:center; }
 .char-lvl-badge{display:inline-block;font-family:var(--fm);font-size:.56rem;color:var(--dim);background:var(--raised);border:1px solid var(--border);border-radius:2px;padding:1px 7px;letter-spacing:.07em}
 .char-card{
   background:var(--surface);border:1px solid rgba(61,50,84,.55);border-radius:var(--r);
@@ -543,6 +543,7 @@ body{
   background:var(--panel);border:1px solid var(--border);
   color:var(--dim);font-size:.88rem;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
+  line-height:1;
   transition:border-color .15s,color .15s,background .15s,transform .1s;
   box-shadow:0 6px 20px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.05);
   -webkit-tap-highlight-color:transparent;touch-action:manipulation;
@@ -2142,7 +2143,7 @@ body.port-border-none .port-card-edit{
 <input type="file" id="img_input" accept="image/*" style="display:none" onchange="app.startCrop(this)">
 <div id="apt_panel" class="fs-panel" role="region" aria-label="Gestor de aptitudes">
   <div class="fs-hdr">
-    <button class="fs-hdr-back" onclick="app.closeAptManager()" aria-label="Volver">←</button>
+    <button class="fs-hdr-back" onclick="app.closeAptManager()" aria-label="Volver"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg></button>
     <div class="fs-hdr-center">
       <span class="fs-hdr-ttl" id="apt_manager_title">Gestor de Trucos</span>
       <span class="fs-hdr-sub" id="apt_manager_sub">Selecciona los trucos del personaje</span>
@@ -2256,18 +2257,19 @@ body.port-border-none .port-card-edit{
 <div id="app-screen" class="screen hidden">
   <div class="app-shell" role="main">
     <header class="app-hdr">
-      <button class="app-hdr-back" onclick="app.goHome()" title="Volver" aria-label="Volver al inicio">←</button>
+      <button class="app-hdr-back" onclick="app.goHome()" title="Volver" aria-label="Volver al inicio"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg></button>
       <div style="flex:1;text-align:center;min-width:0">
         <span class="app-hdr-ttl">Stars &amp; Sorcery</span>
         <div class="last-saved" id="last_saved_lbl"></div>
       </div>
       <button class="app-hdr-save" onclick="app.saveChar()" aria-label="Guardar personaje" title="Guardar">Guardar</button>
       <div class="sdial" id="sdial">
-        <button class="sdial-btn" onclick="app.toggleDial()" title="Acciones" aria-label="Abrir menú de acciones" aria-expanded="false" id="sdial_btn">⚙</button>
+        <button class="sdial-btn" onclick="app.toggleDial()" title="Acciones" aria-label="Abrir menú de acciones" aria-expanded="false" id="sdial_btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
         <div class="sdial-menu" id="sdial_menu">
-          <button class="sdial-item" onclick="app.randomize();app.toggleDial()" title="Personaje aleatorio" aria-label="Generar personaje aleatorio">⚄</button>
-          <button class="sdial-item sdial-danger" onclick="app.confirmClear();app.toggleDial()" title="Resetear hoja" aria-label="Resetear hoja de personaje">↺</button>
-          <button class="sdial-item" onclick="document.getElementById('settings_modal').showModal();app.toggleDial()" title="Ajustes y datos" aria-label="Abrir ajustes y datos">☰</button>
+          <button class="sdial-item" onclick="app.randomize();app.toggleDial()" title="Personaje aleatorio" aria-label="Generar personaje aleatorio"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="4"/><circle cx="8" cy="8" r="1.2" fill="currentColor" stroke="none"/><circle cx="16" cy="8" r="1.2" fill="currentColor" stroke="none"/><circle cx="8" cy="16" r="1.2" fill="currentColor" stroke="none"/><circle cx="16" cy="16" r="1.2" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg></button>
+          <button class="sdial-item sdial-danger" onclick="app.confirmClear();app.toggleDial()" title="Resetear hoja" aria-label="Resetear hoja de personaje"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></button>
+          <button class="sdial-item sdial-danger" onclick="app.deleteCurrentChar();app.toggleDial()" title="Eliminar personaje" aria-label="Eliminar personaje guardado"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
+          <button class="sdial-item" onclick="document.getElementById('settings_modal').showModal();app.toggleDial()" title="Ajustes y datos" aria-label="Abrir ajustes y datos"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
         </div>
       </div>
     </header>
@@ -2750,7 +2752,7 @@ body.port-border-none .port-card-edit{
 <dialog id="settings_modal" class="modal" aria-labelledby="settings_modal_title">
   <div class="mhd">
     <div class="mhd-left">
-      <div class="mhd-icon">☰</div>
+      <div class="mhd-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
       <div>
         <span class="mttl" id="settings_modal_title">Ajustes &amp; Datos</span>
         <span class="mttl-sub">Configuración del personaje y la app</span>
@@ -2856,7 +2858,7 @@ body.port-border-none .port-card-edit{
 </dialog>
 <div id="db_panel" class="fs-panel" role="region" aria-label="Editor de reglas">
   <div class="fs-hdr" style="background:linear-gradient(180deg,rgba(10,8,24,.97) 0%,var(--raised) 100%)">
-    <button class="fs-hdr-back" onclick="app.closeDatabaseEditor()" aria-label="Volver">←</button>
+    <button class="fs-hdr-back" onclick="app.closeDatabaseEditor()" aria-label="Volver"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg></button>
     <div class="fs-hdr-center">
       <span class="fs-hdr-ttl" style="color:var(--ice)" id="db_editor_title">Editor de Reglas</span>
       <span class="fs-hdr-sub">Base de datos del sistema de juego</span>
@@ -2894,7 +2896,7 @@ body.port-border-none .port-card-edit{
 </div>
 <div id="talent_panel" class="fs-panel" role="region" aria-label="Gestor de talentos">
   <div class="fs-hdr">
-    <button class="fs-hdr-back" onclick="app.closeTalentManager()" aria-label="Volver">←</button>
+    <button class="fs-hdr-back" onclick="app.closeTalentManager()" aria-label="Volver"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg></button>
     <div class="fs-hdr-center">
       <span class="fs-hdr-ttl" id="talent_modal_title">Gestor de Talentos</span>
       <span class="fs-hdr-sub">Elige hasta 3 talentos para el personaje</span>
@@ -3644,7 +3646,7 @@ const app = {
       const delBtn = document.createElement('button');
       delBtn.className = 'char-card-delete';
       delBtn.setAttribute('aria-label', `Eliminar ${name}`);
-      delBtn.innerHTML = `<span class="del-icon">🗑</span><span>Borrar</span>`;
+      delBtn.innerHTML = `<span class="del-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></span><span>Borrar</span>`;
 
       const card = document.createElement('div');
       card.className = 'char-card';
@@ -3752,71 +3754,18 @@ const app = {
     document.addEventListener('touchstart', el._swipeCloseHandler, {passive:true});
   },
 
-  /** Delete immediately and show a 4s undo toast. */
+  /** Delete character — shows confirm dialog, same pattern as confirmClear. */
   _deleteCharWithUndo(name) {
-    // Snapshot before delete
-    const snapshot = JSON.stringify(STORAGE.loadRoster());
-
-    STORAGE.deleteChar(name);
-    this.renderHome();
-
-    // Show undo toast
-    this._toastUndo(
-      `"${this._esc(name)}" eliminado`,
-      'Deshacer',
+    this._confirm(
+      '¿Eliminar personaje?',
+      `"${this._esc(name)}" será eliminado permanentemente.`,
+      '✓ Eliminar',
       () => {
-        // Restore full roster snapshot
-        try {
-          const restored = JSON.parse(snapshot);
-          STORAGE.saveRoster(restored);
-          this.renderHome();
-          this.toast('Restaurado', 'ok');
-        } catch(e) {
-          this.toast('No se pudo deshacer', 'err');
-        }
-      },
-      4000
+        STORAGE.deleteChar(name);
+        this.renderHome();
+        this.toast(`"${this._esc(name)}" eliminado`, 'ok');
+      }
     );
-  },
-
-  /** Shows a toast with an optional undo action button. */
-  _toastUndo(msg, actionLabel, onAction, duration = 4000) {
-    const ct = document.getElementById('toast-ct');
-    if (!ct) { this.toast(msg, 'ok'); return; }
-
-    // Remove any previous undo toast
-    ct.querySelectorAll('.toast-undo').forEach(t => t.remove());
-
-    const t = document.createElement('div');
-    t.className = 'toast toast-undo';
-    t.style.cssText = 'display:flex;align-items:center;gap:10px;min-width:220px;max-width:320px';
-
-    const msg_ = document.createElement('span');
-    msg_.style.flex = '1';
-    msg_.textContent = msg;
-
-    const btn = document.createElement('button');
-    btn.style.cssText = 'background:transparent;border:1px solid rgba(200,169,110,.5);color:var(--gold);font-family:var(--fd);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:var(--r);cursor:pointer;flex-shrink:0;touch-action:manipulation;min-height:30px';
-    btn.textContent = actionLabel;
-
-    let done = false;
-    const dismiss = () => {
-      if (done) return; done = true;
-      t.style.opacity = '0';
-      setTimeout(() => t.remove(), 300);
-    };
-
-    btn.addEventListener('pointerup', (e) => {
-      e.stopPropagation();
-      dismiss();
-      onAction();
-    });
-
-    t.appendChild(msg_);
-    t.appendChild(btn);
-    ct.appendChild(t);
-
-    setTimeout(dismiss, duration);
   },
 
   /* ── CONFIRM HELPER ──
@@ -3871,23 +3820,26 @@ const app = {
     container.appendChild(overlay);
 
     let handled = false;
-    const close = (cancelled) => {
+    const close = (cancelled, e) => {
       if (handled) return;
       handled = true;
-      overlay.remove();
-      if (cancelled && onCancel) onCancel();
+      // Stop the event from reaching anything behind the overlay
+      if (e) { e.stopPropagation(); e.preventDefault(); }
+      // Freeze overlay so nothing behind gets touched while it's still in DOM
+      overlay.style.pointerEvents = 'none';
+      // Defer removal by one frame — lets the browser finish the current event
+      // dispatch before the overlay leaves the DOM, preventing tap bleed-through
+      requestAnimationFrame(() => {
+        overlay.remove();
+        if (cancelled && onCancel) onCancel();
+      });
     };
 
-    // Attach both pointerup and click — whichever fires first wins (handled guard
-    // prevents double execution). pointerup fires before click and is reliable on
-    // all mobile browsers including iOS Safari inside overlays.
     const addBtn = (btn, cancelled, fn) => {
       const handler = (e) => {
         if (!btn.contains(e.target)) return;
-        e.stopPropagation();
-        e.preventDefault();
-        if (cancelled) close(true);
-        else { close(false); fn(); }
+        close(cancelled, e);
+        if (!cancelled) fn();
       };
       btn.addEventListener('pointerup', handler, {passive:false});
       btn.addEventListener('click',     handler, {passive:false});
@@ -3895,8 +3847,10 @@ const app = {
     addBtn(cancelBtn, true,  () => {});
     addBtn(okBtn,     false, onConfirm);
 
-    // Block all pointer/touch events on the backdrop only (not on the card/buttons)
-    const eatBackdrop = (e) => { if (!card.contains(e.target)) { e.stopPropagation(); e.preventDefault(); } };
+    // Block all pointer/touch events on the backdrop (not on the card/buttons)
+    const eatBackdrop = (e) => {
+      if (!card.contains(e.target)) { e.stopPropagation(); e.preventDefault(); }
+    };
     overlay.addEventListener('pointerdown', eatBackdrop, {passive:false});
     overlay.addEventListener('touchstart',  eatBackdrop, {passive:false});
     overlay.addEventListener('touchend',    eatBackdrop, {passive:false});
@@ -7149,6 +7103,25 @@ const app = {
       this._bulkEditing = false;
       this.toast('Hoja reseteada','ok');
     });
+  },
+
+  /** Delete the currently loaded character from the roster, then go home. */
+  deleteCurrentChar() {
+    const name = document.getElementById('char_name')?.value?.trim();
+    if (!name) { this.toast('Guarda el personaje primero', 'err'); return; }
+    const roster = STORAGE.loadRoster();
+    if (!roster[name]) { this.toast('Este personaje no está guardado aún', 'err'); return; }
+    this._confirm(
+      '¿Eliminar personaje?',
+      `"${this._esc(name)}" será eliminado permanentemente.`,
+      '✓ Eliminar',
+      () => {
+        STORAGE.deleteChar(name);
+        this.renderHome();
+        this.showScreen('home');
+        this.toast(`"${this._esc(name)}" eliminado`, 'ok');
+      }
+    );
   },
 
   randomize() {
