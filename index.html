@@ -3621,13 +3621,11 @@ const app = {
       delBtn.className = 'char-card-delete';
       delBtn.setAttribute('aria-label', `Eliminar ${name}`);
       delBtn.innerHTML = `<span class="del-icon">🗑</span><span>Borrar</span>`;
-      const doDelete = (e) => {
+      delBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         e.preventDefault();
         this.deleteChar(name);
-      };
-      delBtn.addEventListener('click',    doDelete);
-      delBtn.addEventListener('touchend', doDelete, {passive:false});
+      });
 
       const card = document.createElement('div');
       card.className = 'char-card';
@@ -3794,13 +3792,36 @@ const app = {
     }
     container.appendChild(overlay);
 
+    let handled = false;
     const close = (cancelled) => {
+      if (handled) return;
+      handled = true;
       overlay.remove();
       if (cancelled && onCancel) onCancel();
     };
 
-    cancelBtn.addEventListener('click', () => close(true));
-    okBtn.addEventListener('click', () => { close(false); onConfirm(); });
+    // Attach both pointerup and click — whichever fires first wins (handled guard
+    // prevents double execution). pointerup fires before click and is reliable on
+    // all mobile browsers including iOS Safari inside overlays.
+    const addBtn = (btn, cancelled, fn) => {
+      const handler = (e) => {
+        if (!btn.contains(e.target)) return;
+        e.stopPropagation();
+        e.preventDefault();
+        if (cancelled) close(true);
+        else { close(false); fn(); }
+      };
+      btn.addEventListener('pointerup', handler, {passive:false});
+      btn.addEventListener('click',     handler, {passive:false});
+    };
+    addBtn(cancelBtn, true,  () => {});
+    addBtn(okBtn,     false, onConfirm);
+
+    // Block all pointer/touch events on the backdrop only (not on the card/buttons)
+    const eatBackdrop = (e) => { if (!card.contains(e.target)) { e.stopPropagation(); e.preventDefault(); } };
+    overlay.addEventListener('pointerdown', eatBackdrop, {passive:false});
+    overlay.addEventListener('touchstart',  eatBackdrop, {passive:false});
+    overlay.addEventListener('touchend',    eatBackdrop, {passive:false});
 
     overlay.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') { close(true); return; }
@@ -3811,9 +3832,6 @@ const app = {
         focusable[(idx + (e.shiftKey ? -1 : 1) + focusable.length) % focusable.length].focus();
       }
     });
-
-    // Prevent touches on overlay from reaching the page underneath
-    overlay.addEventListener('touchstart', e => e.stopPropagation(), {passive:false});
 
     requestAnimationFrame(() => cancelBtn.focus());
   },
