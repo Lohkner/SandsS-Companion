@@ -369,24 +369,30 @@ body{
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.04em;
 }
 .char-card-wrap{
-  position:relative;overflow:hidden;border-radius:var(--r);margin-bottom:5px;
+  position:relative;border-radius:var(--r);margin-bottom:5px;
   animation:cardSlideIn .22s cubic-bezier(.22,.61,.36,1) forwards;opacity:0;
+  /* overflow:hidden clips the delete button during swipe */
+  overflow:hidden;
 }
 .char-card-wrap:last-child{margin-bottom:0}
 .char-card-delete{
-  position:absolute;right:0;top:0;bottom:0;width:72px;background:var(--blood);
-  display:flex;align-items:center;justify-content:center;
-  font-size:.6rem;font-family:var(--fd);color:#fff;letter-spacing:.08em;text-transform:uppercase;
-  cursor:pointer;transform:translateX(100%);
-  border-radius:0 var(--r) var(--r) 0;flex-direction:column;gap:3px;
-  border:none;outline:none;
-  touch-action:manipulation;-webkit-tap-highlight-color:rgba(168,42,58,.3);
+  position:absolute;right:0;top:0;bottom:0;width:80px;
+  background:var(--blood);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  font-size:.58rem;font-family:var(--fd);color:#fff;
+  letter-spacing:.08em;text-transform:uppercase;
+  cursor:pointer;border:none;outline:none;
+  /* Start offscreen right */
+  transform:translateX(100%);
+  border-radius:0 var(--r) var(--r) 0;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;
   user-select:none;-webkit-user-select:none;
-  /* Ensure it's always above the card in stacking */
   z-index:2;
+  transition:background .1s;
 }
-.char-card-delete:active{background:var(--crimson)}
-.char-card-delete .del-icon{font-size:.95rem}
+.char-card-delete:active,.char-card-delete.pressing{ background:#7a1020; }
+.char-card-delete .del-icon{ font-size:1.1rem; line-height:1; }
+.char-lvl-badge{display:inline-block;font-family:var(--fm);font-size:.56rem;color:var(--dim);background:var(--raised);border:1px solid var(--border);border-radius:2px;padding:1px 7px;letter-spacing:.07em}
 .char-card{
   background:var(--surface);border:1px solid rgba(61,50,84,.55);border-radius:var(--r);
   display:flex;align-items:center;gap:12px;padding:10px 12px;cursor:pointer;
@@ -1474,7 +1480,6 @@ details > summary { cursor: pointer; font-family: var(--fm); font-size: .6rem; c
 details > summary::-webkit-details-marker { display: none; }
 details > summary::before { content: '▸'; color: var(--gold); font-size: .52rem; transition: transform .2s; }
 details[open] > summary::before { content: '▾'; }
-.char-lvl-badge { display: inline-block; font-family: var(--fm); font-size: .56rem; color: var(--dim); background: var(--raised); border: 1px solid var(--border); border-radius: 2px; padding: 1px 7px; letter-spacing: .07em; }
 .pill-badge { display: inline-flex; align-items: center; gap: 3px; font-family: var(--fm); font-size: .6rem; color: var(--muted); margin-left: auto; background: rgba(24,20,34,.8); border: 1px solid rgba(61,50,84,.45); border-radius: 2px; padding: 2px 9px; }
 .js-detail-txt    { font-size: .8rem; color: var(--text); line-height: 1.65; margin-bottom: 8px; }
 .js-section-lbl   { font-family: var(--fd); font-size: .58rem; color: var(--muted); text-transform: uppercase; letter-spacing: .12em; margin-bottom: 5px; }
@@ -1632,7 +1637,6 @@ details>summary::-webkit-details-marker{display:none}
 details>summary::before{content:'▸';color:var(--gold);font-size:.52rem;transition:transform .2s}
 details[open]>summary::before{content:'▾'}
 
-.char-lvl-badge{display:inline-block;font-family:var(--fm);font-size:.56rem;color:var(--dim);background:var(--raised);border:1px solid var(--border);border-radius:2px;padding:1px 7px;letter-spacing:.07em}
 
 .pill-badge{display:inline-flex;align-items:center;gap:3px;font-family:var(--fm);font-size:.6rem;color:var(--muted);margin-left:auto;background:rgba(24,20,34,.8);border:1px solid rgba(61,50,84,.45);border-radius:2px;padding:2px 9px}
 
@@ -3591,8 +3595,16 @@ const app = {
   /** Renders the saved-character roster on the home screen. */
   renderHome() {
     const el = document.getElementById('home-roster');
+
+    // Clean up previous document-level listener
+    if (el._swipeCloseHandler) {
+      document.removeEventListener('touchstart', el._swipeCloseHandler);
+      el._swipeCloseHandler = null;
+    }
+
     const roster = STORAGE.loadRoster();
-    const keys = Object.keys(roster);
+    const keys   = Object.keys(roster);
+
     if (!keys.length) {
       el.innerHTML = `
         <div class="home-empty">
@@ -3602,30 +3614,32 @@ const app = {
         </div>`;
       return;
     }
+
     el.innerHTML = '';
-    keys.forEach(name => {
+    const SNAP = 'transform .2s cubic-bezier(.25,.46,.45,.94)';
+    const BTN_W = 80; // must match .char-card-delete width
+
+    keys.forEach((name, i) => {
       const data = roster[name];
-      const lvl = data.inputs?.char_lvl || '1';
-      const arq = data.selects?.sel_arq ? (this.DB.archetypes?.[data.selects.sel_arq]?.name || data.selects.sel_arq) : '—';
+      const lvl  = data.inputs?.char_lvl || '1';
+      const arq  = data.selects?.sel_arq  ? (this.DB.archetypes?.[data.selects.sel_arq]?.name  || data.selects.sel_arq) : '—';
       const desc = data.selects?.sel_desc ? (this.DB.descriptors?.[data.selects.sel_desc]?.name || '') : '';
       const bg   = data.selects?.sel_bg   ? (this.DB.backgrounds?.[data.selects.sel_bg]?.name   || '') : '';
+
       const hasPortrait = data.portrait && data.portrait !== DEFAULT_PORTRAIT && !data.portrait.includes('fill=');
       const portHtml = hasPortrait
         ? `<img class="char-port" src="${data.portrait}" alt="">`
         : `<div class="char-port-ph">⚔</div>`;
 
+      // ── DOM ──────────────────────────────────────────────────────
       const wrap = document.createElement('div');
       wrap.className = 'char-card-wrap';
+      wrap.style.animationDelay = `${i * 50}ms`;
 
       const delBtn = document.createElement('button');
       delBtn.className = 'char-card-delete';
       delBtn.setAttribute('aria-label', `Eliminar ${name}`);
       delBtn.innerHTML = `<span class="del-icon">🗑</span><span>Borrar</span>`;
-      delBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        e.preventDefault();
-        this.deleteChar(name);
-      });
 
       const card = document.createElement('div');
       card.className = 'char-card';
@@ -3633,112 +3647,171 @@ const app = {
         ${portHtml}
         <div class="char-ci">
           <div class="char-cn">${this._esc(name)}</div>
-          <div class="char-cs">${this._esc(desc||'—')} · ${this._esc(arq)}${bg ? ' · '+this._esc(bg) : ''}</div>
+          <div class="char-cs">${this._esc(desc||'—')} · ${this._esc(arq)}${bg?' · '+this._esc(bg):''}</div>
           <div style="margin-top:3px"><span class="char-lvl-badge">Nivel ${this._esc(lvl)}</span></div>
         </div>
         <span class="char-card-arrow">›</span>`;
-      card.addEventListener('click', (e) => {
-        if (card._swiped) return;
-        if (e.target.closest('.char-card-delete')) return;
-        this.loadCharToApp(name);
-      });
-
-      // Swipe logic
-      let startX = 0, startY = 0, dx = 0, revealed = false, locked = false, moved = false;
-      const THRESHOLD = 55;
-
-      const onStart = (clientX, clientY) => {
-        startX = clientX; startY = clientY; dx = 0; moved = false; locked = false;
-        card.style.transition = 'none';
-        delBtn.style.transition = 'none';
-      };
-      const onMove = (clientX, clientY) => {
-        const ddx = clientX - startX;
-        const ddy = clientY - startY;
-        if (!locked) {
-          if (Math.abs(ddx) > Math.abs(ddy) && Math.abs(ddx) > 5) locked = true;
-          else if (Math.abs(ddy) > Math.abs(ddx) && Math.abs(ddy) > 5) return;
-          else return;
-        }
-        moved = true;
-        if (revealed) {
-          // Already open: allow dragging right (positive) to close, left is clamped
-          dx = Math.min(70, ddx); // allow up to +70px to the right to close
-        } else {
-          // Closed: only allow dragging left (negative) to open
-          dx = Math.min(0, ddx);
-        }
-        const translateX = revealed ? Math.max(-70, -70 + dx) : Math.max(-70, dx);
-        const clampedX = Math.max(-70, Math.min(0, translateX));
-        card.style.transform = `translateX(${clampedX}px)`;
-        delBtn.style.transform = `translateX(${100 + (clampedX / 70) * 100}%)`;
-      };
-      const onEnd = () => {
-        if (!locked && !moved) return;
-        if (revealed) {
-          // Close if swiped right enough, otherwise stay open
-          if (dx > THRESHOLD * 0.4) {
-            card.style.transition = 'transform .2s cubic-bezier(.25,.46,.45,.94)';
-            delBtn.style.transition = 'transform .2s cubic-bezier(.25,.46,.45,.94)';
-            card.style.transform = 'translateX(0)';
-            delBtn.style.transform = 'translateX(100%)';
-            revealed = false;
-            setTimeout(() => { card._swiped = false; }, TIMING.SWIPE_SNAP);
-          } else {
-            // Snap back to open
-            card.style.transition = 'transform .2s cubic-bezier(.25,.46,.45,.94)';
-            delBtn.style.transition = 'transform .2s cubic-bezier(.25,.46,.45,.94)';
-            card.style.transform = 'translateX(-70px)';
-            delBtn.style.transform = 'translateX(0%)';
-          }
-        } else {
-          // Open if swiped left enough
-          if (dx < -THRESHOLD * 0.6) {
-            card.style.transition = 'transform .2s cubic-bezier(.25,.46,.45,.94)';
-            delBtn.style.transition = 'transform .2s cubic-bezier(.25,.46,.45,.94)';
-            card.style.transform = 'translateX(-70px)';
-            delBtn.style.transform = 'translateX(0%)';
-            revealed = true;
-            card._swiped = true;
-          } else {
-            // Snap back to closed
-            card.style.transition = 'transform .2s cubic-bezier(.25,.46,.45,.94)';
-            delBtn.style.transition = 'transform .2s cubic-bezier(.25,.46,.45,.94)';
-            card.style.transform = 'translateX(0)';
-            delBtn.style.transform = 'translateX(100%)';
-            revealed = false;
-            setTimeout(() => { card._swiped = false; }, TIMING.SWIPE_SNAP);
-          }
-        }
-      };
-
-      card.addEventListener('touchstart', e => onStart(e.touches[0].clientX, e.touches[0].clientY), {passive:true});
-      card.addEventListener('touchmove', e => { onMove(e.touches[0].clientX, e.touches[0].clientY); if(locked) e.preventDefault(); }, {passive:false});
-      card.addEventListener('touchend', onEnd, {passive:true});
 
       wrap.appendChild(delBtn);
       wrap.appendChild(card);
-      wrap.style.animationDelay = `${el.children.length * 55}ms`;
       el.appendChild(wrap);
+
+      // ── Helpers ───────────────────────────────────────────────────
+      const setPos = (x, animated) => {
+        const t = animated ? SNAP : 'none';
+        card.style.transition   = t;
+        delBtn.style.transition = t;
+        card.style.transform    = `translateX(${x}px)`;
+        // delBtn slides in from the right: at x=0 it's at 100%, at x=-BTN_W it's at 0%
+        const pct = 100 + (x / BTN_W) * 100;
+        delBtn.style.transform  = `translateX(${pct}%)`;
+      };
+
+      const reveal  = () => { setPos(-BTN_W, true); card._swiped = true;  };
+      const conceal = () => { setPos(0,       true); card._swiped = false; };
+
+      // ── Swipe gesture ─────────────────────────────────────────────
+      let startX = 0, startY = 0, curX = 0;
+      let axisLocked = false, isHoriz = false;
+
+      card.addEventListener('touchstart', e => {
+        const t = e.touches[0];
+        startX = curX = t.clientX; startY = t.clientY;
+        axisLocked = false; isHoriz = false;
+        card.style.transition   = 'none';
+        delBtn.style.transition = 'none';
+      }, {passive:true});
+
+      card.addEventListener('touchmove', e => {
+        const t   = e.touches[0];
+        const ddx = t.clientX - startX;
+        const ddy = t.clientY - startY;
+
+        if (!axisLocked) {
+          if (Math.abs(ddx) < 4 && Math.abs(ddy) < 4) return;
+          isHoriz    = Math.abs(ddx) > Math.abs(ddy);
+          axisLocked = true;
+        }
+        if (!isHoriz) return;
+
+        e.preventDefault();
+        curX = t.clientX;
+
+        // Clamp: open up to BTN_W, close at 0
+        const base = card._swiped ? -BTN_W : 0;
+        const raw  = base + (curX - startX);
+        const clamped = Math.max(-BTN_W, Math.min(0, raw));
+        setPos(clamped, false);
+      }, {passive:false});
+
+      card.addEventListener('touchend', () => {
+        if (!axisLocked || !isHoriz) return;
+        const delta = curX - startX;
+        if (card._swiped) {
+          // Was open: close if swiped right enough
+          delta > 20 ? conceal() : reveal();
+        } else {
+          // Was closed: open if swiped left enough
+          delta < -30 ? reveal() : conceal();
+        }
+      }, {passive:true});
+
+      // ── Delete action — direct, no confirm dialog ─────────────────
+      // Tap the delete button → delete immediately + undo toast
+      delBtn.addEventListener('pointerup', (e) => {
+        e.stopPropagation();
+        this._deleteCharWithUndo(name);
+      });
+
+      // ── Open char ─────────────────────────────────────────────────
+      card.addEventListener('click', (e) => {
+        if (card._swiped) { conceal(); return; }
+        this.loadCharToApp(name);
+      });
     });
 
-    // Single delegated listener to close any open swipe when tapping outside
-    // (replaces the per-card global listeners that caused a memory leak)
-    el._swipeCloseHandler && document.removeEventListener('touchstart', el._swipeCloseHandler);
+    // Close any open card when touching outside it
     el._swipeCloseHandler = (e) => {
       el.querySelectorAll('.char-card').forEach(c => {
-        if (c._swiped && !c.closest('.char-card-wrap').contains(e.target)) {
-          const w = c.closest('.char-card-wrap');
-          const db = w?.querySelector('.char-card-delete');
-          c.style.transition = 'transform .25s ease';
-          if (db) db.style.transition = 'transform .25s ease';
-          c.style.transform = 'translateX(0)';
-          if (db) db.style.transform = 'translateX(100%)';
-          setTimeout(() => { c._swiped = false; }, TIMING.SWIPE_SNAP);
+        if (!c._swiped) return;
+        if (!c.closest('.char-card-wrap').contains(e.target)) {
+          const btn = c.closest('.char-card-wrap').querySelector('.char-card-delete');
+          c.style.transition   = SNAP;
+          if (btn) btn.style.transition = SNAP;
+          c.style.transform    = 'translateX(0)';
+          if (btn) btn.style.transform  = 'translateX(100%)';
+          c._swiped = false;
         }
       });
     };
     document.addEventListener('touchstart', el._swipeCloseHandler, {passive:true});
+  },
+
+  /** Delete immediately and show a 4s undo toast. */
+  _deleteCharWithUndo(name) {
+    // Snapshot before delete
+    const snapshot = JSON.stringify(STORAGE.loadRoster());
+
+    STORAGE.deleteChar(name);
+    this.renderHome();
+
+    // Show undo toast
+    this._toastUndo(
+      `"${this._esc(name)}" eliminado`,
+      'Deshacer',
+      () => {
+        // Restore full roster snapshot
+        try {
+          const restored = JSON.parse(snapshot);
+          STORAGE.saveRoster(restored);
+          this.renderHome();
+          this.toast('Restaurado', 'ok');
+        } catch(e) {
+          this.toast('No se pudo deshacer', 'err');
+        }
+      },
+      4000
+    );
+  },
+
+  /** Shows a toast with an optional undo action button. */
+  _toastUndo(msg, actionLabel, onAction, duration = 4000) {
+    const ct = document.getElementById('toast-ct');
+    if (!ct) { this.toast(msg, 'ok'); return; }
+
+    // Remove any previous undo toast
+    ct.querySelectorAll('.toast-undo').forEach(t => t.remove());
+
+    const t = document.createElement('div');
+    t.className = 'toast toast-undo';
+    t.style.cssText = 'display:flex;align-items:center;gap:10px;min-width:220px;max-width:320px';
+
+    const msg_ = document.createElement('span');
+    msg_.style.flex = '1';
+    msg_.textContent = msg;
+
+    const btn = document.createElement('button');
+    btn.style.cssText = 'background:transparent;border:1px solid rgba(200,169,110,.5);color:var(--gold);font-family:var(--fd);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:var(--r);cursor:pointer;flex-shrink:0;touch-action:manipulation;min-height:30px';
+    btn.textContent = actionLabel;
+
+    let done = false;
+    const dismiss = () => {
+      if (done) return; done = true;
+      t.style.opacity = '0';
+      setTimeout(() => t.remove(), 300);
+    };
+
+    btn.addEventListener('pointerup', (e) => {
+      e.stopPropagation();
+      dismiss();
+      onAction();
+    });
+
+    t.appendChild(msg_);
+    t.appendChild(btn);
+    ct.appendChild(t);
+
+    setTimeout(dismiss, duration);
   },
 
   /* ── CONFIRM HELPER ──
@@ -3834,16 +3907,6 @@ const app = {
     });
 
     requestAnimationFrame(() => cancelBtn.focus());
-  },
-
-  deleteChar(name) {
-    this._confirm('¿Eliminar personaje?', `"${this._esc(name)}" será eliminado permanentemente.`, '✓ Eliminar', () => this._doDeleteChar(name));
-  },
-
-  _doDeleteChar(name) {
-    STORAGE.deleteChar(name);
-    this.renderHome();
-    this.toast(`"${name}" eliminado`, 'ok');
   },
 
   unlockApp() {
