@@ -2501,7 +2501,7 @@ body.port-border-none .port-card-edit{
                 <div>
                   <h3 class="sub" style="font-size:.72rem">Infrecuentes</h3>
                   <label class="skill-opt"><input type="radio" name="save_uncommon" value="FUE" onchange="app.calc()"> Fuerza</label>
-                  <label class="skill-opt"><input type="radio" name="save_uncommon" value="INT" onchange="app.calc()"> Intelecto</label>
+                  <label class="skill-opt"><input type="radio" name="save_uncommon" value="INT" onchange="app.calc()"> Inteligencia</label>
                   <label class="skill-opt"><input type="radio" name="save_uncommon" value="CAR" onchange="app.calc()"> Carisma</label>
                 </div>
               </div>
@@ -3324,10 +3324,10 @@ const DEFAULT_PORTRAIT = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/200
 const STATS = ['FUE','DES','CON','INT','SAB','CAR'];
 
 /** Proficiency bonus thresholds by level */
-const PROF_THRESHOLDS = [[9,5],[7,4],[5,3],[1,2]];
+const PROF_THRESHOLDS = [[9,4],[5,3],[1,2]]; // S&S v5.0: Nv1-4→+2, Nv5-8→+3, Nv9-10→+4
 
 /** XP required to reach each level (index = current level) */
-const XP_TABLE = [0, 1000, 3000, 6000, 10000, 15000, 21000, 28000, 36000, 45000];
+const XP_TABLE = [0, 300, 900, 2100, 4500, 9000, 16000, 28000, 44000, 62000];
 
 /** Inventory slots per card cap */
 const MAX_PORTRAIT_W = 600;
@@ -4339,9 +4339,16 @@ const app = {
   },
 
   getMod(val) {
-    // Fórmula estándar: floor((val - 10) / 2), con techo a la tabla S&S (−3 a +4)
-    const raw = Math.floor((val - 10) / 2);
-    return Math.max(-3, Math.min(4, raw));
+    // Tabla S&S v5.0 (Cap.0 pág.1) — NO es floor((val-10)/2)
+    // 3→-3 · 4-5→-2 · 6-8→-1 · 9-11→0 · 12-14→+1 · 15-16→+2 · 17-18→+3 · 19-20→+4
+    if (val <= 3)  return -3;
+    if (val <= 5)  return -2;
+    if (val <= 8)  return -1;
+    if (val <= 11) return  0;
+    if (val <= 14) return +1;
+    if (val <= 16) return +2;
+    if (val <= 18) return +3;
+    return +4; // 19-20+
   },
 
   // Tabla de XP necesario para subir al siguiente nivel (acumulativo)
@@ -4880,7 +4887,8 @@ const app = {
   },
 
   calcInventory() {
-    return { current: this.inventory.reduce((s,i)=>s+(i.slots||0),0), max: (parseInt(document.getElementById('base_FUE')?.value)||8)+4 };
+    // Slots = puntuación FUE (entero) + 5 del Morral gratuito (S&S v5.0 Cap.II)
+    return { current: this.inventory.reduce((s,i)=>s+(i.slots||0),0), max: (parseInt(document.getElementById('base_FUE')?.value)||8)+5 };
   },
 
   syncCombatOptions() {
