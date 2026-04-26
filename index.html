@@ -379,7 +379,13 @@ body{
   font-size:.6rem;font-family:var(--fd);color:#fff;letter-spacing:.08em;text-transform:uppercase;
   cursor:pointer;transform:translateX(100%);
   border-radius:0 var(--r) var(--r) 0;flex-direction:column;gap:3px;
+  border:none;outline:none;
+  touch-action:manipulation;-webkit-tap-highlight-color:rgba(168,42,58,.3);
+  user-select:none;-webkit-user-select:none;
+  /* Ensure it's always above the card in stacking */
+  z-index:2;
 }
+.char-card-delete:active{background:var(--crimson)}
 .char-card-delete .del-icon{font-size:.95rem}
 .char-card{
   background:var(--surface);border:1px solid rgba(61,50,84,.55);border-radius:var(--r);
@@ -3611,10 +3617,17 @@ const app = {
       const wrap = document.createElement('div');
       wrap.className = 'char-card-wrap';
 
-      const delBtn = document.createElement('div');
+      const delBtn = document.createElement('button');
       delBtn.className = 'char-card-delete';
+      delBtn.setAttribute('aria-label', `Eliminar ${name}`);
       delBtn.innerHTML = `<span class="del-icon">🗑</span><span>Borrar</span>`;
-      delBtn.addEventListener('click', (e) => { e.stopPropagation(); this.deleteChar(name); });
+      const doDelete = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        this.deleteChar(name);
+      };
+      delBtn.addEventListener('click',    doDelete);
+      delBtn.addEventListener('touchend', doDelete, {passive:false});
 
       const card = document.createElement('div');
       card.className = 'char-card';
@@ -3626,7 +3639,11 @@ const app = {
           <div style="margin-top:3px"><span class="char-lvl-badge">Nivel ${this._esc(lvl)}</span></div>
         </div>
         <span class="char-card-arrow">›</span>`;
-      card.addEventListener('click', () => { if (!card._swiped) this.loadCharToApp(name); });
+      card.addEventListener('click', (e) => {
+        if (card._swiped) return;
+        if (e.target.closest('.char-card-delete')) return;
+        this.loadCharToApp(name);
+      });
 
       // Swipe logic
       let startX = 0, startY = 0, dx = 0, revealed = false, locked = false, moved = false;
@@ -3734,50 +3751,70 @@ const app = {
    * @param {Element}     [container=document.body]  Pass an open <dialog> when
    *                      calling from inside one so the overlay renders above it.
    */
-  _confirm(title, body, confirmLabel, onConfirm, container = document.body) {
-    const isInDialog = container !== document.body;
+  _confirm(title, body, confirmLabel, onConfirm, container = document.body, onCancel = null) {
     const overlay = document.createElement('div');
-    overlay.style.cssText = isInDialog
-      ? 'position:absolute;inset:0;background:rgba(0,0,0,.75);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;border-radius:inherit'
-      : 'position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px';
-    // Build via DOM (no innerHTML) to prevent XSS from user-controlled title/body
+    const isBody  = container === document.body;
+    overlay.style.cssText = isBody
+      ? 'position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:10500;display:flex;align-items:center;justify-content:center;padding:16px;'
+      : 'position:absolute;inset:0;background:rgba(0,0,0,.8);z-index:10500;display:flex;align-items:center;justify-content:center;padding:16px;border-radius:inherit';
+
     const card = document.createElement('div');
-    card.style.cssText = 'background:var(--panel);border:1px solid var(--border);border-radius:var(--rl);padding:20px;max-width:300px;width:100%;text-align:center;position:relative;z-index:10000';
+    card.style.cssText = 'background:var(--panel);border:1px solid var(--border);border-radius:var(--rl);padding:20px 18px;max-width:min(320px,90vw);width:100%;text-align:center;position:relative;z-index:10501;box-shadow:0 8px 40px rgba(0,0,0,.9)';
+
     const tEl = document.createElement('div');
-    tEl.style.cssText = 'font-family:var(--fd);color:var(--gold);font-size:.9rem;letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px';
+    tEl.style.cssText = 'font-family:var(--fd);color:var(--gold);font-size:.88rem;letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px;line-height:1.3';
     tEl.textContent = title;
+
     const bEl = document.createElement('div');
-    bEl.style.cssText = 'font-size:.82rem;color:var(--muted);margin-bottom:16px';
+    bEl.style.cssText = 'font-size:.8rem;color:var(--muted);margin-bottom:18px;line-height:1.5';
     bEl.textContent = body;
+
     const btnRow = document.createElement('div');
-    btnRow.style.cssText = 'display:flex;gap:8px';
+    btnRow.style.cssText = 'display:flex;gap:8px;min-width:0';
+
     const cancelBtn = document.createElement('button');
-    cancelBtn.className = 'btn btn-g'; cancelBtn.style.flex = '1'; cancelBtn.textContent = 'Cancelar';
+    cancelBtn.className = 'btn btn-g';
+    cancelBtn.style.cssText = 'flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-height:44px';
+    cancelBtn.textContent = 'Cancelar';
+
     const okBtn = document.createElement('button');
-    okBtn.className = 'btn btn-p'; okBtn.style.flex = '1'; okBtn.textContent = confirmLabel;
-    btnRow.appendChild(cancelBtn); btnRow.appendChild(okBtn);
-    card.appendChild(tEl); card.appendChild(bEl); card.appendChild(btnRow);
+    okBtn.className = 'btn btn-p';
+    okBtn.style.cssText = 'flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-height:44px;font-size:.62rem';
+    okBtn.textContent = confirmLabel;
+
+    btnRow.appendChild(cancelBtn);
+    btnRow.appendChild(okBtn);
+    card.appendChild(tEl);
+    card.appendChild(bEl);
+    card.appendChild(btnRow);
     overlay.appendChild(card);
-    const prevPosition = isInDialog ? getComputedStyle(container).position : null;
-    if (isInDialog && prevPosition === 'static') container.style.position = 'relative';
+
+    if (!isBody && getComputedStyle(container).position === 'static') {
+      container.style.position = 'relative';
+    }
     container.appendChild(overlay);
-    const close = () => {
+
+    const close = (cancelled) => {
       overlay.remove();
-      if (isInDialog && prevPosition === 'static') container.style.position = prevPosition;
+      if (cancelled && onCancel) onCancel();
     };
-    cancelBtn.addEventListener('click', close);
-    okBtn.addEventListener('click', () => { close(); onConfirm(); });
-    // Trap focus within dialog — Tab cycles between buttons
-    const focusable = [cancelBtn, okBtn];
+
+    cancelBtn.addEventListener('click', () => close(true));
+    okBtn.addEventListener('click', () => { close(false); onConfirm(); });
+
     overlay.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') { close(); return; }
+      if (e.key === 'Escape') { close(true); return; }
       if (e.key === 'Tab') {
         e.preventDefault();
+        const focusable = [cancelBtn, okBtn];
         const idx = focusable.indexOf(document.activeElement);
         focusable[(idx + (e.shiftKey ? -1 : 1) + focusable.length) % focusable.length].focus();
       }
     });
-    // Focus the cancel button by default — safer UX for destructive confirmations
+
+    // Prevent touches on overlay from reaching the page underneath
+    overlay.addEventListener('touchstart', e => e.stopPropagation(), {passive:false});
+
     requestAnimationFrame(() => cancelBtn.focus());
   },
 
@@ -6546,20 +6583,22 @@ const app = {
   },
 
   saveChar() {
-    if (this._saving) return; this._saving = true;
+    if (this._saving) return;
+    this._saving = true;
     const releaseSaving = () => { this._saving = false; };
     const name = document.getElementById('char_name').value.trim();
-    if (!name) { releaseSaving(); this.toast('¡Se requiere nombre!','err'); return; }
+    if (!name) { releaseSaving(); this.toast('¡Se requiere nombre!', 'err'); return; }
     const roster = STORAGE.loadRoster();
     if (roster[name]) {
-      this._confirm('¿Sobreescribir personaje?', `El personaje "${this._esc(name)}" ya existe y será reemplazado.`, '✓ Sobreescribir', () => {
-        this._doSaveChar(name, roster);
-        releaseSaving();
-      });
-      // Also release if user cancels the dialog (cancelBtn path in _confirm)
-      // _confirm doesn't expose a cancel callback, so use a short safety timeout
-      // only as a fallback — long enough to not interfere with a slow confirm click.
-      setTimeout(releaseSaving, TIMING.SAVE_GUARD);
+      // Pass releaseSaving as the cancel callback so the lock releases immediately
+      this._confirm(
+        '¿Sobreescribir personaje?',
+        `El personaje "${this._esc(name)}" ya existe y será reemplazado.`,
+        '✓ Sobreescribir',
+        () => { this._doSaveChar(name, roster); releaseSaving(); },
+        document.body,
+        releaseSaving  // onCancel — releases lock right away
+      );
     } else {
       this._doSaveChar(name, roster);
       releaseSaving();
