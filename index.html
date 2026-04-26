@@ -3435,6 +3435,11 @@ const STORAGE = {
   },
 
   /** Delete a single character */
+  deleteChar(name) {
+    const roster = this.loadRoster();
+    delete roster[String(name)];
+    return this.saveRoster(roster);
+  },
 };
 
 const app = {
